@@ -24,7 +24,7 @@ public class Rock_YG : MonoBehaviour
     [Header("Go_rock")]
     [SerializeField] private Vector2 mouse_pos;
     [SerializeField] private Vector2 rock_pos;
-    private bool is_selected =true;
+    public bool is_selected = false;
     private LineRenderer lineRenderer;
     private float distance;
     private Rigidbody2D rigid;
@@ -56,7 +56,7 @@ public class Rock_YG : MonoBehaviour
         Update_mousepos();
     }
 
-    private void Update_mousepos() //마우스 위치 업데이트
+    private void Update_mousepos() //마우스 위치 업데이트 -> 코루틴으로 변경해도 괜찮을듯
     {
         var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         pos = new Vector3(pos.x, pos.y, 0);
