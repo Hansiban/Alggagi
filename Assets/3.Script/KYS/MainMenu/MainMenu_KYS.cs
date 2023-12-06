@@ -1,51 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-class MainMenu_KYS : MonoBehaviour
+class MainMenu_KYS : MonoBehaviour // temp
 {
     // test dbaccessmanager
 
     // 게임 시작 버튼
     public void Btn_StartGame(string sceneName)
     {
-        SceneManager.LoadScene(sceneName);
+        Debug.Log("Login Button Pressed");
+
+        string query = "select * from user";
+        var dd = DbAccessManager_KYS.Instance.Select(query, "user");
+
+        Debug.Log("결과 : " +dd);
+
+        //SceneManager.LoadScene(sceneName);
     }
 
-    // 로그인 버튼
-    public void Btn_Login()
+    public void ShowProfile()
     {
-
-    }
-
-    private void ValidateLogin()
-    {
-
-    }
-
-    // 회원가입 버튼
-    public void Btn_SignUp()
-    {
-
-    }
-
-    private void ShowSignUpPanel()
-    {
-
-    }
-
-    // 회원가입 창의 제출 버튼
-    public void Btn_Submit()
-    {
-
-    }
-
-    private void ValidateSignUp()
-    {
-
+        // disable Login_SignUp GO & enable Profile after fetching user data
     }
 }
