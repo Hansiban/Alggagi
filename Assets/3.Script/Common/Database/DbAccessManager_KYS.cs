@@ -17,7 +17,7 @@ public class User
     public int Draw { get; set; }
 }
 
-
+// async
 public class DbAccessManager_KYS
 {
     private static DbAccessManager_KYS _instance;
@@ -39,7 +39,7 @@ public class DbAccessManager_KYS
 
     string strConn = string.Format("server={0};uid={1};pwd={2};database={3};charset=utf8 ;", ipAddress, db_id, db_pw, db_name);
 
-    public string Select(string cmdTxt, string tableName)
+    public string Select(string cmdTxt)
     {
         string result = string.Empty;
 

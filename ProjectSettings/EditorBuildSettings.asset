@@ -15,4 +15,4 @@ EditorBuildSettings:
     path: Assets/1.Scene/KYS/Emoji_KYS.unity
     guid: 73c059281f9a75249bb9d9a08d243ba9
   m_configObjects:
-    com.unity.input.settings: {fileID: 11400000, guid: 47f9b76e278dde94cbcc99c9b95bc7f8, type: 2}
+    com.unity.input.settings: {fileID: 11400000, guid: df264864e1d2bce42b7f4be0ab4c3336, type: 2}
