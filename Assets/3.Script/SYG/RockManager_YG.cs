@@ -54,7 +54,7 @@ public class RockManager_YG : MonoBehaviour
             {
                 pos = new Vector3(second_initpos.x + (i - 3) * x_distance, second_initpos.y, 0);
             }
-            GameObject rock = Instantiate(rock_prefab, pos, Quaternion.identity); //position, rotation 설정
+            GameObject rock = Instantiate(rock_prefab, pos, Quaternion.identity);
             rock_list.Add(rock);
         }
     }
@@ -83,18 +83,22 @@ public class RockManager_YG : MonoBehaviour
     private void find_rock()
     {
         Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero, 0f);
-        if (hit.collider != null)
+        Debug.Log(pos);
+        RaycastHit2D[] hit = Physics2D.RaycastAll(pos, Vector2.zero);
+        foreach(RaycastHit2D r in hit)
         {
-            GameObject click_obj = hit.transform.gameObject;
-            Rock_YG select_rock;
-            //click_obj가 rock_yg컴포넌트를 가지고 있다면
-            //rock_yg.is_selected를 true로 변경
-            if (click_obj.TryGetComponent<Rock_YG>(out select_rock))
+            if (r.transform.CompareTag("Rock"))
             {
-                select_rock.is_selected = true;
-                StopCoroutine(click_co());
-                select_text.enabled = false;
+                GameObject click_obj = r.transform.gameObject;
+                Rock_YG select_rock;
+                //click_obj가 rock_yg컴포넌트를 가지고 있다면
+                //rock_yg.is_selected를 true로 변경
+                if (click_obj.TryGetComponent<Rock_YG>(out select_rock))
+                {
+                    select_rock.is_selected = true;
+                    StopCoroutine(click_co());
+                    select_text.enabled = false;
+                }
             }
             else
             {

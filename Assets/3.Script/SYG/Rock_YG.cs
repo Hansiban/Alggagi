@@ -1,4 +1,9 @@
+using System.Collections;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using Mirror;
 
 public class Rock_YG : MonoBehaviour
 {
@@ -38,6 +43,7 @@ public class Rock_YG : MonoBehaviour
         lineRenderer = GetComponent<LineRenderer>();
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        BG_col = GameObject.FindGameObjectWithTag("BG").GetComponent<BoxCollider2D>();
 
         rock_pos = gameObject.transform.position;
 
@@ -94,6 +100,7 @@ public class Rock_YG : MonoBehaviour
 
     private void Go_rock() //addforce로 돌 움직이게 하기
     {
+        is_selected = false;
         rigid.AddForce(new Vector2(rock_pos.x - mouse_pos.x, rock_pos.y - mouse_pos.y) * distance, ForceMode2D.Impulse);
     }
 
