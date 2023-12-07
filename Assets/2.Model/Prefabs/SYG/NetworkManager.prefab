@@ -51,14 +51,14 @@ MonoBehaviour:
   autoConnectClientBuild: 0
   sendRate: 60
   offlineScene: 
-  onlineScene: 
+  onlineScene: Assets/1.Scene/KYS/Lobby_KYS.unity
   transport: {fileID: 6904545534633788804}
   networkAddress: 43.200.181.67
   maxConnections: 100
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 4861170152903429829, guid: 0aad294e722978a4a9d05dec82b1d6a4, type: 3}
+  playerPrefab: {fileID: 27718489743383958, guid: bf9b1f59f462c244dac4cdcd79f8e665, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 1
   spawnPrefabs:
