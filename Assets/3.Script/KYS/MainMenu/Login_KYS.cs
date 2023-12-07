@@ -39,7 +39,7 @@ class Login_KYS : MonoBehaviour
     {
         string cmdTxt = $"SELECT * FROM user WHERE id = \"{_idInputField.text}\" && password = \"{_pwdInputField.text}\"";
 
-        UserDataModel_KYS userData = DbAccessManager_KYS.Instance.SelectAndRead<UserDataModel_KYS>(cmdTxt);
+        UserDataModel_KYS userData = DbAccessManager_KYS.Instance.Select<UserDataModel_KYS>(cmdTxt);
 
         if (userData == default(UserDataModel_KYS))
             StartCoroutine(nameof(NotifyInvalidation));

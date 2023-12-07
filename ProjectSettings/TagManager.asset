@@ -6,6 +6,7 @@ TagManager:
   tags:
   - BG
   - Rock
+  - Container
   layers:
   - Default
   - TransparentFX
