@@ -19,6 +19,7 @@ public class RockManager_YG : NetworkBehaviour
     #endregion
 
     private bool is_myturn = true; //내차롄지 확인
+    private NetworkConnection conn;
 
     [Header("Init_rock")]
     private int init_count = 7;
@@ -34,6 +35,7 @@ public class RockManager_YG : NetworkBehaviour
 
     [Header("Game_End")]
     private UserDataModel_KYS user_data;
+
 
     private void Awake()
     {
@@ -51,7 +53,6 @@ public class RockManager_YG : NetworkBehaviour
         Init_rock();
         select_text = FindObjectOfType<Text>();
         select_text.enabled = false;
-
         Selecting_rock();
         base.OnStartAuthority();
     }
@@ -73,7 +74,7 @@ public class RockManager_YG : NetworkBehaviour
         GameObject pannel = Instantiate(panel_prefab);
         NetworkServer.Spawn(pannel);
         
-        Debug.Log("Init_rock");
+       // Debug.Log("Init_rock");
         for (int i = 0; i < init_count; i++)
         {
             Vector3 pos = new Vector3();
@@ -88,7 +89,10 @@ public class RockManager_YG : NetworkBehaviour
             
             GameObject rock = Instantiate(rock_prefab, pos, Quaternion.identity);
             rock_list.Add(rock);
-            NetworkServer.Spawn(rock);
+            NetworkServer.Spawn(rock, connectionToClient);
+            // 스폰된 객체의 NetworkIdentity를 가져와서 권한 설정
+            NetworkIdentity rockIdentity = rock.GetComponent<NetworkIdentity>();
+            rockIdentity.AssignClientAuthority(connectionToClient);
         }
     }
 
@@ -127,7 +131,6 @@ public class RockManager_YG : NetworkBehaviour
     private void find_rock()
     {
         Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Debug.Log(pos);
         RaycastHit2D[] hit = Physics2D.RaycastAll(pos, Vector2.zero);
         foreach(RaycastHit2D r in hit)
         {

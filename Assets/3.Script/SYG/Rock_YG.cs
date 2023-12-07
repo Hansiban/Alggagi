@@ -1,9 +1,5 @@
-using System.Collections;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
 using Mirror;
+using UnityEngine;
 
 public class Rock_YG : NetworkBehaviour
 {
@@ -46,28 +42,89 @@ public class Rock_YG : NetworkBehaviour
 
     private void Start()
     {
-        Get_component();
-        Line_setting();
+        if (isClient)
+        {
+            //Debug.Log("This script is running on a client.");
+
+            // 클라이언트에서 명령을 호출하거나 다른 동작을 수행할 수 있습니다.
+            CmdGetComponent();
+            CmdLine_setting();
+        }
+        else
+        {
+           // Debug.Log("not client.");
+        }
     }
 
-    //[Command]
+    [Command]
+    public void CmdGetComponent()
+    {
+        // 서버에서 실행되는 코드
+        RpcSetComponent();
+      //  Debug.Log("CmdGetComponent");
+    }
+
+    [ClientRpc]
+    public void RpcSetComponent()
+    {
+        // 클라이언트에서 실행되는 코드
+        Get_component();
+       // Debug.Log("RpcSetComponent");
+    }
+
     public void Get_component()
     {
         //할당
         lineRenderer = GetComponent<LineRenderer>();
+        if (lineRenderer != null)
+        {
+            Debug.Log(lineRenderer.gameObject.name);
+        }
+        else
+        {
+           // Debug.Log($"lineRenderer == null");
+        }
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         BG_col = GameObject.FindGameObjectWithTag("BG").GetComponent<BoxCollider2D>();
 
         rock_pos = gameObject.transform.position;
+
+       // Debug.Log("Get_component");
     }
 
-    //[Command]
+
+    [Command]
+    public void CmdLine_setting()
+    {
+        // 서버에서 실행되는 코드
+        RpcLine_setting();
+        //Debug.Log("CmdLine_setting");
+    }
+
+    [ClientRpc]
+    public void RpcLine_setting()
+    {
+        if (isServer)
+        {
+            // 클라이언트에서 실행되는 코드
+            Line_setting();
+           // Debug.Log("RpcLine_setting");
+        }
+    }
+
+    [ClientRpc]
     public void Line_setting()
     {
+        if (lineRenderer == null)
+        {
+            //Debug.LogError("lineRenderer is null!");
+            return;
+        }
         //라인렌더러 설정
         lineRenderer.positionCount = 2;
-        lineRenderer.enabled = false;
+        //lineRenderer.enabled = false;
+        //Debug.Log("Line_setting");
     }
 
     private void change_sprite(int index) //유저 정보에 따라 스프라이트 바꾸기
@@ -86,7 +143,6 @@ public class Rock_YG : NetworkBehaviour
         Update_mousepos();
     }
 
-    //[Command]
     private void Update_mousepos() //마우스 위치 업데이트 -> 코루틴으로 변경해도 괜찮을듯
     {
         //Debug.Log("3");
@@ -97,7 +153,6 @@ public class Rock_YG : NetworkBehaviour
 
     private void OnGUI() //드래그 감지
     {
-        Debug.Log("OnGUI");
         if (!is_selected)
         {
             return;
@@ -119,28 +174,73 @@ public class Rock_YG : NetworkBehaviour
 
         if (m_event.type == EventType.MouseUp) //드래그 끝
         {
-            lineRenderer.enabled = false;
-            distance = Vector2.Distance(rock_pos, mouse_pos);
-            Go_rock();
+            if (isClient)
+            {
+                check_distance();
+            }
         }
     }
 
-    private void Go_rock() //addforce로 돌 움직이게 하기
+    [Client]
+    private void check_distance()
     {
+       // Debug.Log("check_distance");
+        lineRenderer.enabled = false;
+        distance = Vector2.Distance(rock_pos, mouse_pos);
+        //Debug.Log(distance);
+        CmdGo_rock(rock_pos, mouse_pos, distance);
+    }
+
+    [Command]
+    public void CmdGo_rock(Vector2 start, Vector2 end, float distance)
+    {
+        // 서버에서 실행되는 코드
+        RpcGo_rock(rock_pos, mouse_pos, distance);
+        //Debug.Log("CmdGo_rock");
+    }
+
+    [ClientRpc]
+    public void RpcGo_rock(Vector2 start, Vector2 end, float distance)
+    {
+        // 서버에서 실행되는 코드
+        Go_rock(rock_pos, mouse_pos, distance);
+        //Debug.Log("RpcGo_rock");
+    }
+
+    private void Go_rock(Vector2 start, Vector2 end, float distance) //addforce로 돌 움직이게 하기
+    {
+        //Debug.Log("Go_rock");
         is_selected = false;
-        rigid.AddForce(new Vector2(rock_pos.x - mouse_pos.x, rock_pos.y - mouse_pos.y) * distance, ForceMode2D.Impulse);
+        rigid.AddForce(new Vector2(start.x - end.x, start.y - end.y) * distance, ForceMode2D.Impulse);
+        //Debug.Log($"{rock_pos.x - mouse_pos.x} || {rock_pos.y - mouse_pos.y}");
     }
 
     private void OnTriggerExit2D(Collider2D col) //돌 죽으면 들어옴
     {
         if (col.Equals(BG_col))
         {
-            Dead_rock();
+            CmdDead_rock();
         }
     }
 
-    private void Dead_rock() //돌 죽게하는 메서드
+    [Command]
+    private void CmdDead_rock()
     {
-        Destroy(gameObject);
+        GameObject obj = GetComponent<NetworkIdentity>().gameObject;
+        Debug.Log("CmdDead_rock");
+        RpcDead_rock(obj);
+    }
+
+    [ClientRpc]
+    private void RpcDead_rock(GameObject obj)
+    {
+        Debug.Log("RpcDead_rock");
+        Dead_rock(obj);
+    }
+
+    private void Dead_rock(GameObject obj) //돌 죽게하는 메서드
+    {
+        Debug.Log("Dead_rock");
+        NetworkServer.Destroy(obj);
     }
 }
