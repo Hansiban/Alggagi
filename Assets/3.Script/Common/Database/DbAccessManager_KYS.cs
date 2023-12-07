@@ -33,7 +33,20 @@ public class DbAccessManager_KYS
     #endregion
 
     // Gamemanager가 User 데이터 관리할 수도 있음
-    public UserDataModel_KYS UserData { get; private set; } = null;
+    //public UserDataModel_KYS UserData { get; private set; } = null;
+
+    // 여러 씬에서 UserData에 접근하기에 생성한 다른 씬 test용 데이터
+    public UserDataModel_KYS UserData { get; private set; } = new UserDataModel_KYS()
+    {
+        Draw = 0,
+        Id = "test_id",
+        Level = 0,
+        Experience = 0,
+        Lose = 0,
+        Nickname = "test_nickname",
+        Password = "test_password",
+        Win = 0
+    };
 
     public bool InsertUserData(UserDataModel_KYS incomingData)
     {

@@ -14,4 +14,5 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/1.Scene/SYG/Logictest_YG.unity
     guid: 9836b712e4e7bdd4595f4b02b578d3b2
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: df264864e1d2bce42b7f4be0ab4c3336, type: 2}
