@@ -24,7 +24,7 @@ public class LobbyManager_KYS : NetworkBehaviour
     {
         base.OnStartAuthority();
 
-        CmdHandOverAutority();
+        //CmdHandOverAutority();
     }
 
     [Command]
@@ -41,6 +41,8 @@ public class LobbyManager_KYS : NetworkBehaviour
     private void Awake()
     {
         if (isServer) return;
+
+        _gameRoomPrefabs = new List<GameObject>();
 
         //_gameRoomPrefabs = new List<GameObject>();
 
@@ -62,28 +64,32 @@ public class LobbyManager_KYS : NetworkBehaviour
         //Debug.Log("_gameRoomCreateButton 대한 quthorityㄷ고 세팅 완료");
     }
 
-
-    [Command]
+    [Command(requiresAuthority = false)]
     public void Btn_CreateGameRoom()
     {
         Debug.Log("Btn_CreateGameRoom");
 
-        string name = string.IsNullOrWhiteSpace(_gameRoomNameInputField.text) ? DEFAULT_NAME : _gameRoomNameInputField.text;
-
-        GameObject newRoom = Instantiate(_gameRoomPrefab);
-
-        newRoom.GetComponent<GameRoomButton_KYS>()
-            .Init(name, DbAccessManager_KYS.Instance.UserData.Level.ToString());
-
-        newRoom.transform.SetParent(_gameRoomContainer);
-
-        _gameRoomPrefabs.Add(newRoom);
-
+        //return;
+        RpcTest();
     }
 
     [ClientRpc]
-    public void Test()
+    public void RpcTest()
     {
-        Debug.Log("Test");
+        Debug.Log("rpc test 진입");
+        string name = string.IsNullOrWhiteSpace(_gameRoomNameInputField.text) ? DEFAULT_NAME : _gameRoomNameInputField.text;
+
+        Debug.Log("rpc test1");
+        GameObject newRoom = Instantiate(_gameRoomPrefab);
+
+        Debug.Log("rpc test2");
+        newRoom.GetComponent<GameRoomButton_KYS>()
+            .Init(name, DbAccessManager_KYS.Instance.UserData.Level.ToString());
+
+        Debug.Log("rpc test3");
+        newRoom.transform.SetParent(_gameRoomContainer);
+
+        Debug.Log("rpc test4");
+        _gameRoomPrefabs.Add(newRoom);
     }
 }
