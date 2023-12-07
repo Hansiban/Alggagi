@@ -53,7 +53,7 @@ MonoBehaviour:
   offlineScene: 
   onlineScene: Assets/1.Scene/KYS/Lobby_KYS.unity
   transport: {fileID: 6904545534633788804}
-  networkAddress: 43.200.181.67
+  networkAddress: localhost
   maxConnections: 100
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
@@ -64,6 +64,7 @@ MonoBehaviour:
   spawnPrefabs:
   - {fileID: 4186446091217560110, guid: f38a8b9f633035446826303892b6fa5c, type: 3}
   - {fileID: 8577599198532167169, guid: 75e2e5acdfb596640ab53534701a8c80, type: 3}
+  - {fileID: 1402948929672863505, guid: d874b9fc5e6d85b4d96ec4f865adbc77, type: 3}
   snapshotSettings:
     bufferTimeMultiplier: 2
     bufferLimit: 32
