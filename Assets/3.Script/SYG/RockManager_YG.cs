@@ -92,11 +92,9 @@ public class RockManager_YG : NetworkBehaviour
         }
     }
 
-    [Command]
     private void Reset_rock()
     {
-        Debug.Log("Init_rock");
-        for (int i = 0; i < init_count; i++)
+        for (int i = 0; i < rock_list.Count; i++)
         {
             GameObject rock = rock_list[i];
             rock_list.Remove(rock);
