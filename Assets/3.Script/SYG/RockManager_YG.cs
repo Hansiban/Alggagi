@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
-public class RockManager_YG : MonoBehaviour
+public class RockManager_YG : NetworkBehaviour
 {
     #region ½ºÄÉÄ¡
 
@@ -32,17 +33,40 @@ public class RockManager_YG : MonoBehaviour
 
     private void Awake()
     {
-        Init_rock();
-        select_text.enabled = false;
+        //Init_rock();
+        //select_text = FindObjectOfType<Text>();
+        //select_text.enabled = false;
     }
 
     private void Start()
     {
+        //Selecting_rock();
+    }
+    public override void OnStartAuthority()
+    {
+        Init_rock();
+        select_text = FindObjectOfType<Text>();
+        select_text.enabled = false;
+
         Selecting_rock();
+        base.OnStartAuthority();
     }
 
+    public override void OnStopAuthority()
+    {
+        Reset_rock();
+        base.OnStopAuthority();
+    }
+
+    private void OnApplicationQuit()
+    {
+        Reset_rock();
+    }
+
+    [Command]
     private void Init_rock()
     {
+        Debug.Log("Init_rock");
         for (int i = 0; i < init_count; i++)
         {
             Vector3 pos = new Vector3();
@@ -54,9 +78,24 @@ public class RockManager_YG : MonoBehaviour
             {
                 pos = new Vector3(second_initpos.x + (i - 3) * x_distance, second_initpos.y, 0);
             }
+            
             GameObject rock = Instantiate(rock_prefab, pos, Quaternion.identity);
             rock_list.Add(rock);
+            NetworkServer.Spawn(rock);
         }
+    }
+
+        [Command]
+    private void Reset_rock()
+    {
+        Debug.Log("Init_rock");
+        for (int i = 0; i < init_count; i++)
+        {
+            GameObject rock = rock_list[i];
+            rock_list.Remove(rock);
+            Destroy(rock);
+        }
+        Debug.Log("Reset_rock");
     }
 
     private void Selecting_rock()

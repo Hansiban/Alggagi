@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/1.Scene/SYG/Server_YG.unity
     guid: f2ec4bb6eea5e3d468777df4037901b9
+  - enabled: 0
+    path: Assets/1.Scene/SYG/Logictest_YG.unity
+    guid: 9836b712e4e7bdd4595f4b02b578d3b2
   m_configObjects: {}

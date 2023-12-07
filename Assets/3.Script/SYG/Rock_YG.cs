@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
 
-public class Rock_YG : MonoBehaviour
+public class Rock_YG : NetworkBehaviour
 {
     #region 스케치
 
@@ -37,7 +37,21 @@ public class Rock_YG : MonoBehaviour
     [Header("Dead_rock")]
     [SerializeField] private BoxCollider2D BG_col;
 
+    //public override void OnStartAuthority()
+    //{
+    //    Get_component();
+    //    Line_setting();
+    //    base.OnStartAuthority();
+    //}
+
     private void Start()
+    {
+        Get_component();
+        Line_setting();
+    }
+
+    //[Command]
+    private void Get_component()
     {
         //할당
         lineRenderer = GetComponent<LineRenderer>();
@@ -47,9 +61,16 @@ public class Rock_YG : MonoBehaviour
 
         rock_pos = gameObject.transform.position;
 
+        Debug.Log("Get_component");
+    }
+
+    //[Command]
+    private void Line_setting()
+    {
         //라인렌더러 설정
         lineRenderer.positionCount = 2;
         lineRenderer.enabled = false;
+        Debug.Log("Line_setting");
     }
 
     private void change_sprite(int index) //유저 정보에 따라 스프라이트 바꾸기
@@ -59,11 +80,19 @@ public class Rock_YG : MonoBehaviour
 
     private void Update()
     {
+        //Debug.Log("1");
+        if (!is_selected)
+        {
+            return;
+        }
+        //Debug.Log("2");
         Update_mousepos();
     }
 
+    //[Command]
     private void Update_mousepos() //마우스 위치 업데이트 -> 코루틴으로 변경해도 괜찮을듯
     {
+        //Debug.Log("3");
         var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         pos = new Vector3(pos.x, pos.y, 0);
         mouse_pos = pos;
@@ -71,6 +100,7 @@ public class Rock_YG : MonoBehaviour
 
     private void OnGUI() //드래그 감지
     {
+        Debug.Log("OnGUI");
         if (!is_selected)
         {
             return;
@@ -116,5 +146,4 @@ public class Rock_YG : MonoBehaviour
     {
         Destroy(gameObject);
     }
-
 }

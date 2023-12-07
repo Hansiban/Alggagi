@@ -60,7 +60,7 @@ public class ServerChecker_YG : MonoBehaviour
     private void Default_Data(string path)
     {
         List<Item> item = new List<Item>();
-        item.Add(new Item("1", "127.0.0.1", "7777"));
+        item.Add(new Item("1", "43.200.181.67", "7777"));
 
         JsonData data = JsonMapper.ToJson(item);
         File.WriteAllText(path + "/License.json", data.ToString());
