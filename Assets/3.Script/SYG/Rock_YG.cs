@@ -51,7 +51,7 @@ public class Rock_YG : NetworkBehaviour
     }
 
     //[Command]
-    private void Get_component()
+    public void Get_component()
     {
         //할당
         lineRenderer = GetComponent<LineRenderer>();
@@ -60,17 +60,14 @@ public class Rock_YG : NetworkBehaviour
         BG_col = GameObject.FindGameObjectWithTag("BG").GetComponent<BoxCollider2D>();
 
         rock_pos = gameObject.transform.position;
-
-        Debug.Log("Get_component");
     }
 
     //[Command]
-    private void Line_setting()
+    public void Line_setting()
     {
         //라인렌더러 설정
         lineRenderer.positionCount = 2;
         lineRenderer.enabled = false;
-        Debug.Log("Line_setting");
     }
 
     private void change_sprite(int index) //유저 정보에 따라 스프라이트 바꾸기

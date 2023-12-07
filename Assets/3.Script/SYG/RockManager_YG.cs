@@ -24,12 +24,16 @@ public class RockManager_YG : NetworkBehaviour
     private int init_count = 7;
     [SerializeField] private List<GameObject> rock_list = new List<GameObject>();
     [SerializeField] private GameObject rock_prefab;
+    [SerializeField] private GameObject panel_prefab;
     Vector2 first_initpos = new Vector2(-5.64f, -3f);
     Vector2 second_initpos = new Vector2(-6.64f, -1.5f);
     float x_distance = 2f;
 
     [Header("Selected_rock")]
     [SerializeField] Text select_text;
+
+    [Header("Game_End")]
+    private UserDataModel_KYS user_data;
 
     private void Awake()
     {
@@ -66,6 +70,9 @@ public class RockManager_YG : NetworkBehaviour
     [Command]
     private void Init_rock()
     {
+        GameObject pannel = Instantiate(panel_prefab);
+        NetworkServer.Spawn(pannel);
+        
         Debug.Log("Init_rock");
         for (int i = 0; i < init_count; i++)
         {
@@ -85,11 +92,9 @@ public class RockManager_YG : NetworkBehaviour
         }
     }
 
-        [Command]
     private void Reset_rock()
     {
-        Debug.Log("Init_rock");
-        for (int i = 0; i < init_count; i++)
+        for (int i = 0; i < rock_list.Count; i++)
         {
             GameObject rock = rock_list[i];
             rock_list.Remove(rock);
@@ -137,14 +142,44 @@ public class RockManager_YG : NetworkBehaviour
                     select_rock.is_selected = true;
                     StopCoroutine(click_co());
                     select_text.enabled = false;
+                    return;
                 }
-            }
-            else
-            {
-                Debug.Log("클릭했는데 돌이 없음");
             }
         }
         is_myturn = false;
     }
 
+
+    #region game_end
+    private void Game_end(bool win)
+    {
+        if (win)
+        {
+            Win();
+        }
+        else
+        {
+            Lose();
+        }
+    }
+
+    private void Win()
+    {
+        Get_exp();
+        user_data.Win += 1;
+    }
+
+    private void Lose()
+    {
+        user_data.Lose += 1;
+    }
+
+    private void Get_exp()
+    {
+        //남은 말 수 체크하기
+        int num = rock_list.Count;
+        //경험치 얻기
+        user_data.Experience += num;
+    }
+    #endregion
 }
