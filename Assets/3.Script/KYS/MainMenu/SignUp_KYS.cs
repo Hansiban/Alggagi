@@ -22,6 +22,7 @@ class SignUp_KYS : MonoBehaviour
     // 회원가입 버튼
     public void Btn_OpenSignUpModal()
     {
+        // 모든 인풋필드를 빈 값으로 초기화
         _nicknameInputField.text = string.Empty;
         _idInputField.text = string.Empty;
         _pwdInputField.text = string.Empty;
@@ -30,18 +31,26 @@ class SignUp_KYS : MonoBehaviour
     }
 
     // 회원가입 창 닫기 버튼
-    public void Btn_CloseSignUpModal() => _signUpModal.SetActive(false);
+    public void Btn_CloseSignUpModal() => CloseSignUpModal();
+
+    private void CloseSignUpModal() => _signUpModal.SetActive(false);
 
     // 회원가입 창의 제출 버튼
     public void Btn_Submit()
     {
-        if (CheckSignUpValidation())
-            SignUp();
+        if (!CheckSignUpValidation())
+            return;
+
+        SignUp();
+        CloseSignUpModal();
     }
 
     private bool CheckSignUpValidation()
     {
-        return CheckIfIdValid() && CheckIfNicknameValid();
+        bool isIdValid = CheckIfIdValid();
+        bool isNickNameValid = CheckIfNicknameValid();
+
+        return isIdValid && isNickNameValid;
     }
 
     // 아이디 중복 검사
@@ -49,9 +58,10 @@ class SignUp_KYS : MonoBehaviour
     {
         string cmdTxt = $"SELECT * FROM user WHERE id = \"{_idInputField.text}\"";
 
-        var res = DbAccessManager_KYS.Instance.Select(cmdTxt);
+        // if does not exist, valid
+        bool isValid = !DbAccessManager_KYS.Instance.Select(cmdTxt);
 
-        bool isValid = string.IsNullOrEmpty(res);
+        Debug.LogWarning("Id " + isValid);
 
         _idInvalidationText.SetActive(!isValid);
 
@@ -63,30 +73,25 @@ class SignUp_KYS : MonoBehaviour
     {
         string cmdTxt = $"SELECT * FROM user WHERE nickname = \"{_nicknameInputField.text}\"";
 
-        var res = DbAccessManager_KYS.Instance.Select(cmdTxt);
+        // if does not exist, valid
+        bool isValid = !DbAccessManager_KYS.Instance.Select(cmdTxt);
 
-        bool isValid = string.IsNullOrEmpty(res);
+        Debug.LogWarning("Nick reverse " + DbAccessManager_KYS.Instance.Select(cmdTxt));
+        Debug.LogWarning("Nick " + isValid);
 
         _nickNameInvalidationText.SetActive(!isValid);
 
         return isValid;
     }
 
-
-    private int test = 6;
-
     private void SignUp()
     {
-        // TODO : get rid of test
-        string cmdTxt = $"INSERT INTO user VALUES (\"{_idInputField.text}\", \"{_pwdInputField.text}\", \"{_nicknameInputField.text}\", {test}, {test}, {test}, {test}, {test});";
+        string cmdTxt = $"INSERT INTO user VALUES (\"{_idInputField.text}\", \"{_pwdInputField.text}\", \"{_nicknameInputField.text}\"," +
+                                                    $"0, 0, 0, 0, 0);";
 
         var res = DbAccessManager_KYS.Instance.Insert(cmdTxt);
 
-        Debug.Log("SignUp " + res);
-    }
-
-    public void OnSignUpValidated()
-    {
-        // MainMenu_KYS.ShowProfile()
+        if(res)
+            _signUpModal.SetActive(false);
     }
 }

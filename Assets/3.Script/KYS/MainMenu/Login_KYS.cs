@@ -21,19 +21,30 @@ class Login_KYS : MonoBehaviour
     // 로그인 버튼
     public void Btn_Login()
     {
-        ValidateLogin();
+        UserDataModel_KYS userData = ValidateLogin();
+
+        if (userData == null)
+            return;
+
+        // 유저 데이터 저장
+        DbAccessManager_KYS.Instance.InsertUserData(userData);
+
+        // 프로필 불러오기
+        MainMenu_KYS mainMenu = gameObject.GetComponent<MainMenu_KYS>();
+        mainMenu.ShowProfile();
     }
 
-    private void ValidateLogin()
+    // 로그인이 잘 된다면, 유저 데이터 전체를 string으로 리턴
+    private UserDataModel_KYS ValidateLogin()
     {
         string cmdTxt = $"SELECT * FROM user WHERE id = \"{_idInputField.text}\" && password = \"{_pwdInputField.text}\"";
 
-        var res = DbAccessManager_KYS.Instance.Select(cmdTxt);
+        UserDataModel_KYS userData = DbAccessManager_KYS.Instance.SelectAndRead<UserDataModel_KYS>(cmdTxt);
 
-        if (!string.IsNullOrEmpty(res))
-            Debug.Log("Login Succeeded with " + res);
-        else
+        if (userData == default(UserDataModel_KYS))
             StartCoroutine(nameof(NotifyInvalidation));
+
+        return userData;
     }
 
     private IEnumerator NotifyInvalidation()

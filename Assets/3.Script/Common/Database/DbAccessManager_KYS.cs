@@ -3,23 +3,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Reflection;
 using UnityEngine;
-
-public class User
-{
-    public string Id { get; set; }
-    public string Password { get; set; }
-    public string Nickname { get; set; }
-    public int Level { get; set; }
-    public int Experience { get; set; }
-    public int Win { get; set; }
-    public int Lose { get; set; }
-    public int Draw { get; set; }
-}
 
 // async
 public class DbAccessManager_KYS
 {
+    #region Singleton Instance
     private static DbAccessManager_KYS _instance;
     public static DbAccessManager_KYS Instance
     {
@@ -31,19 +21,41 @@ public class DbAccessManager_KYS
             return _instance;
         }
     }
+    #endregion
 
-    static string ipAddress = "172.30.1.19";
-    static string db_id = "root";
-    static string db_pw = "1234";
-    static string db_name = "Alggagi_Test";
+    #region DB Connection Info
+    private const string IP_ADDRESS = "172.30.1.19";
+    private const string DB_ID = "root";
+    private const string DB_PWD = "1234";
+    private const string DB_NAME = "Alggagi_Test";
 
-    string strConn = string.Format("server={0};uid={1};pwd={2};database={3};charset=utf8 ;", ipAddress, db_id, db_pw, db_name);
+    private readonly string connStr = $"server={IP_ADDRESS};uid={DB_ID};pwd={DB_PWD};database={DB_NAME};charset=utf8 ;";
+    #endregion
 
-    public string Select(string cmdTxt)
+    // Gamemanager가 User 데이터 관리할 수도 있음
+    public UserDataModel_KYS UserData { get; private set; } = null;
+
+    public bool InsertUserData(UserDataModel_KYS incomingData)
     {
-        string result = string.Empty;
+        if (UserData != null)
+            return false;
 
-        using (MySqlConnection connection = new MySqlConnection(strConn))
+        UserData = incomingData;
+        
+        return true;
+    }
+
+    public void RemoveUserData()
+    {
+        UserData = null;
+    }
+
+    // return json
+    public T SelectAndRead<T>(string cmdTxt) where T : new()
+    {
+        T rowModel = default(T);
+
+        using (MySqlConnection connection = new MySqlConnection(connStr))
         {
             try
             {
@@ -51,10 +63,48 @@ public class DbAccessManager_KYS
 
                 using (MySqlCommand command = new MySqlCommand(cmdTxt, connection))
                 {
-                    object exeRes = command.ExecuteScalar();
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
 
-                    if (exeRes != null)
-                        result = exeRes.ToString();
+                        while (reader.Read())
+                        {
+                            rowModel = Activator.CreateInstance<T>();
+
+                            foreach (PropertyInfo prop in typeof(T).GetProperties())
+                            {
+                                object rawValue = reader[prop.Name];
+
+                                object convertedValue = Convert.ChangeType(rawValue, prop.PropertyType);
+                                prop.SetValue(rowModel, convertedValue);
+                            }
+
+                            //for (int i = 0; i < reader.FieldCount; i++)
+                            //{
+                            //    string columnName = reader.GetName(i);
+                            //    string columnValue = reader.IsDBNull(i) ? null : reader.GetValue(i).ToString();
+
+                            //    // Set the property dynamically using reflection
+                            //    PropertyInfo property = typeof(T).GetProperty(columnName);
+                            //    if (property != null)
+                            //    {
+                            //        // Convert the column value to the property type if needed
+                            //        object convertedValue = Convert.ChangeType(columnValue, property.PropertyType);
+                            //        property.SetValue(rowModel, convertedValue);
+                            //    }
+                            //}
+                        }
+
+                        //while (reader.Read())
+                        //{
+                        //    // Iterate through all columns dynamically
+                        //    for (int i = 0; i < reader.FieldCount; i++)
+                        //    {
+                        //        string columnName = reader.GetName(i);
+                        //        string columnValue = reader.IsDBNull(i) ? null : reader.GetValue(i).ToString();
+                        //        Debug.Log($"{columnName}: {columnValue}");
+                        //    }
+                        //}
+                    }
                 }
             }
             catch (Exception ex)
@@ -63,14 +113,40 @@ public class DbAccessManager_KYS
             }
         }
 
-        return result;
+        return rowModel;
+    }
+
+    // Check if exists
+    public bool Select(string cmdTxt)
+    {
+        bool exist = false;
+        
+        using (MySqlConnection connection = new MySqlConnection(connStr))
+        {
+            try
+            {
+                connection.Open();
+
+                using (MySqlCommand command = new MySqlCommand(cmdTxt, connection))
+                {
+                    object res = command.ExecuteScalar();
+                    exist = res != null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("DB Error: " + ex.Message);
+            }
+        }
+
+        return exist;
     }
 
     public bool Insert(string cmdTxt)
     {
         bool success = false;
 
-        using (MySqlConnection connection = new MySqlConnection(strConn))
+        using (MySqlConnection connection = new MySqlConnection(connStr))
         {
             try
             {
