@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - BG
+  - Rock
   layers:
   - Default
   - TransparentFX
@@ -41,6 +43,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Player
-    uniqueID: 3182881323
+  - name: BackGround
+    uniqueID: 624215043
     locked: 0
