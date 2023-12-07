@@ -7,22 +7,33 @@ public class LobbyManager_KYS : MonoBehaviour
 {
     [SerializeField] private TMP_InputField _gameRoomNameInputField;
 
-    private List<GameRoom_KYS> _gameRooms;
+    [SerializeField] private Transform _gameRoomContainer;
+
+    [SerializeField] private GameObject _gameRoomPrefab;
+
+    private List<GameObject> _gameRoomPrefabs;
+
+    private const string DEFAULT_NAME = "같이 게임해요~";
+
 
     private void Awake()
     {
-        _gameRooms = new List<GameRoom_KYS>();
+        _gameRoomPrefabs = new List<GameObject>();
     }
 
 
+    // [Command]
     public void Btn_CreateGameRoom()
     {
-        // _gameRoomNameInputField.text;
-        // _gameRooms.Add();
-    }
+        string name = string.IsNullOrWhiteSpace(_gameRoomNameInputField.text) ? DEFAULT_NAME : _gameRoomNameInputField.text;
 
-    private void AddGameRoom()
-    {
+        GameObject newRoom = Instantiate(_gameRoomPrefab);
 
+        newRoom.GetComponent<GameRoomButton_KYS>()
+            .Init(name, DbAccessManager_KYS.Instance.UserData.Level.ToString());
+
+        newRoom.transform.SetParent(_gameRoomContainer);
+
+        _gameRoomPrefabs.Add(newRoom);
     }
 }
