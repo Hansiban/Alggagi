@@ -182,7 +182,7 @@ public class RockManager_YG : NetworkBehaviour
         //남은 말 수 체크하기
         int num = rock_list.Count;
         //경험치 얻기
-        user_data.Experience += num;
+        user_data.Exp += num;
     }
     #endregion
 }

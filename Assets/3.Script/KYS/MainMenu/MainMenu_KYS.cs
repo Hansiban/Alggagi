@@ -31,7 +31,7 @@ class MainMenu_KYS : MonoBehaviour // temp
     {
         _logInSignUpPanel.SetActive(false);
 
-        _nickName.text = DbAccessManager_KYS.Instance.UserData.Nickname;
+        _nickName.text = DbAccessManager_KYS.Instance.UserData.Nick;
         _level.text = $"{DbAccessManager_KYS.Instance.UserData.Level}";
 
         _userProfilePanel.SetActive(true);
