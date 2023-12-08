@@ -20,24 +20,6 @@ public class LobbyManager_KYS : NetworkBehaviour
     private const string DEFAULT_NAME = "같이 게임해요~";
 
 
-    public override void OnStartAuthority()
-    {
-        base.OnStartAuthority();
-
-        //CmdHandOverAutority();
-    }
-
-    [Command]
-    internal void CmdHandOverAutority()
-    {
-        netIdentity.AssignClientAuthority(connectionToClient);
-        Debug.Log("Lobby Manager에 대한 quthorityㄷ고 세팅 완료");
-
-        _gameRoomCreateButton.GetComponent<NetworkIdentity>().AssignClientAuthority(connectionToClient);
-        Debug.Log("_gameRoomCreateButton 대한 quthorityㄷ고 세팅 완료");
-    }
-
-
     private void Awake()
     {
         if (isServer) return;
@@ -64,29 +46,36 @@ public class LobbyManager_KYS : NetworkBehaviour
         //Debug.Log("_gameRoomCreateButton 대한 quthorityㄷ고 세팅 완료");
     }
 
-    [Command(requiresAuthority = false)]
     public void Btn_CreateGameRoom()
     {
-        Debug.Log("Btn_CreateGameRoom");
+        string roomName = string.IsNullOrWhiteSpace(_gameRoomNameInputField.text) ? DEFAULT_NAME : _gameRoomNameInputField.text;
 
-        //return;
-        RpcTest();
+        CmdCreateGameRoom(DbAccessManager_KYS.Instance.UserData, roomName);
+
+        //// add another MNRM
+        //MyNetworkManager_KYS.singleton.AddMyNetworkRoomManager(DbAccessManager_KYS.Instance.UserData);
+
+        //// navigate to the room/online scene of the made MNRM 
+        //MyNetworkRoomManager mnrm = MyNetworkManager_KYS.singleton.GetMyNetworkRoomManager(DbAccessManager_KYS.Instance.UserData.Id);
+
+        // mnrm.NavigateToScene();
+
+    }
+
+    [Command(requiresAuthority = false)]
+    public void CmdCreateGameRoom(UserDataModel_KYS hostData, string roomName)
+    {
+        RpcTest(hostData, roomName);
     }
 
     [ClientRpc]
-    public void RpcTest()
+    public void RpcTest(UserDataModel_KYS hostData, string roomName)
     {
-        Debug.Log("rpc test 진입");
-        string name = string.IsNullOrWhiteSpace(_gameRoomNameInputField.text) ? DEFAULT_NAME : _gameRoomNameInputField.text;
-
-        Debug.Log("rpc test1");
         GameObject newRoom = Instantiate(_gameRoomPrefab);
 
-        Debug.Log("rpc test2");
         newRoom.GetComponent<GameRoomButton_KYS>()
-            .Init(name, DbAccessManager_KYS.Instance.UserData.Level.ToString());
+            .Init(hostData, roomName);
 
-        Debug.Log("rpc test3");
         newRoom.transform.SetParent(_gameRoomContainer);
 
         Debug.Log("rpc test4");

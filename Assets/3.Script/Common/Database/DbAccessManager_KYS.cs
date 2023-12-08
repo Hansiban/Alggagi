@@ -41,10 +41,10 @@ public class DbAccessManager_KYS
         Draw = 0,
         Id = "test_id",
         Level = 0,
-        Experience = 0,
+        Exp = 0,
         Lose = 0,
-        Nickname = "test_nickname",
-        Password = "test_password",
+        Nick = "test_nickname",
+        Pwd = "test_password",
         Win = 0
     };
 

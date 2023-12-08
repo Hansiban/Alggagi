@@ -17,11 +17,26 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/1.Scene/KYS/MainMenu_KYS.unity
     guid: 88a6e1fb047cca44e8296352b8ed8d30
-  - enabled: 0
-    path: Assets/1.Scene/KYS/Lobby_KYS.unity
+  - enabled: 1
+    path: Assets/1.Scene/KYS/Lobby_KYS_not-using.unity
     guid: cd15d5ddac17b1b49ab4f233d9406f0a
-  - enabled: 0
-    path: Assets/1.Scene/SYG/RoomScene_YG.unity
-    guid: 2bd46eee849072444a36b54cfc88ec78
+  - enabled: 1
+    path: Assets/1.Scene/KYS/_Single_NetworkRoomManager_TestScene.unity
+    guid: 4fa3a60788892524da1764b96fac1298
+  - enabled: 1
+    path: Assets/1.Scene/KYS/Temp_GameScene_KYS.unity
+    guid: 85c40aa6e6f250542adf9342aab5b529
+  - enabled: 1
+    path: Assets/1.Scene/KYS/WaitingRoom_KYS.unity
+    guid: d42364c561e44b94496b25214ea69cd3
+  - enabled: 1
+    path: Assets/Mirror/Examples/Room/Scenes/OfflineScene.unity
+    guid: 9e6f14982412b2545a0911ebaaa46a23
+  - enabled: 1
+    path: Assets/Mirror/Examples/Room/Scenes/OnlineScene.unity
+    guid: d7a6763559b31854586c9e49916273ef
+  - enabled: 1
+    path: Assets/Mirror/Examples/Room/Scenes/RoomScene.unity
+    guid: 48478f4d522f96945b8396f376299d3a
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: df264864e1d2bce42b7f4be0ab4c3336, type: 2}

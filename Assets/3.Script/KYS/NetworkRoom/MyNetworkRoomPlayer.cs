@@ -1,10 +1,10 @@
 using Mirror;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MyNetworkManager_KYS : NetworkManager
+// ´ë±â½Ç
+public class MyNetworkRoomPlayer : NetworkRoomPlayer
 {
-    
+
 }
