@@ -5,10 +5,6 @@ using UnityEngine;
 
 public class MyNetworkRoomManager : NetworkRoomManager
 {
-    [Header("Spawner Setup")]
-    [Tooltip("Reward Prefab for the Spawner")]
-    public GameObject rewardPrefab;
-
     public static new MyNetworkRoomManager singleton { get; private set; }
 
     /// <summary>
@@ -29,21 +25,9 @@ public class MyNetworkRoomManager : NetworkRoomManager
     {
         // spawn the initial batch of Rewards
         if (sceneName == GameplayScene)
-            InitialSpawn();
-    }
-
-    [ServerCallback]
-    internal static void InitialSpawn()
-    {
-        for (int i = 0; i < 10; i++)
-            SpawnReward();
-    }
-
-    [ServerCallback]
-    internal static void SpawnReward()
-    {
-        Vector3 spawnPosition = new Vector3(Random.Range(-19, 20), 1, Random.Range(-19, 20));
-        NetworkServer.Spawn(Object.Instantiate(MyNetworkRoomManager.singleton.rewardPrefab, spawnPosition, Quaternion.identity));
+        {
+            // profile ·Îµù
+        }
     }
 
     /// <summary>
