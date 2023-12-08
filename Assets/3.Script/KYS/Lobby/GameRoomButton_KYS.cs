@@ -16,6 +16,8 @@ public class GameRoomButton_KYS : MonoBehaviour
     [SerializeField] private GameObject _waitingNotifier;
     [SerializeField] private GameObject _gameRunningNotifier;
 
+    private UserDataModel_KYS _hostData;
+
     private bool _isOpen;
     public bool IsOpen
     {
@@ -30,12 +32,13 @@ public class GameRoomButton_KYS : MonoBehaviour
     }
 
     // Prefab 생성 시 꼭 불러주어야 함
-    internal void Init(string name, string level)
+    internal void Init(UserDataModel_KYS hostData, string name)
     {
         IsOpen = true;
 
+        _hostData = hostData;
         _name.text = name;
-        _level.text = level;
+        _level.text = hostData.Level.ToString();
     }
 
     // []
