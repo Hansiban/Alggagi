@@ -63,8 +63,10 @@ public class DbAccessManager_KYS
         UserData = null;
     }
 
-    // return json
-    public T SelectAndRead<T>(string cmdTxt) where T : new()
+    /// <summary>
+    /// 파라미터 cmdTxt를 실행했을 때 데이터를 찾았을 경우 지정한 타입 T의 형태로 반환, 그렇지 않을 경우 타입 T의 default 값(null 등)을 반환
+    /// </summary>
+    public T Select<T>(string cmdTxt) where T : new()
     {
         T rowModel = default(T);
 
@@ -129,7 +131,9 @@ public class DbAccessManager_KYS
         return rowModel;
     }
 
-    // Check if exists
+    /// <summary>
+    /// 파라미터 cmdTxt를 실행했을 때 데이터를 찾았을 경우 true를 반환, 그렇지 않을 경우 false를 반환
+    /// </summary>
     public bool Select(string cmdTxt)
     {
         bool exist = false;
