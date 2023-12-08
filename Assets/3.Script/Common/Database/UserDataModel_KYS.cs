@@ -1,14 +1,12 @@
-public class UserDataModel_KYS : IQueryDataModel_KYS
+public class UserDataModel_KYS
 {
     public string Id { get; set; }
-    public string Password { get; set; }
-    public string Nickname { get; set; }
+    public string Pwd { get; set; }
+    public string Nick { get; set; }
 
-    public int Level { get; set; }
-    public int Experience { get; set; }
+    public int Lvl { get; set; }
+    public int Exp { get; set; }
     public int Win { get; set; }
     public int Lose { get; set; }
     public int Draw { get; set; }
-
-    // tostring
 }

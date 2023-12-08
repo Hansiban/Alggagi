@@ -19,11 +19,11 @@ public class RockManager_YG : NetworkBehaviour
     #endregion
 
     private bool is_myturn = true; //내차롄지 확인
-
     [Header("Init_rock")]
     private int init_count = 7;
     [SerializeField] private List<GameObject> rock_list = new List<GameObject>();
     [SerializeField] private GameObject rock_prefab;
+    [SerializeField] private GameObject panel_prefab;
     Vector2 first_initpos = new Vector2(-5.64f, -3f);
     Vector2 second_initpos = new Vector2(-6.64f, -1.5f);
     float x_distance = 2f;
@@ -31,8 +31,15 @@ public class RockManager_YG : NetworkBehaviour
     [Header("Selected_rock")]
     [SerializeField] Text select_text;
 
+    [Header("Game_End")]
+    private UserDataModel_KYS user_data;
+
+
     private void Awake()
     {
+        // 일단 해봄
+        this.enabled = false;
+
         //Init_rock();
         //select_text = FindObjectOfType<Text>();
         //select_text.enabled = false;
@@ -47,7 +54,6 @@ public class RockManager_YG : NetworkBehaviour
         Init_rock();
         select_text = FindObjectOfType<Text>();
         select_text.enabled = false;
-
         Selecting_rock();
         base.OnStartAuthority();
     }
@@ -66,7 +72,9 @@ public class RockManager_YG : NetworkBehaviour
     [Command]
     private void Init_rock()
     {
-        Debug.Log("Init_rock");
+        GameObject pannel = Instantiate(panel_prefab);
+        NetworkServer.Spawn(pannel);
+
         for (int i = 0; i < init_count; i++)
         {
             Vector3 pos = new Vector3();
@@ -78,18 +86,60 @@ public class RockManager_YG : NetworkBehaviour
             {
                 pos = new Vector3(second_initpos.x + (i - 3) * x_distance, second_initpos.y, 0);
             }
-            
             GameObject rock = Instantiate(rock_prefab, pos, Quaternion.identity);
-            rock_list.Add(rock);
-            NetworkServer.Spawn(rock);
+
+            /*
+            if(만약 요청한 클라이언트의 networkroomplayer.index가 0이라면)
+            {
+              rock.transform.position += Vector3.up * 3;
+            }
+            */
+
+            NetworkServer.Spawn(rock, connectionToClient);
+            
         }
     }
 
-        [Command]
+    //private void Init_rock_()
+    //{
+    //    GameObject pannel = Instantiate(panel_prefab);
+    //    NetworkServer.Spawn(pannel);
+
+    //    for (int i = 0; i < init_count; i++)
+    //    {
+    //        Vector3 pos = new Vector3();
+    //        if (i < init_count / 2)
+    //        {
+    //            pos = new Vector3(first_initpos.x + i * x_distance, first_initpos.y, 0);
+    //        }
+    //        else
+    //        {
+    //            pos = new Vector3(second_initpos.x + (i - 3) * x_distance, second_initpos.y, 0);
+    //        }
+
+    //        GameObject rock = Instantiate(rock_prefab, pos, Quaternion.identity);
+    //        rock_list.Add(rock);
+
+    //        // 스폰된 객체의 NetworkIdentity를 가져와서 권한 설정
+    //        NetworkIdentity rockIdentity = rock.GetComponent<NetworkIdentity>();
+
+    //        // 현재 스폰된 클라이언트가 첫 번째 클라이언트인 경우
+    //        if (NetworkServer.connections[0] != null && rockIdentity.connectionToClient == NetworkServer.connections[0])
+    //        {
+    //            rockIdentity.AssignClientAuthority(NetworkServer.connections[0]);
+    //        }
+    //        // 현재 스폰된 클라이언트가 두 번째 클라이언트인 경우
+    //        else if (NetworkServer.connections[1] != null && rockIdentity.connectionToClient == NetworkServer.connections[1])
+    //        {
+    //            rockIdentity.AssignClientAuthority(NetworkServer.connections[1]);
+    //            rock.transform.position += Vector3.up * 3;
+    //        }
+    //    }
+    //}
+
     private void Reset_rock()
     {
-        Debug.Log("Init_rock");
-        for (int i = 0; i < init_count; i++)
+        for (int i = 0; i < rock_list.Count; i++)
         {
             GameObject rock = rock_list[i];
             rock_list.Remove(rock);
@@ -122,7 +172,6 @@ public class RockManager_YG : NetworkBehaviour
     private void find_rock()
     {
         Vector2 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Debug.Log(pos);
         RaycastHit2D[] hit = Physics2D.RaycastAll(pos, Vector2.zero);
         foreach(RaycastHit2D r in hit)
         {
@@ -137,14 +186,44 @@ public class RockManager_YG : NetworkBehaviour
                     select_rock.is_selected = true;
                     StopCoroutine(click_co());
                     select_text.enabled = false;
+                    return;
                 }
-            }
-            else
-            {
-                Debug.Log("클릭했는데 돌이 없음");
             }
         }
         is_myturn = false;
     }
 
+
+    #region game_end
+    private void Game_end(bool win)
+    {
+        if (win)
+        {
+            Win();
+        }
+        else
+        {
+            Lose();
+        }
+    }
+
+    private void Win()
+    {
+        Get_exp();
+        user_data.Win += 1;
+    }
+
+    private void Lose()
+    {
+        user_data.Lose += 1;
+    }
+
+    private void Get_exp()
+    {
+        //남은 말 수 체크하기
+        int num = rock_list.Count;
+        //경험치 얻기
+        user_data.Exp += num;
+    }
+    #endregion
 }

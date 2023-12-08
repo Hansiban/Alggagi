@@ -27,13 +27,26 @@ public class DbAccessManager_KYS
     private const string IP_ADDRESS = "172.30.1.19";
     private const string DB_ID = "root";
     private const string DB_PWD = "1234";
-    private const string DB_NAME = "Alggagi_Test";
+    private const string DB_NAME = "Alggagi";
 
     private readonly string connStr = $"server={IP_ADDRESS};uid={DB_ID};pwd={DB_PWD};database={DB_NAME};charset=utf8 ;";
     #endregion
 
     // Gamemanager가 User 데이터 관리할 수도 있음
-    public UserDataModel_KYS UserData { get; private set; } = null;
+    //public UserDataModel_KYS UserData { get; private set; } = null;
+
+    // 여러 씬에서 UserData에 접근하기에 생성한 다른 씬 test용 데이터
+    public UserDataModel_KYS UserData { get; private set; } = new UserDataModel_KYS()
+    {
+        Draw = 0,
+        Id = "test_id",
+        Lvl = 0,
+        Exp = 0,
+        Lose = 0,
+        Nick = "test_nickname",
+        Pwd = "test_password",
+        Win = 0
+    };
 
     public bool InsertUserData(UserDataModel_KYS incomingData)
     {
@@ -50,8 +63,10 @@ public class DbAccessManager_KYS
         UserData = null;
     }
 
-    // return json
-    public T SelectAndRead<T>(string cmdTxt) where T : new()
+    /// <summary>
+    /// 파라미터 cmdTxt를 실행했을 때 데이터를 찾았을 경우 지정한 타입 T의 형태로 반환, 그렇지 않을 경우 타입 T의 default 값(null 등)을 반환
+    /// </summary>
+    public T Select<T>(string cmdTxt) where T : new()
     {
         T rowModel = default(T);
 
@@ -116,7 +131,9 @@ public class DbAccessManager_KYS
         return rowModel;
     }
 
-    // Check if exists
+    /// <summary>
+    /// 파라미터 cmdTxt를 실행했을 때 데이터를 찾았을 경우 true를 반환, 그렇지 않을 경우 false를 반환
+    /// </summary>
     public bool Select(string cmdTxt)
     {
         bool exist = false;

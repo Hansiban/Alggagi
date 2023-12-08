@@ -37,9 +37,9 @@ class Login_KYS : MonoBehaviour
     // 로그인이 잘 된다면, 유저 데이터 전체를 string으로 리턴
     private UserDataModel_KYS ValidateLogin()
     {
-        string cmdTxt = $"SELECT * FROM user WHERE id = \"{_idInputField.text}\" && password = \"{_pwdInputField.text}\"";
+        string cmdTxt = $"SELECT * FROM user WHERE id = \"{_idInputField.text}\" && pwd = \"{_pwdInputField.text}\"";
 
-        UserDataModel_KYS userData = DbAccessManager_KYS.Instance.SelectAndRead<UserDataModel_KYS>(cmdTxt);
+        UserDataModel_KYS userData = DbAccessManager_KYS.Instance.Select<UserDataModel_KYS>(cmdTxt);
 
         if (userData == default(UserDataModel_KYS))
             StartCoroutine(nameof(NotifyInvalidation));
@@ -62,7 +62,6 @@ class Login_KYS : MonoBehaviour
         while (_invalidationTextTimer < 3)
         {
             _invalidationTextTimer += Time.deltaTime;
-            Debug.Log("_invalidationTextTimer:  "+ _invalidationTextTimer);
             yield return null;
         }
 
