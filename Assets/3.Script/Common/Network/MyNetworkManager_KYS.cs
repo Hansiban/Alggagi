@@ -42,48 +42,40 @@ public class MyNetworkManager_KYS : NetworkManager
     //{
     //    base.OnClientDisconnect();
     //}
+
+    //public new static MyNetworkManager_KYS singleton { get; internal set; }
+
+    //public GameObject _networkRoomManagerPrefab;
+
+    //[SerializeField]
+    //private Dictionary<string, MyNetworkRoomManager> _myNetworkRoomManagers; // key = host id
+
+    //public void AddMyNetworkRoomManager(UserDataModel_KYS hostData)
+    //{
+    //    GameObject roomManagerObject = new GameObject(hostData.Id + "_RoomManager");
+    //    MyNetworkRoomManager myRoomManager = roomManagerObject.AddComponent<MyNetworkRoomManager>();
+
+
+    //    string tempSurfix = DateTime.Now.ToString();
+    //    if (_myNetworkRoomManagers.ContainsKey(hostData.Id))
+    //    {
+    //        _myNetworkRoomManagers.Add(hostData.Id + tempSurfix, myRoomManager);
+    //    }
+    //    else
+    //    {
+    //        _myNetworkRoomManagers.Add(hostData.Id + tempSurfix, myRoomManager);
+    //    }
+
+    //    Debug.Log(hostData.Id + "  Added MNRM");
+    //}
+
+    //public MyNetworkRoomManager GetMyNetworkRoomManager(string key)
+    //{
+    //    if(_myNetworkRoomManagers.ContainsKey(key))
+    //        return _myNetworkRoomManagers[key];
+
+    //    return null;
+    //}
     #endregion
 
-    public new static MyNetworkManager_KYS singleton { get; internal set; }
-
-    public GameObject _networkRoomManagerPrefab;
-
-    [SerializeField]
-    private Dictionary<string, MyNetworkRoomManager> _myNetworkRoomManagers; // key = host id
-
-    public void AddMyNetworkRoomManager(UserDataModel_KYS hostData)
-    {
-        GameObject roomManagerObject = new GameObject(hostData.Id + "_RoomManager");
-        MyNetworkRoomManager myRoomManager = roomManagerObject.AddComponent<MyNetworkRoomManager>();
-
-
-        string tempSurfix = DateTime.Now.ToString();
-        if (_myNetworkRoomManagers.ContainsKey(hostData.Id))
-        {
-            _myNetworkRoomManagers.Add(hostData.Id + tempSurfix, myRoomManager);
-        }
-        else
-        {
-            _myNetworkRoomManagers.Add(hostData.Id + tempSurfix, myRoomManager);
-        }
-
-        Debug.Log(hostData.Id + "  Added MNRM");
-    }
-
-    public MyNetworkRoomManager GetMyNetworkRoomManager(string key)
-    {
-        if(_myNetworkRoomManagers.ContainsKey(key))
-            return _myNetworkRoomManagers[key];
-
-        return null;
-    }
-
-
-
-    public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation, bool customHandling)
-    {
-        base.OnClientChangeScene(newSceneName, sceneOperation, customHandling);
-
-        //if(newSceneName.Equals())
-    }
 }
