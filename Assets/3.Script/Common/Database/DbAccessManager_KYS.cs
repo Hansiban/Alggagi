@@ -27,7 +27,7 @@ public class DbAccessManager_KYS
     private const string IP_ADDRESS = "172.30.1.19";
     private const string DB_ID = "root";
     private const string DB_PWD = "1234";
-    private const string DB_NAME = "Alggagi_Test";
+    private const string DB_NAME = "Alggagi";
 
     private readonly string connStr = $"server={IP_ADDRESS};uid={DB_ID};pwd={DB_PWD};database={DB_NAME};charset=utf8 ;";
     #endregion
@@ -40,7 +40,7 @@ public class DbAccessManager_KYS
     {
         Draw = 0,
         Id = "test_id",
-        Level = 0,
+        Lvl = 0,
         Exp = 0,
         Lose = 0,
         Nick = "test_nickname",

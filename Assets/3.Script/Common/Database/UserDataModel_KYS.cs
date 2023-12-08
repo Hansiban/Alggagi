@@ -4,7 +4,7 @@ public class UserDataModel_KYS
     public string Pwd { get; set; }
     public string Nick { get; set; }
 
-    public int Level { get; set; }
+    public int Lvl { get; set; }
     public int Exp { get; set; }
     public int Win { get; set; }
     public int Lose { get; set; }

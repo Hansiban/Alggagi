@@ -1378,8 +1378,7 @@ MonoBehaviour:
   _logInSignUpPanel: {fileID: 1831192964}
   _userProfilePanel: {fileID: 515608518}
   _logoutButton: {fileID: 260557371}
-  _nickName: {fileID: 0}
-  _level: {fileID: 0}
+  _profile: {fileID: 287755783537934705}
 --- !u!114 &379274481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6200,3 +6199,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9df320d817a124d49b3a5026a9a8d309, type: 3}
+--- !u!114 &287755783537934705 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -8004715361240900172, guid: 9df320d817a124d49b3a5026a9a8d309, type: 3}
+  m_PrefabInstance: {fileID: 287755783537934704}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 515608518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6a52d307499934f9178f7c851788ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -5,7 +5,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// 얘는 그냥 잘 돌아감. 버튼 눌리면 isOpen false 되면 텍스트 잘 바뀜.sibal
 public class GameRoomButton_KYS : MonoBehaviour
 {
     [SerializeField] private Button _enterButton;
@@ -38,10 +37,9 @@ public class GameRoomButton_KYS : MonoBehaviour
 
         _hostData = hostData;
         _name.text = name;
-        _level.text = hostData.Level.ToString();
+        _level.text = hostData.Lvl.ToString();
     }
 
-    // []
     // _enterButton (이미 프리팹 본인이 버튼임)
     public void Btn_EnterGameRoom()
     {

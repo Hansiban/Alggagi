@@ -40,6 +40,9 @@ public class MyNetworkRoomManager : NetworkRoomManager
     /// <returns>true unless some code in here decides it needs to abort the replacement</returns>
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
     {
+        Debug.Log("OnRoomServerSceneLoadedForPlayer" + roomPlayer.GetComponent<MyNetworkRoomPlayer>().UserData.Id);
+        // gameobject.findobjectoftype<plyaerprofile>().init(aa,aa);
+
         return true;
     }
 
@@ -61,6 +64,84 @@ public class MyNetworkRoomManager : NetworkRoomManager
         Setting showStartButton false when the button is pressed hides it in the game scene since NetworkRoomManager
         is set as DontDestroyOnLoad = true.
     */
+
+    public override void OnServerAddPlayer(NetworkConnectionToClient conn)
+    {
+        base.OnServerAddPlayer(conn);
+    }
+
+    private PlayerProfile _hostProfile = new PlayerProfile();
+
+    private UserDataModel_KYS _hostData;
+    public UserDataModel_KYS HostData
+    {
+        get => _hostData;
+
+        private set
+        {
+            _hostData = value;
+
+            if (_hostData == null)
+            {
+                _hostProfile = new PlayerProfile();
+            }
+            else
+            {
+                _hostProfile.Init(_hostData);
+
+                Debug.Log($"HOST ENTERED : {_hostData.Id}");
+            }
+        } 
+    }
+
+    private PlayerProfile _guestProfile = new PlayerProfile();
+
+    private UserDataModel_KYS _guestData;
+    public UserDataModel_KYS GuestData
+    {
+        get => _guestData;
+
+        private set
+        {
+            _guestData = value;
+
+            if (_guestData == null)
+            {
+                _guestProfile = new PlayerProfile();
+            }
+            else
+            {
+                _guestProfile.Init(_guestData);
+
+                Debug.Log($"GUEST ENTERED : {_guestData.Id}");
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// This is called on the client when the client is finished loading a new networked scene.
+    /// </summary>
+    public override void OnRoomClientSceneChanged()
+    {
+        CmdInsertClientInfo();
+    }
+
+    [Command]
+    public void CmdInsertClientInfo()
+    {
+
+        RpcInsertClientInfo();
+    }
+
+    [ClientRpc]
+    public void RpcInsertClientInfo()
+    {
+        if(HostData == null)
+            HostData = DbAccessManager_KYS.Instance.UserData;
+        else
+            GuestData = DbAccessManager_KYS.Instance.UserData;
+    }
 
     bool showStartButton;
 
