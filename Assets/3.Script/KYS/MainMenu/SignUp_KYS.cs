@@ -71,7 +71,7 @@ class SignUp_KYS : MonoBehaviour
     // 닉네임 중복 검사
     private bool CheckIfNicknameValid()
     {
-        string cmdTxt = $"SELECT * FROM user WHERE nickname = \"{_nicknameInputField.text}\"";
+        string cmdTxt = $"SELECT * FROM user WHERE nick = \"{_nicknameInputField.text}\"";
 
         // if does not exist, valid
         bool isValid = !DbAccessManager_KYS.Instance.Select(cmdTxt);

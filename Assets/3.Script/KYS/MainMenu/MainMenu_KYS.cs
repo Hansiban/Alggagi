@@ -8,8 +8,7 @@ class MainMenu_KYS : MonoBehaviour // temp
     [SerializeField] private GameObject _userProfilePanel;
     [SerializeField] private GameObject _logoutButton;
 
-    [SerializeField] private TMP_Text _nickName;
-    [SerializeField] private TMP_Text _level;
+    [SerializeField] private PlayerProfile _profile;
 
     private void Awake()
     {
@@ -35,8 +34,7 @@ class MainMenu_KYS : MonoBehaviour // temp
         _logInSignUpPanel.SetActive(false);
         _logoutButton.SetActive(true);
 
-        _nickName.text = DbAccessManager_KYS.Instance.UserData.Nick;
-        _level.text = $"{DbAccessManager_KYS.Instance.UserData.Level}";
+        _profile.Init(DbAccessManager_KYS.Instance.UserData);
 
         _userProfilePanel.SetActive(true);
     }

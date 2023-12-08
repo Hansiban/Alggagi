@@ -1,19 +1,19 @@
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
-public class PlayerProfileController : MonoBehaviour
+class PlayerProfile : MonoBehaviour
 {
-    // profile picture
     [SerializeField] TMP_Text _nickTxt;
     [SerializeField] TMP_Text _levelTxt;
 
-    private UserDataModel_KYS _userData;
-
-
     public void Init(UserDataModel_KYS userData)
     {
-        _userData = userData;
+        _nickTxt.text = userData.Nick;
+        _levelTxt.text = userData.Lvl.ToString();
     }
 }
