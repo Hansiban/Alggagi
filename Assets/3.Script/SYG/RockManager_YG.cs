@@ -38,7 +38,7 @@ public class RockManager_YG : NetworkBehaviour
     private void Awake()
     {
         // ¿œ¥‹ «ÿ∫Ω
-        gameObject.SetActive(false);
+        this.enabled = false;
 
         //Init_rock();
         //select_text = FindObjectOfType<Text>();

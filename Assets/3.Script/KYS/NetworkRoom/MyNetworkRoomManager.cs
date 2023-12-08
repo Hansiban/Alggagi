@@ -27,7 +27,8 @@ public class MyNetworkRoomManager : NetworkRoomManager
 
         if (sceneName == GameplayScene)
         {
-            GameObject.FindObjectOfType<RockManager_YG>().gameObject.SetActive(true);
+            Debug.Log("OnServerSceneChanged");
+            GameObject.FindObjectOfType<RockManager_YG>(true).gameObject.SetActive(true);
         }
     }
 
