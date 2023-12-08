@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5825640384217700194}
   - component: {fileID: 1358095860445174797}
   - component: {fileID: -2273339011085824928}
+  - component: {fileID: 8553449189646266720}
   m_Layer: 0
   m_Name: Test Player Prefab
   m_TagString: Untagged
@@ -64,3 +65,22 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+--- !u!114 &8553449189646266720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 27718489743383958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bf68e4d2b714da4fa8c5edc959ce87e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  rock_list: []
+  rock_prefab: {fileID: 4186446091217560110, guid: f38a8b9f633035446826303892b6fa5c, type: 3}
+  panel_prefab: {fileID: 8577599198532167169, guid: 75e2e5acdfb596640ab53534701a8c80, type: 3}
+  select_text: {fileID: 0}

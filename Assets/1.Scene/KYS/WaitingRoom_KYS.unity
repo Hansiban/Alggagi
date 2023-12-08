@@ -1126,6 +1126,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 4396296682743902187, guid: 13dcd7781aaa10349a2e56383585a9dc, type: 3}
+      propertyPath: GameplayScene
+      value: Assets/1.Scene/SYG/Logictest_YG.unity
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396296682743902187, guid: 13dcd7781aaa10349a2e56383585a9dc, type: 3}
       propertyPath: roomPlayerPrefab
       value: 
       objectReference: {fileID: 1283694800733325514, guid: 5b9cf0c94199edb4f81576d0e82ddc96, type: 3}
