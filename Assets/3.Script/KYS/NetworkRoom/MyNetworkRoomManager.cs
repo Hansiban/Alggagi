@@ -86,4 +86,13 @@ public class MyNetworkRoomManager : NetworkRoomManager
             ServerChangeScene(GameplayScene);
         }
     }
+
+    public int GetPlayerIndex(NetworkConnection conn)
+    {
+        // 플레이어 컨트롤러 가져오기
+        NetworkRoomPlayer roomPlayer = conn.identity.GetComponent<NetworkRoomPlayer>();
+        
+        // 플레이어 컨트롤러의 인덱스 반환
+        return roomPlayer.index;
+    }
 }
