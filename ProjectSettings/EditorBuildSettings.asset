@@ -14,11 +14,14 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/1.Scene/SYG/Logictest_YG.unity
     guid: 9836b712e4e7bdd4595f4b02b578d3b2
-  - enabled: 1
+  - enabled: 0
     path: Assets/1.Scene/KYS/MainMenu_KYS.unity
     guid: 88a6e1fb047cca44e8296352b8ed8d30
-  - enabled: 1
+  - enabled: 0
     path: Assets/1.Scene/KYS/Lobby_KYS.unity
     guid: cd15d5ddac17b1b49ab4f233d9406f0a
+  - enabled: 0
+    path: Assets/1.Scene/SYG/RoomScene_YG.unity
+    guid: 2bd46eee849072444a36b54cfc88ec78
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: df264864e1d2bce42b7f4be0ab4c3336, type: 2}

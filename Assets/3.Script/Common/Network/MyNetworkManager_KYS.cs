@@ -44,7 +44,4 @@ public class MyNetworkManager_KYS : NetworkManager
     #endregion
 
     Dictionary<string, NetworkRoomManager> _networkRoomManagers; // key = host id
-
-
-
 }

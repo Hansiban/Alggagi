@@ -20,6 +20,7 @@ public class RockManager_YG : NetworkBehaviour
 
     private bool is_myturn = true; //내차롄지 확인
     private NetworkConnection conn;
+    List<NetworkIdentity> user_identity_list = new List<NetworkIdentity>();
 
     [Header("Init_rock")]
     private int init_count = 7;
@@ -54,6 +55,10 @@ public class RockManager_YG : NetworkBehaviour
         select_text = FindObjectOfType<Text>();
         select_text.enabled = false;
         Selecting_rock();
+        NetworkIdentity user_identity = GetComponent<NetworkIdentity>();
+        Debug.Log($"user_identity.netId : {user_identity.netId}");
+        user_identity_list.Add(user_identity);
+        Debug.Log($"user_identity.netId : {user_identity.netId}");
         base.OnStartAuthority();
     }
 
@@ -71,10 +76,13 @@ public class RockManager_YG : NetworkBehaviour
     [Command]
     private void Init_rock()
     {
+        Debug.Log(1);
         GameObject pannel = Instantiate(panel_prefab);
         NetworkServer.Spawn(pannel);
-        
-       // Debug.Log("Init_rock");
+
+
+        // Debug.Log("Init_rock");
+        Debug.Log(2);
         for (int i = 0; i < init_count; i++)
         {
             Vector3 pos = new Vector3();
@@ -86,15 +94,52 @@ public class RockManager_YG : NetworkBehaviour
             {
                 pos = new Vector3(second_initpos.x + (i - 3) * x_distance, second_initpos.y, 0);
             }
-            
+            Debug.Log(3);
             GameObject rock = Instantiate(rock_prefab, pos, Quaternion.identity);
             rock_list.Add(rock);
             NetworkServer.Spawn(rock, connectionToClient);
+            Debug.Log(4);
             // 스폰된 객체의 NetworkIdentity를 가져와서 권한 설정
-            NetworkIdentity rockIdentity = rock.GetComponent<NetworkIdentity>();
-            rockIdentity.AssignClientAuthority(connectionToClient);
+            var user_identity = gameObject.GetComponent<NetworkIdentity>();
         }
     }
+
+    //private void Init_rock_()
+    //{
+    //    GameObject pannel = Instantiate(panel_prefab);
+    //    NetworkServer.Spawn(pannel);
+
+    //    for (int i = 0; i < init_count; i++)
+    //    {
+    //        Vector3 pos = new Vector3();
+    //        if (i < init_count / 2)
+    //        {
+    //            pos = new Vector3(first_initpos.x + i * x_distance, first_initpos.y, 0);
+    //        }
+    //        else
+    //        {
+    //            pos = new Vector3(second_initpos.x + (i - 3) * x_distance, second_initpos.y, 0);
+    //        }
+
+    //        GameObject rock = Instantiate(rock_prefab, pos, Quaternion.identity);
+    //        rock_list.Add(rock);
+
+    //        // 스폰된 객체의 NetworkIdentity를 가져와서 권한 설정
+    //        NetworkIdentity rockIdentity = rock.GetComponent<NetworkIdentity>();
+
+    //        // 현재 스폰된 클라이언트가 첫 번째 클라이언트인 경우
+    //        if (NetworkServer.connections[0] != null && rockIdentity.connectionToClient == NetworkServer.connections[0])
+    //        {
+    //            rockIdentity.AssignClientAuthority(NetworkServer.connections[0]);
+    //        }
+    //        // 현재 스폰된 클라이언트가 두 번째 클라이언트인 경우
+    //        else if (NetworkServer.connections[1] != null && rockIdentity.connectionToClient == NetworkServer.connections[1])
+    //        {
+    //            rockIdentity.AssignClientAuthority(NetworkServer.connections[1]);
+    //            rock.transform.position += Vector3.up * 3;
+    //        }
+    //    }
+    //}
 
     private void Reset_rock()
     {
