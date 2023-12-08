@@ -119,22 +119,23 @@ public class MyNetworkRoomManager : NetworkRoomManager
     }
 
 
+    // Network Behaviour 가진 애가 불러줘야 함
     /// <summary>
     /// This is called on the client when the client is finished loading a new networked scene.
     /// </summary>
     public override void OnRoomClientSceneChanged()
     {
-        CmdInsertClientInfo();
+        //CmdInsertClientInfo();
     }
 
-    [Command]
+    //[Command]
     public void CmdInsertClientInfo()
     {
 
         RpcInsertClientInfo();
     }
 
-    [ClientRpc]
+    //[ClientRpc]
     public void RpcInsertClientInfo()
     {
         if(HostData == null)
