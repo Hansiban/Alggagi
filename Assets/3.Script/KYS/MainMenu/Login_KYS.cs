@@ -13,7 +13,6 @@ class Login_KYS : NetworkBehaviour
 
     private float _invalidationTextTimer = 0;
 
-
     private void Awake()
     {
         _invalidationText.SetActive(false);
@@ -22,17 +21,6 @@ class Login_KYS : NetworkBehaviour
     // 로그인 버튼
     public void Btn_Login()
     {
-        Debug.Log("Clicked Login Button");
-
-        if (isLocalPlayer)
-        {
-            Debug.Log("isLocalPlayer");
-        }
-        else
-        {
-            Debug.Log("NOT LOCAL PLAYER");
-        }
-
         Debug.Log($"id input {_idInputField.text}\npwd input {_pwdInputField.text}");
 
         CmdValidateLogin(_idInputField.text, _pwdInputField.text);
@@ -41,8 +29,6 @@ class Login_KYS : NetworkBehaviour
     [Command(requiresAuthority =false)]
     private void CmdValidateLogin(string id, string pwd)
     {
-        Debug.Log($"CmdValidateLogin");
-
         string cmdTxt = $"SELECT * FROM user WHERE id = \"{id}\" && pwd = \"{pwd}\"";
 
         UserDataModel_KYS userData = DbAccessManager_KYS.Instance.Select<UserDataModel_KYS>(cmdTxt);
