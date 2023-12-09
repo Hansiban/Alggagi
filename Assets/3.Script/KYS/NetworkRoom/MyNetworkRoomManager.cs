@@ -21,16 +21,6 @@ public class MyNetworkRoomManager : NetworkRoomManager
     /// Called on the server when a scene is completed loaded, when the scene load was initiated by the server with ServerChangeScene().
     /// </summary>
     /// <param name="sceneName">The name of the new scene.</param>
-    public override void OnServerSceneChanged(string sceneName)
-    {
-        base.OnServerSceneChanged(sceneName);
-
-        if (sceneName == GameplayScene)
-        {
-            Debug.Log("OnServerSceneChanged");
-            GameObject.FindObjectOfType<RockManager_YG>(true).gameObject.SetActive(true);
-        }
-    }
 
     /// <summary>
     /// This is called on the server when a networked scene finishes loading.

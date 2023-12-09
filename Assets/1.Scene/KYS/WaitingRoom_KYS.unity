@@ -317,7 +317,7 @@ MonoBehaviour:
   m_text: "\uB300\uAE30 \uC911...."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 054842d9830fc2644897efc4b81df3c7, type: 2}
-  m_sharedMaterial: {fileID: 3314874276170481435, guid: 054842d9830fc2644897efc4b81df3c7, type: 2}
+  m_sharedMaterial: {fileID: 4643907535049317596, guid: 054842d9830fc2644897efc4b81df3c7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1128,6 +1128,10 @@ PrefabInstance:
     - target: {fileID: 4396296682743902187, guid: 13dcd7781aaa10349a2e56383585a9dc, type: 3}
       propertyPath: GameplayScene
       value: Assets/1.Scene/SYG/Logictest_YG.unity
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396296682743902187, guid: 13dcd7781aaa10349a2e56383585a9dc, type: 3}
+      propertyPath: networkAddress
+      value: localhost
       objectReference: {fileID: 0}
     - target: {fileID: 4396296682743902187, guid: 13dcd7781aaa10349a2e56383585a9dc, type: 3}
       propertyPath: roomPlayerPrefab

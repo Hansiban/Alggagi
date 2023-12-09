@@ -33,26 +33,12 @@ public class Rock_YG : NetworkBehaviour
     [Header("Dead_rock")]
     [SerializeField] private BoxCollider2D BG_col;
 
-    //public override void OnStartAuthority()
-    //{
-    //    Get_component();
-    //    Line_setting();
-    //    base.OnStartAuthority();
-    //}
-
     private void Start()
     {
         if (isClient)
         {
-            //Debug.Log("This script is running on a client.");
-
-            // 클라이언트에서 명령을 호출하거나 다른 동작을 수행할 수 있습니다.
             CmdGetComponent();
             CmdLine_setting();
-        }
-        else
-        {
-           // Debug.Log("not client.");
         }
     }
 
@@ -86,11 +72,14 @@ public class Rock_YG : NetworkBehaviour
         }
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        Debug.Log("sprite_rock.Length:" + sprite_rock.Length);
+        if (spriteRenderer == null)
+        {
+            Debug.Log("spriteRenderer_null");
+        }
         BG_col = GameObject.FindGameObjectWithTag("BG").GetComponent<BoxCollider2D>();
 
         rock_pos = gameObject.transform.position;
-
-       // Debug.Log("Get_component");
     }
 
 
@@ -127,8 +116,9 @@ public class Rock_YG : NetworkBehaviour
         //Debug.Log("Line_setting");
     }
 
-    private void change_sprite(int index) //유저 정보에 따라 스프라이트 바꾸기
+    public void change_sprite(int index) //유저 정보에 따라 스프라이트 바꾸기
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = sprite_rock[index];
     }
 
@@ -153,7 +143,7 @@ public class Rock_YG : NetworkBehaviour
 
     private void OnGUI() //드래그 감지
     {
-        if (!is_selected)
+        if (!is_selected || !hasAuthority) //hasAuthority가 왜 사용되지 않지?
         {
             return;
         }
