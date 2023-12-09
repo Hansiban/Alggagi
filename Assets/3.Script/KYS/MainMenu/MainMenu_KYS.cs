@@ -86,12 +86,35 @@ class MainMenu_KYS : NetworkBehaviour // temp
         if (_canStart)  // && room is not full
         {
             Debug.Log("start!");
+            
+            //connectionToClient.Disconnect();
+            CmdDisconnectOnEnteringWaitingRoom();
+
             SceneManager.LoadScene(sceneName);
+
         }
         else
         {
             Debug.Log("nononononon");
         }
+    }
+
+    //[Command]
+    //private void CmdDisconnectOnEnteringWaitingRoom()
+    //{
+    //    connectionToClient.Disconnect();
+    //}
+
+    [Command]
+    private void CmdDisconnectOnEnteringWaitingRoom()
+    {
+        TargetDisconnectClient();
+    }
+
+    [TargetRpc]
+    private void TargetDisconnectClient()
+    {
+        connectionToClient.Disconnect();
     }
 
     public void ShowLoginPanel()
