@@ -25,7 +25,7 @@ public class DbAccessManager_KYS
     #endregion
 
     #region DB Connection Info
-    private const string IP_ADDRESS = "172.30.1.32";
+    private const string IP_ADDRESS = "210.207.200.54";
     private const string DB_ID = "root";
     private const string DB_PWD = "1234";
     private const string DB_NAME = "Alggagi";

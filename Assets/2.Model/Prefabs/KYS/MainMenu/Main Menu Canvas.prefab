@@ -2472,7 +2472,7 @@ GameObject:
   - component: {fileID: 188301063243317600}
   m_Layer: 5
   m_Name: Main Menu Canvas
-  m_TagString: Untagged
+  m_TagString: Test
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2627,6 +2627,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f05a289af1527f847a4d7a964910e1bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   _logInSignUpPanel: {fileID: 4911338721914233653}
   _userProfilePanel: {fileID: 4911338721066870135}
   _logoutButton: {fileID: 4911338721354424458}
@@ -3838,7 +3841,7 @@ GameObject:
   - component: {fileID: 4911338722422651927}
   m_Layer: 5
   m_Name: Title
-  m_TagString: Untagged
+  m_TagString: Test
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -58,10 +58,11 @@ MonoBehaviour:
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 4911338721482559095, guid: bb6259b9bb673db4bafc742bc33c1516, type: 3}
+  playerPrefab: {fileID: 3562474888573212597, guid: c74e3416b67f1cf4c8a5f6c0a18c4104, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
-  spawnPrefabs: []
+  spawnPrefabs:
+  - {fileID: 4911338721482559095, guid: bb6259b9bb673db4bafc742bc33c1516, type: 3}
   snapshotSettings:
     bufferTimeMultiplier: 2
     bufferLimit: 32
