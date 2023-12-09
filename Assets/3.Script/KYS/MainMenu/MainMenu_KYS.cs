@@ -12,6 +12,8 @@ class MainMenu_KYS : MonoBehaviour // temp
 
     private void Awake()
     {
+        // 로그인 server에 클라이언트로서 연결
+
         ShowLoginPanel();
     }
 

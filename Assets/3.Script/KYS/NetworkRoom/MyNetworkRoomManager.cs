@@ -154,9 +154,9 @@ public class MyNetworkRoomManager : NetworkRoomManager
     public void RpcInsertClientInfo()
     {
         if(HostData == null)
-            HostData = DbAccessManager_KYS.Instance.UserData;
+            HostData = GameManager.Instance.LocalUserData;
         else
-            GuestData = DbAccessManager_KYS.Instance.UserData;
+            GuestData = GameManager.Instance.LocalUserData;
     }
 
     bool showStartButton;

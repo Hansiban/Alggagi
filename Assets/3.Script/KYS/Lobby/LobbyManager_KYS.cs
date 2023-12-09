@@ -50,7 +50,7 @@ public class LobbyManager_KYS : NetworkBehaviour
     {
         string roomName = string.IsNullOrWhiteSpace(_gameRoomNameInputField.text) ? DEFAULT_NAME : _gameRoomNameInputField.text;
 
-        CmdCreateGameRoom(DbAccessManager_KYS.Instance.UserData, roomName);
+        CmdCreateGameRoom(GameManager.Instance.LocalUserData, roomName);
 
         //// add another MNRM
         //MyNetworkManager_KYS.singleton.AddMyNetworkRoomManager(DbAccessManager_KYS.Instance.UserData);

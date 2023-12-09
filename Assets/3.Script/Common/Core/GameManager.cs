@@ -46,7 +46,7 @@ class GameManager
         return true;
     }
 
-    public void RemoveUserData()
+    public void RemoveLocalUserData()
     {
         LocalUserData = null;
     }

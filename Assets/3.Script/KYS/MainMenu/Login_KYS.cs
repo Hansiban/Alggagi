@@ -22,12 +22,27 @@ class Login_KYS : NetworkBehaviour
     // 로그인 버튼
     public void Btn_Login()
     {
+        Debug.Log("Clicked Login Button");
+
+        if (isLocalPlayer)
+        {
+            Debug.Log("isLocalPlayer");
+        }
+        else
+        {
+            Debug.Log("NOT LOCAL PLAYER");
+        }
+
+        Debug.Log($"id input {_idInputField.text}\npwd input {_pwdInputField.text}");
+
         CmdValidateLogin(_idInputField.text, _pwdInputField.text);
     }
 
-    [Command]
+    [Command(requiresAuthority =false)]
     private void CmdValidateLogin(string id, string pwd)
     {
+        Debug.Log($"id came in");
+
         string cmdTxt = $"SELECT * FROM user WHERE id = \"{id}\" && pwd = \"{pwd}\"";
 
         UserDataModel_KYS userData = DbAccessManager_KYS.Instance.Select<UserDataModel_KYS>(cmdTxt);
@@ -35,6 +50,7 @@ class Login_KYS : NetworkBehaviour
         if (userData != default(UserDataModel_KYS))
             Debug.Log("SERVER : Logged In User Data :\n" + userData.ToString());
 
+        Debug.Log($"{userData.Id} logging in");
         TargetSaveLocalUserData(userData);
     }
 
@@ -42,11 +58,15 @@ class Login_KYS : NetworkBehaviour
     [TargetRpc]
     private void TargetSaveLocalUserData(UserDataModel_KYS userData)
     {
+        Debug.Log($"TargetSaveLocalUserData");
+
         if (userData == default(UserDataModel_KYS))
         {
             StartCoroutine(nameof(NotifyInvalidation));
             return;
         }
+
+        Debug.Log($"confirmed");
 
         // 로그인 한 유저가 본인 데이터 저장
         GameManager.Instance.InsertLocalUserData(userData);

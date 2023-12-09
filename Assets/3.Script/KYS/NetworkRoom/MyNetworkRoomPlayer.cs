@@ -15,7 +15,7 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
     {
         Debug.Log("MyNetworkRoomPlayer AWAKE");
 
-        UserData = DbAccessManager_KYS.Instance.UserData;
+        UserData = GameManager.Instance.LocalUserData;
     }
 
     public override void IndexChanged(int oldIndex, int newIndex)

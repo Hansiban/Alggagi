@@ -19,6 +19,6 @@ class Logout_KYS : MonoBehaviour
             SceneManager.LoadSceneAsync(MAINMENU_NAME);
 
         // 로그인 유저 데이터 리셋
-        DbAccessManager_KYS.Instance.RemoveUserData();
+        GameManager.Instance.RemoveLocalUserData();
     }
 }
