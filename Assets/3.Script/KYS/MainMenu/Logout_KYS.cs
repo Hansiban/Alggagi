@@ -18,6 +18,8 @@ class Logout_KYS : MonoBehaviour
         else // 현재 씬이 MainMenu 씬이 아니라면 MainMenu 씬으로 이동
             SceneManager.LoadSceneAsync(MAINMENU_NAME);
 
+        GetComponent<MainMenu_KYS>().DisableStartButton();
+
         // 로그인 유저 데이터 리셋
         GameManager.Instance.RemoveLocalUserData();
     }

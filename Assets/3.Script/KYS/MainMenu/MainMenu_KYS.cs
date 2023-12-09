@@ -83,8 +83,15 @@ class MainMenu_KYS : NetworkBehaviour // temp
     // 게임 시작 버튼
     public void Btn_StartGame(string sceneName)
     {
-        // check if already full
-        SceneManager.LoadScene(sceneName);
+        if (_canStart)  // && room is not full
+        {
+            Debug.Log("start!");
+            SceneManager.LoadScene(sceneName);
+        }
+        else
+        {
+            Debug.Log("nononononon");
+        }
     }
 
     public void ShowLoginPanel()
@@ -93,6 +100,11 @@ class MainMenu_KYS : NetworkBehaviour // temp
         _userProfilePanel.SetActive(false);
         _logoutButton.SetActive(false);
     }
+
+    private bool _canStart = false;
+
+    internal void EnableStartButton() => _canStart = true;
+    internal void DisableStartButton() => _canStart = false;
 
     //[TargetRpc]
     //public void TargetShowProfile()

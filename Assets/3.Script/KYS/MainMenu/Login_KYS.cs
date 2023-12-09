@@ -74,13 +74,15 @@ class Login_KYS : NetworkBehaviour
         // 일단은 id와 레벨만
         GameManager.Instance.InsertLocalUserData(nick, level);
 
-        // 로그인 버튼 활성화
         Debug.Log($"<color = red>CLIENT : Logged In User Data :\nnick : {nick}\tlevel:{level} </color>");
         Debug.Log($"InsertLocalUserData :\nid : {GameManager.Instance.LocalUserData.Nick}\tlevel:{GameManager.Instance.LocalUserData.Lvl}");
 
         // 프로필 불러오기
         MainMenu_KYS mainMenu = gameObject.GetComponent<MainMenu_KYS>();
         mainMenu.ShowProfile();
+
+        // 로그인 버튼 활성화
+        mainMenu.EnableStartButton();
     }
 
 
