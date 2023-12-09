@@ -34,7 +34,7 @@ class MainMenu_KYS : MonoBehaviour // temp
         _logInSignUpPanel.SetActive(false);
         _logoutButton.SetActive(true);
 
-        _profile.Init(DbAccessManager_KYS.Instance.UserData);
+        _profile.Init(GameManager.Instance.LocalUserData);
 
         _userProfilePanel.SetActive(true);
     }

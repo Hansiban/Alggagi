@@ -6,6 +6,7 @@ using System.Data;
 using System.Reflection;
 using UnityEngine;
 
+// server only
 // async
 public class DbAccessManager_KYS
 {
@@ -31,38 +32,6 @@ public class DbAccessManager_KYS
 
     private readonly string connStr = $"server={IP_ADDRESS};uid={DB_ID};pwd={DB_PWD};database={DB_NAME};charset=utf8 ;";
     #endregion
-
-    // Gamemanager가 User 데이터 관리할 수도 있음
-    //public UserDataModel_KYS UserData { get; private set; } = null;
-
-    // 여러 씬에서 UserData에 접근하기에 생성한 다른 씬 test용 데이터
-    public UserDataModel_KYS UserData { get; private set; } = new UserDataModel_KYS()
-    {
-        Draw = -1,
-        Id = "test_id",
-        Lvl = 0,
-        Exp = 0,
-        Lose = 0,
-        Nick = "test_nickname",
-        Pwd = "test_password",
-        Win = 0
-    };
-
-    public bool InsertUserData(UserDataModel_KYS incomingData)
-    {
-        if (UserData != null
-            && UserData.Draw != -1) // UserData.Draw이 -1이면 테스트용 데이터가 들어가 있다는 소리. 나중에 뺄 거임
-            return false;
-
-        UserData = incomingData;
-        
-        return true;
-    }
-
-    public void RemoveUserData()
-    {
-        UserData = null;
-    }
 
     /// <summary>
     /// 파라미터 cmdTxt를 실행했을 때 데이터를 찾았을 경우 지정한 타입 T의 형태로 반환, 그렇지 않을 경우 타입 T의 default 값(null 등)을 반환
