@@ -134,6 +134,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Network Login Manager
       objectReference: {fileID: 0}
+    - target: {fileID: 5768993441603881768, guid: 060f7f600fcec6242866cd4ba800513d, type: 3}
+      propertyPath: port
+      value: 8569
+      objectReference: {fileID: 0}
     - target: {fileID: 6539642408950868767, guid: 060f7f600fcec6242866cd4ba800513d, type: 3}
       propertyPath: m_RootOrder
       value: 2
