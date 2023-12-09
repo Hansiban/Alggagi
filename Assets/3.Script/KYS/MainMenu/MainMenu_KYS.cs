@@ -1,4 +1,5 @@
 ﻿using Mirror;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,6 +9,8 @@ class MainMenu_KYS : NetworkBehaviour // temp
     [SerializeField] private GameObject _logInSignUpPanel;
     [SerializeField] private GameObject _userProfilePanel;
     [SerializeField] private GameObject _logoutButton;
+
+    [SerializeField] private GameObject _offlinetoRoomHandler;
 
     private void Awake()
     {
@@ -87,16 +90,45 @@ class MainMenu_KYS : NetworkBehaviour // temp
         {
             Debug.Log("start!");
             
-            //connectionToClient.Disconnect();
-            CmdDisconnectOnEnteringWaitingRoom();
 
-            SceneManager.LoadScene(sceneName);
+            // works
+            CmdDisconnectOnEnteringWaitingRoom(connectionToClient);
+            //Debug.Log("Manual Disconnection ready");
+            //connectionToClient.Disconnect();
+            //Debug.Log("Manual Disconnection done");
+
+            Instantiate(_offlinetoRoomHandler).GetComponent<OfflineRoomToWaitingRoomhandler>();
+            // null ref
+            //GetComponent<NetworkLoginManager_KYS>().gameObject.SetActive(false);
+
+            //StartCoroutine(LoadScene1SecLaterTest(sceneName));
 
         }
         else
         {
             Debug.Log("nononononon");
         }
+    }
+
+    public IEnumerator LoadScene1SecLaterTest(string sceneName)
+    {
+        float timePassed = 0;
+        Debug.Log("LoadScene1SecLaterTest 1");
+        while (true)
+        {
+            timePassed += Time.deltaTime;
+            yield return new WaitForSeconds(2);
+
+            Debug.Log(timePassed + "passed");
+
+            if (timePassed > 3)
+            {
+                Debug.Log("LoadScene1SecLaterTest 2");
+                SceneManager.LoadScene(sceneName);
+                yield break;
+            }
+        }
+
     }
 
     //[Command]
@@ -106,14 +138,15 @@ class MainMenu_KYS : NetworkBehaviour // temp
     //}
 
     [Command]
-    private void CmdDisconnectOnEnteringWaitingRoom()
+    private void CmdDisconnectOnEnteringWaitingRoom(NetworkConnectionToClient identity)
     {
-        TargetDisconnectClient();
+        identity.Disconnect();
     }
 
     [TargetRpc]
     private void TargetDisconnectClient()
     {
+        Debug.Log("DISCONNECTED");
         connectionToClient.Disconnect();
     }
 

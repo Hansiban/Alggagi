@@ -24,10 +24,11 @@ public class MyNetworkRoomManager : NetworkRoomManager
     public override void OnServerSceneChanged(string sceneName)
     {
         base.OnServerSceneChanged(sceneName);
+        Debug.Log("OnServerSceneChanged to   :    " + sceneName);
+        //여기에서 스타트 클라이언트 안 되나? 
 
         if (sceneName == GameplayScene)
         {
-            Debug.Log("OnServerSceneChanged");
             GameObject.FindObjectOfType<RockManager_YG>(true).gameObject.SetActive(true);
         }
     }
@@ -38,6 +39,8 @@ public class MyNetworkRoomManager : NetworkRoomManager
     /// <param name="sceneName">Name of the new scene.</param>
     public override void OnRoomServerSceneChanged(string sceneName)
     {
+        Debug.Log(sceneName + "Loaded when OnRoomServerSceneChanged");
+
         // spawn the initial batch of Rewards
         if (sceneName == GameplayScene)
         {

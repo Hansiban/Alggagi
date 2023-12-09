@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // for Login
 public class TestDummyPlayer : NetworkBehaviour
@@ -18,6 +19,29 @@ public class TestDummyPlayer : NetworkBehaviour
     {
         base.OnStartAuthority();
 
+    }
+
+    private void OnDisconnectedFromServer(NetworkIdentity info)
+    {
+        Debug.Log("OnDisconnectedFromServer FROM testdummyplayer");
+        SceneManager.LoadScene("WaitingRoom_KYS");
+    }
+
+    [TargetRpc]
+    public void GoToRoomScene()
+    {
+        SceneManager.LoadScene("WaitingRoom_KYS");
+    }
+
+    private void OnPlayerConnected(NetworkIdentity player)
+    {
+        Debug.Log("OnPlayerConnected");
+
+    }
+
+    private void OnPlayerDisconnected(NetworkIdentity player)
+    {
+        Debug.Log("OnPlayerDisconnected");
     }
 
     private void Start()

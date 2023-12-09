@@ -17,6 +17,14 @@ public class NetworkLoginManager_KYS : NetworkManager
         singleton = this;
     }
 
+    private void OnPlayerDisconnected(NetworkIdentity player)
+    {
+        Debug.Log("OnPlayerDisconnected FROM NETWORKLOGINMANAGER");
+
+        var dd  = player.gameObject.GetComponent<TestDummyPlayer>();
+        dd.GoToRoomScene();
+    }
+
 
     //public override void Awake()
     //{

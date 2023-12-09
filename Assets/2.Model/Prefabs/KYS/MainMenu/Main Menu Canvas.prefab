@@ -2633,6 +2633,7 @@ MonoBehaviour:
   _logInSignUpPanel: {fileID: 4911338721914233653}
   _userProfilePanel: {fileID: 4911338721066870135}
   _logoutButton: {fileID: 4911338721354424458}
+  _offlinetoRoomHandler: {fileID: 8939887989646537069, guid: 68e599d899584af419797dffe0e74e19, type: 3}
 --- !u!114 &188301063243317600
 MonoBehaviour:
   m_ObjectHideFlags: 0
