@@ -1,50 +1,96 @@
 using Mirror;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-
-public enum turn
-{
-    none = 0,
-    player1,
-    player2
-}
 
 public class TurnManager_YG : NetworkBehaviour
 {
+    public static TurnManager_YG instance = null;
+    public RockManager_YG[] all_rockmanager;
     [SyncVar(hook = nameof(Turn_setting))]
-    public turn player_turn = turn.player1;
-    public List<RockManager_YG> all_rockmanager = new List<RockManager_YG>();
-    Text select_text;
+    public int player_turn;
 
-    private void Awake()
+    //private void Awake()
+    //{
+    //    if (instance == null)
+    //    {
+    //        instance = this;
+    //        DontDestroyOnLoad(this);
+    //    }
+
+    //    else
+    //    {
+    //        Destroy(this.gameObject);
+    //        return;
+    //    }
+    //}
+    private void Start()
     {
-        select_text = FindObjectOfType<Text>();
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
+
+        else
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+
+        Debug.Log("Start1");
+        Add_list();
+        if (isClient)
+        {
+            Debug.Log("Start2");
+            //Change_turn();
+            Debug.Log("Start3");
+        }
+        if (isServer)
+        {
+            CmdChange_turn();
+        }
+        Debug.Log("Star4");
     }
 
-    [Command]
+    [Server]
+    public void CmdChange_turn()
+    {
+        Debug.Log("CmdChange_turn");
+        player_turn = (player_turn == 2) ? 1 : 2;
+        Debug.Log("player_turn:" + player_turn);
+    }
+
     public void Change_turn()
     {
-        player_turn = (player_turn == turn.player1) ? turn.player2 : turn.player1;
+        Debug.Log("Change_turn");
+        player_turn = (player_turn == 2) ? 1 : 2;
+        Debug.Log("player_turn:" + player_turn);
     }
 
-    public void Game()
+    private void Turn_setting(int old_, int new_)
     {
-        
-    }
-    private void Turn_setting(turn _, turn __)
-    {
-        if (player_turn == turn.player1)
+        player_turn = new_;
+        Debug.Log("all_rockmanager.Count:" + all_rockmanager.Length);
+        if (player_turn == 1)
         {
             all_rockmanager[0].is_myturn = true;
             all_rockmanager[1].is_myturn = false;
-            select_text.text = "player1";
         }
         else
         {
             all_rockmanager[0].is_myturn = false;
             all_rockmanager[1].is_myturn = true;
-            select_text.text = "player2";
         }
+    }
+
+    [Command]
+    public void Gameover()
+    {
+        Debug.Log("Gameover");
+    }
+
+    public void Add_list()
+    {
+        all_rockmanager = FindObjectsOfType<RockManager_YG>();
     }
 }
