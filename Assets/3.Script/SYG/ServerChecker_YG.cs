@@ -32,6 +32,8 @@ public class Item
 public class ServerChecker_YG : MonoBehaviour
 {
     public Type type;
+    private NetworkManager manager;
+    private KcpTransport kcp;
 
     private string Path = string.Empty;
     public string Server_Ip { get; private set; }
@@ -51,6 +53,8 @@ public class ServerChecker_YG : MonoBehaviour
         {
             Default_Data(Path);
         }
+        manager = GetComponent<NetworkManager>();
+        kcp = (KcpTransport)manager.transport;
     }
 
     private void Default_Data(string path)
@@ -78,8 +82,8 @@ public class ServerChecker_YG : MonoBehaviour
             Server_Port = str_Port;
             type = (Type)Enum.Parse(typeof(Type), string_type);
 
-            NetworkLoginManager_KYS.singleton.networkAddress = Server_Ip;
-            //kcp.port = ushort.Parse(Server_Port);
+            manager.networkAddress = Server_Ip;
+            kcp.port = ushort.Parse(Server_Port);
 
             return type;
 
@@ -127,8 +131,8 @@ public class ServerChecker_YG : MonoBehaviour
         }
         else
         {
-            NetworkLoginManager_KYS.singleton.StartServer();
-            Debug.Log($"{NetworkLoginManager_KYS.singleton.networkAddress} StartServer...");
+            manager.StartServer();
+            Debug.Log($"{manager.networkAddress} StartServer...");
             NetworkServer.OnConnectedEvent += (NetworkConnectionToClient) =>
             {
                 Debug.Log($"new client Connect : {NetworkConnectionToClient.address}");
@@ -142,19 +146,19 @@ public class ServerChecker_YG : MonoBehaviour
 
     public void Start_Client() //클라이언트 입장
     {
-        Debug.Log($"{NetworkLoginManager_KYS.singleton.networkAddress} : StartClient");
-        NetworkLoginManager_KYS.singleton.StartClient();
+        Debug.Log($"{manager.networkAddress} : StartClient");
+        manager.StartClient();
     }
 
     private void OnApplicationQuit()
     {
         if (NetworkClient.isConnected)
         {
-            NetworkLoginManager_KYS.singleton.StopClient();
+            manager.StopClient();
         }
         if (NetworkClient.active)
         {
-            NetworkLoginManager_KYS.singleton.StopServer();
+            manager.StopServer();
         }
     }
 }
