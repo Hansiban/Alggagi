@@ -24,7 +24,7 @@ public class DbAccessManager_KYS
     #endregion
 
     #region DB Connection Info
-    private const string IP_ADDRESS = "172.30.1.19";
+    private const string IP_ADDRESS = "172.30.1.32";
     private const string DB_ID = "root";
     private const string DB_PWD = "1234";
     private const string DB_NAME = "Alggagi";
@@ -38,7 +38,7 @@ public class DbAccessManager_KYS
     // 여러 씬에서 UserData에 접근하기에 생성한 다른 씬 test용 데이터
     public UserDataModel_KYS UserData { get; private set; } = new UserDataModel_KYS()
     {
-        Draw = 0,
+        Draw = -1,
         Id = "test_id",
         Lvl = 0,
         Exp = 0,
@@ -50,7 +50,8 @@ public class DbAccessManager_KYS
 
     public bool InsertUserData(UserDataModel_KYS incomingData)
     {
-        if (UserData != null)
+        if (UserData != null
+            && UserData.Draw != -1) // UserData.Draw이 -1이면 테스트용 데이터가 들어가 있다는 소리. 나중에 뺄 거임
             return false;
 
         UserData = incomingData;

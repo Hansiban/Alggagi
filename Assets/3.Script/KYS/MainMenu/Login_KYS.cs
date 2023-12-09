@@ -23,7 +23,7 @@ class Login_KYS : MonoBehaviour
     {
         UserDataModel_KYS userData = ValidateLogin();
 
-        if (userData == null)
+        if (userData == default(UserDataModel_KYS))
             return;
 
         // 유저 데이터 저장
@@ -43,6 +43,8 @@ class Login_KYS : MonoBehaviour
 
         if (userData == default(UserDataModel_KYS))
             StartCoroutine(nameof(NotifyInvalidation));
+        else
+            Debug.Log("Logged In User Data :\n" + userData.ToString());
 
         return userData;
     }
