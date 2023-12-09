@@ -32,7 +32,7 @@ public class Item
 public class ServerChecker_YG : MonoBehaviour
 {
     public Type type;
-    private NetworkManager manager;
+    private NetworkLoginManager_KYS manager;
     private KcpTransport kcp;
 
     private string Path = string.Empty;
@@ -53,7 +53,7 @@ public class ServerChecker_YG : MonoBehaviour
         {
             Default_Data(Path);
         }
-        manager = GetComponent<NetworkManager>();
+        manager = GetComponent<NetworkLoginManager_KYS>();
         kcp = (KcpTransport)manager.transport;
     }
 
