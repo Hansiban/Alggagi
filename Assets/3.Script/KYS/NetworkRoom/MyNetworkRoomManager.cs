@@ -16,7 +16,9 @@ public class MyNetworkRoomManager : NetworkRoomManager
     {
         base.Awake();
         singleton = this;
+    
     }
+
 
     public override void OnClientSceneChanged()
     {
@@ -24,8 +26,6 @@ public class MyNetworkRoomManager : NetworkRoomManager
         Debug.Log(SceneManager.GetActiveScene().name + "·Î " + gameObject.name + "ÀÇ ¾ÀÀÌ ¹Ù²î¾ú½À´Ï´Ù.");
         if (SceneManager.GetActiveScene().name == "WaitingRoom_KYS") // to be modified
         {
-            Debug.Log(gameObject.name);
-
             gameObject.GetComponent<MyNetworkRoomPlayer>().FillInMyInfo();
             //CmdFillInPlayerProfiles(this.gameObject);
         }

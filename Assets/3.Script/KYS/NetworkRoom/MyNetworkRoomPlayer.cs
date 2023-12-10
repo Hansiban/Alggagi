@@ -33,11 +33,10 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
         Debug.Log("OnStartLocalPlayer");
         base.OnStartLocalPlayer();
 
-        Debug.Log("is LOCAL PLAYER " + isLocalPlayer);
         CmdSpawnProfile(LocalUserData.Nick, LocalUserData.Lvl);
         //if (isLocalPlayer)
-            //CmdSpawnProfile(connectionToClient, LocalUserData.Nick, LocalUserData.Lvl);
-            //CmdFillInPlayerProfile(LocalUserData.Nick, LocalUserData.Lvl);
+        //CmdSpawnProfile(connectionToClient, LocalUserData.Nick, LocalUserData.Lvl);
+        //CmdFillInPlayerProfile(LocalUserData.Nick, LocalUserData.Lvl);
     }
 
     // 만약 이미 씬에 PlayerProfile이 없으면 a 포지션에, 있으면 b 포지션에 스폰하고 각자 identity로 아소리티 줌
@@ -48,39 +47,34 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
         //return;
         Debug.Log("CmdSpawnProfile " + nick + " "+ lvl);
 
-        bool anotherPlayerExists = FindObjectsOfType<PlayerProfile>().Length <= 0;
+        bool anotherPlayerExists = FindObjectsOfType<PlayerProfile>().Length > 0;
 
-        Vector3 spawnPosition = anotherPlayerExists ? new Vector3(134, -329, 0) : new Vector3(-961, -329, 0);
+        Vector3 spawnPosition = anotherPlayerExists ? new Vector3(150, -350, 0) : new Vector3(-950, -350, 0);
 
-        GameObject profile = Instantiate(_profilePrefab, spawnPosition, Quaternion.identity);
+        GameObject profile = Instantiate(_profilePrefab);
+        profile.transform.SetParent(GameObject.FindGameObjectWithTag("Test").transform); // Main Canvas
+        profile.transform.localPosition = spawnPosition;
+        profile.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 
         profile.GetComponent<PlayerProfile>().Init(nick, lvl);
 
         Debug.Log(profile.GetComponent<PlayerProfile>().IsInitialized);
 
         NetworkServer.Spawn(profile);
-        // 스폰 하라니까 못 하고 지랄
 
         RpcSpawnProfile(nick, lvl, anotherPlayerExists);
 
-        if (anotherPlayerExists)
-            FindObjectsOfType<PlayerProfile>()[1].Init(nick, lvl);
-        else
-            FindObjectsOfType<PlayerProfile>()[0].Init(nick, lvl);
-        //NetworkServer.Spawn(profile, conn);
+        //if (anotherPlayerExists)
+        //    FindObjectsOfType<PlayerProfile>()[1].Init(nick, lvl);
+        //else
+        //    FindObjectsOfType<PlayerProfile>()[0].Init(nick, lvl);
     }
 
     [ClientRpc]
     private void RpcSpawnProfile(string nick, int lvl, bool anotherPlayerExists)
     {
-        if (isServer)
-        {
-
-            Debug.Log("WTF");
-            return;
-        }
-
         Debug.Log("RpcSpawnProfile  " + nick );
+        Debug.Log("FindObjectsOfType<PlayerProfile>() length " + FindObjectsOfType<PlayerProfile>().Length);
 
         if (anotherPlayerExists)
             FindObjectsOfType<PlayerProfile>()[1].Init(nick, lvl);
