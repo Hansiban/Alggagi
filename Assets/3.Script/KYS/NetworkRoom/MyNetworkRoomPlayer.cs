@@ -5,15 +5,53 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+ // 여기가 아니라 MyNetworkRoomManager가 처리.. 아니다. 얘는 networkbrhavioye없어서커맨드안됨 
 public class MyNetworkRoomPlayer : NetworkRoomPlayer
 {
     [SerializeField] private GameObject _profilePrefab;
     public RockManager_YG rockmanager;
 
-    public override void IndexChanged(int oldIndex, int newIndex)
+
+    // Waiting Room에서의 프로필 데이터 연동도 해당 방법을 사용하면 좋았겠으나
+    // 현재로서는 GamePlayer Scene의 프로필 데이터 연동에만 사용된다
+    public override void OnStartLocalPlayer()
     {
-        base.IndexChanged(oldIndex, newIndex);
+        base.OnStartLocalPlayer();
+
+        // null 뜸 OnClientEnterRoom에서도.
+        //Debug.Log("connectionToClient.connectionId : " + connectionToClient.connectionId);
+        Debug.Log("GameManager.Instance.LocalUserData : " + GameManager.Instance.LocalUserData.ToString());
+
+        //CmdAddDataMyNetworkRoomManagerOnServerside(connectionToClient.connectionId, GameManager.Instance.LocalUserData);
+        CmdAddDataMyNetworkRoomManagerOnServerside(GameManager.Instance.LocalUserData.Id, GameManager.Instance.LocalUserData.Pwd, GameManager.Instance.LocalUserData.Nick,
+            GameManager.Instance.LocalUserData.Lvl, GameManager.Instance.LocalUserData.Exp, GameManager.Instance.LocalUserData.Win, GameManager.Instance.LocalUserData.Lose, GameManager.Instance.LocalUserData.Draw);
+
     }
+
+
+
+    public override void OnClientEnterRoom()
+    {
+        base.OnClientEnterRoom();
+
+        return;
+
+        //Debug.Log("connectionToClient.connectionId : " + connectionToClient.connectionId);
+        Debug.Log("GameManager.Instance.LocalUserData : " + GameManager.Instance.LocalUserData.ToString());
+
+        //CmdAddDataMyNetworkRoomManagerOnServerside(connectionToClient.connectionId, GameManager.Instance.LocalUserData);
+        //CmdAddDataMyNetworkRoomManagerOnServerside(GameManager.Instance.LocalUserData.Id, GameManager.Instance.LocalUserData);
+    }
+
+    [Command]
+    private void CmdAddDataMyNetworkRoomManagerOnServerside(string id, string pwd, string nick, int lvl, int exp, int win, int lose, int draw) //  UserDataModel_KYS data 넘기면 안 나옴
+    {
+        Debug.Log($"AddDataMyNetworkRoomManagerOnServerside {id} {pwd} {nick} {lvl} {exp} {win} {lose} {draw}");
+
+        MyNetworkRoomManager.singleton.AddData(id, id, pwd, nick, lvl, exp, win, lose, draw);
+        //MyNetworkRoomManager.singleton.AddData(id, data);
+    }
+
 
     public override void OnStartClient()
     {
