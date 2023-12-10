@@ -5,11 +5,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// ´ë±â½Ç
+// ëŒ€ê¸°ì‹¤
 public class MyNetworkRoomPlayer : NetworkRoomPlayer
 {
-    // ÇÊ¿äÇÒÁöµµ ¾È ÇÊ¿äÇÒÁöµµ
+    // í•„ìš”í• ì§€ë„ ì•ˆ í•„ìš”í• ì§€ë„
     [SerializeField] private GameObject _profilePrefab;
+    public RockManager_YG rockmanager;
 
     public UserDataModel_KYS LocalUserData { get; private set; }
 
@@ -31,21 +32,24 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
     [Command]
     private void CmdFillInPlayerProfiles(GameObject roomPlayer)
     {
-        Debug.Log(SceneManager.GetActiveScene().name + " ¾ÀÀÌ ÇöÀç È°¼ºÈ­ »óÅÂÀÔ´Ï´Ù.");
+        Debug.Log(SceneManager.GetActiveScene().name + " ì”¬ì´ í˜„ì¬ í™œì„±í™” ìƒíƒœì…ë‹ˆë‹¤.");
 
         Debug.Log(roomPlayer.GetComponent<MyNetworkRoomPlayer>().LocalUserData.ToString());
 
         var playerProfiles = GameObject.FindObjectsOfType<PlayerProfile>();
 
-        Debug.Log(playerProfiles.Length + " °³ÀÇ PlayerProfilesµéÀÌ °¨ÁöµÇ¾ú½À´Ï´Ù.");
+        Debug.Log(playerProfiles.Length + " ê°œì˜ PlayerProfilesë“¤ì´ ê°ì§€ë˜ì—ˆìŠµë‹ˆë‹¤.");
 
-        // rpc·Î »©¾ß ÇÒ ¼öµµ ÀÖÀ½
-        // ÀÌ º¯È­°¡ Client µé ÂÊ¿¡¼­µµ ¹İ¿µµÉÁö´Â ¸ğ¸£°ÚÀ½
+        // rpcë¡œ ë¹¼ì•¼ í•  ìˆ˜ë„ ìˆìŒ
+        // ì´ ë³€í™”ê°€ Client ë“¤ ìª½ì—ì„œë„ ë°˜ì˜ë ì§€ëŠ” ëª¨ë¥´ê² ìŒ
         if (!playerProfiles[0].IsInitialized)
             playerProfiles[0].Init(roomPlayer.GetComponent<MyNetworkRoomPlayer>().LocalUserData);
         else
             playerProfiles[1].Init(roomPlayer.GetComponent<MyNetworkRoomPlayer>().LocalUserData);
 
     }
-
+    public void Get_rockmanager(RockManager_YG manager)
+    {
+        rockmanager = manager;
+    }
 }
