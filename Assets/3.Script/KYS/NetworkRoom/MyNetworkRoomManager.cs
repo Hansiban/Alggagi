@@ -1,4 +1,5 @@
 using Mirror;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,25 @@ using UnityEngine;
 public class MyNetworkRoomManager : NetworkRoomManager
 {
     public static new MyNetworkRoomManager singleton { get; private set; }
+
+    private int _turnNum;
+    public int TurnNum
+    {
+        get => _turnNum;
+        private set
+        {
+            _turnNum = value;
+            OnTurnNumChanged.Invoke(_turnNum);
+        }
+    }
+    public Action<int> OnTurnNumChanged;
+
+    // called by rock manager only
+    public void ChangeTurnNumber(int newTurnNum)
+    {
+        Debug.Log("ChangeTurnNumber : " + newTurnNum);
+        TurnNum = newTurnNum;
+    }
 
     /// <summary>
     /// Runs on both Server and Client
@@ -15,6 +35,22 @@ public class MyNetworkRoomManager : NetworkRoomManager
     {
         base.Awake();
         singleton = this;
+
+        OnTurnNumChanged = (_turnNum) => { Debug.Log($"<b>! ! ! {_turnNum} ! ! !</b>"); };
+    }
+
+    private static int _playerNum = 0;
+    internal void RegisterPlayer()
+    {
+        Debug.Log("RegisterPlayer " + _playerNum);
+        _playerNum++;
+
+        if (_playerNum >= 2)
+        {
+            Debug.Log("_playerNum >= 2");
+            TurnNum = 1;
+            OnTurnNumChanged.Invoke(_turnNum);
+        }
     }
 
     /// <summary>
@@ -29,123 +65,11 @@ public class MyNetworkRoomManager : NetworkRoomManager
     public override void OnRoomServerSceneChanged(string sceneName)
     {
         // spawn the initial batch of Rewards
-        if (sceneName == GameplayScene)
-        {
-            // profile 로딩
-        }
-    }
-
-    /// <summary>
-    /// Called just after GamePlayer object is instantiated and just before it replaces RoomPlayer object.
-    /// This is the ideal point to pass any data like player name, credentials, tokens, colors, etc.
-    /// into the GamePlayer object as it is about to enter the Online scene.
-    /// </summary>
-    /// <param name="roomPlayer"></param>
-    /// <param name="gamePlayer"></param>
-    /// <returns>true unless some code in here decides it needs to abort the replacement</returns>
-    public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
-    {
-        // gameobject.findobjectoftype<plyaerprofile>().init(aa,aa);
-
-        return true;
-    }
-
-    public override void OnRoomStopClient()
-    {
-        base.OnRoomStopClient();
-    }
-
-    public override void OnRoomStopServer()
-    {
-        base.OnRoomStopServer();
-    }
-
-    /*
-        This code below is to demonstrate how to do a Start button that only appears for the Host player
-        showStartButton is a local bool that's needed because OnRoomServerPlayersReady is only fired when
-        all players are ready, but if a player cancels their ready state there's no callback to set it back to false
-        Therefore, allPlayersReady is used in combination with showStartButton to show/hide the Start button correctly.
-        Setting showStartButton false when the button is pressed hides it in the game scene since NetworkRoomManager
-        is set as DontDestroyOnLoad = true.
-    */
-
-    public override void OnServerAddPlayer(NetworkConnectionToClient conn)
-    {
-        base.OnServerAddPlayer(conn);
-    }
-
-    private PlayerProfile _hostProfile = new PlayerProfile();
-
-    private UserDataModel_KYS _hostData;
-    public UserDataModel_KYS HostData
-    {
-        get => _hostData;
-
-        private set
-        {
-            _hostData = value;
-
-            if (_hostData == null)
-            {
-                _hostProfile = new PlayerProfile();
-            }
-            else
-            {
-                _hostProfile.Init(_hostData);
-
-                Debug.Log($"HOST ENTERED : {_hostData.Id}");
-            }
-        } 
-    }
-
-    private PlayerProfile _guestProfile = new PlayerProfile();
-
-    private UserDataModel_KYS _guestData;
-    public UserDataModel_KYS GuestData
-    {
-        get => _guestData;
-
-        private set
-        {
-            _guestData = value;
-
-            if (_guestData == null)
-            {
-                _guestProfile = new PlayerProfile();
-            }
-            else
-            {
-                _guestProfile.Init(_guestData);
-
-                Debug.Log($"GUEST ENTERED : {_guestData.Id}");
-            }
-        }
-    }
-
-
-    // Network Behaviour 가진 애가 불러줘야 함
-    /// <summary>
-    /// This is called on the client when the client is finished loading a new networked scene.
-    /// </summary>
-    public override void OnRoomClientSceneChanged()
-    {
-        //CmdInsertClientInfo();
-    }
-
-    //[Command]
-    public void CmdInsertClientInfo()
-    {
-
-        RpcInsertClientInfo();
-    }
-
-    //[ClientRpc]
-    public void RpcInsertClientInfo()
-    {
-        if(HostData == null)
-            HostData = DbAccessManager_KYS.Instance.UserData;
-        else
-            GuestData = DbAccessManager_KYS.Instance.UserData;
+        //if (sceneName == GameplayScene)
+        //{
+        //    Debug.Log("OnRoomServerSceneChanged");
+        //    TurnNum = 1;
+        //}
     }
 
     bool showStartButton;

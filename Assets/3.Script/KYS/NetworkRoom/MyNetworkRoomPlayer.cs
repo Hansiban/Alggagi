@@ -16,6 +16,10 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
         UserData = DbAccessManager_KYS.Instance.UserData;
     }
 
+
+
+
+
     public override void IndexChanged(int oldIndex, int newIndex)
     {
         base.IndexChanged(oldIndex, newIndex);
