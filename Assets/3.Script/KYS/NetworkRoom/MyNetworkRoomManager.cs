@@ -2,6 +2,7 @@ using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MyNetworkRoomManager : NetworkRoomManager
 {
@@ -15,6 +16,21 @@ public class MyNetworkRoomManager : NetworkRoomManager
     {
         base.Awake();
         singleton = this;
+    }
+
+    public override void OnClientSceneChanged()
+    {
+        base.OnClientSceneChanged();
+
+        Debug.Log(SceneManager.GetActiveScene().name + "로 " + gameObject.name + "의 씬이 바뀌었습니다.");
+
+        if (SceneManager.GetActiveScene().name == "WaitingRoom_KYS") // to be modified
+        {
+            Debug.Log(gameObject.name);
+
+            gameObject.GetComponent<MyNetworkRoomPlayer>().FillInMyInfo();
+            //CmdFillInPlayerProfiles(this.gameObject);
+        }
     }
 
     /// <summary>
@@ -42,7 +58,10 @@ public class MyNetworkRoomManager : NetworkRoomManager
     /// <returns>true unless some code in here decides it needs to abort the replacement</returns>
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
     {
-        // gameobject.findobjectoftype<plyaerprofile>().init(aa,aa);
+        base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
+
+        Debug.LogError("게임 씬입니다 OnRoomServerSceneLoadedForPlayer");
+        //CmdFillInPlayerProfiles(roomPlayer);
 
         return true;
     }
