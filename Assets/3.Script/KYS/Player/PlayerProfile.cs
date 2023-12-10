@@ -13,10 +13,10 @@ class PlayerProfile : MonoBehaviour
 
     public bool IsInitialized { get; private set; } = false;
 
-    public void Init(UserDataModel_KYS userData)
+    public void Init(string nick, int lvl)
     {
-        _nickTxt.text = userData.Nick;
-        _levelTxt.text = userData.Lvl.ToString();
+        _nickTxt.text = nick;
+        _levelTxt.text = lvl.ToString();
 
         IsInitialized = true;
     }
