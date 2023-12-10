@@ -13,7 +13,7 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
 
     private void Awake()
     {
-        UserData = DbAccessManager_KYS.Instance.UserData;
+        UserData = GameManager.Instance.LocalUserData;
     }
 
     public override void IndexChanged(int oldIndex, int newIndex)

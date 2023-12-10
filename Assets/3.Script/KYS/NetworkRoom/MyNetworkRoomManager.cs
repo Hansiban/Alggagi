@@ -18,16 +18,13 @@ public class MyNetworkRoomManager : NetworkRoomManager
     }
 
     /// <summary>
-    /// Called on the server when a scene is completed loaded, when the scene load was initiated by the server with ServerChangeScene().
-    /// </summary>
-    /// <param name="sceneName">The name of the new scene.</param>
-
-    /// <summary>
     /// This is called on the server when a networked scene finishes loading.
     /// </summary>
     /// <param name="sceneName">Name of the new scene.</param>
     public override void OnRoomServerSceneChanged(string sceneName)
     {
+        Debug.Log(sceneName + "Loaded when OnRoomServerSceneChanged");
+
         // spawn the initial batch of Rewards
         if (sceneName == GameplayScene)
         {
@@ -143,9 +140,9 @@ public class MyNetworkRoomManager : NetworkRoomManager
     public void RpcInsertClientInfo()
     {
         if(HostData == null)
-            HostData = DbAccessManager_KYS.Instance.UserData;
+            HostData = GameManager.Instance.LocalUserData;
         else
-            GuestData = DbAccessManager_KYS.Instance.UserData;
+            GuestData = GameManager.Instance.LocalUserData;
     }
 
     bool showStartButton;

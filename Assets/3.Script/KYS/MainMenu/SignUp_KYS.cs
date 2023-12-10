@@ -15,6 +15,8 @@ class SignUp_KYS : MonoBehaviour
 
     private void Awake()
     {
+        _signUpModal.SetActive(false);
+
         _nickNameInvalidationText.SetActive(false);
         _idInvalidationText.SetActive(false);
     }
