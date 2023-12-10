@@ -216,7 +216,9 @@ public class RockManager_YG : NetworkBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 find_rock();
+                
             }
+            yield return null;
         }
     }
 
@@ -234,10 +236,13 @@ public class RockManager_YG : NetworkBehaviour
                 //rock_yg.is_selected를 true로 변경
                 if (click_obj.TryGetComponent<Rock_YG>(out selected_rock))
                 {
-
-                    if (select_rock.isOwned)
+                    foreach (var tmp_rock in rock_list)
                     {
-                        select_rock.is_selected = true;
+                        tmp_rock.GetComponent<Rock_YG>().is_selected = false;
+                    }
+                    if (selected_rock.isOwned)
+                    {
+                        selected_rock.is_selected = true;
                         is_myturn = false;
                     }
                     return;

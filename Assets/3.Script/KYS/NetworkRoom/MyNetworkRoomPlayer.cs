@@ -74,4 +74,8 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
         profile.transform.localPosition = position;
         profile.GetComponent<PlayerProfile>().Init(nick, lvl);
     }
+    public void  Get_rockmanager(RockManager_YG manager)
+    {
+       rockmanager = manager;
+    }
 }
