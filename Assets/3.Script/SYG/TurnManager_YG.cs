@@ -23,6 +23,7 @@ public class TurnManager_YG : NetworkBehaviour
     //        return;
     //    }
     //}
+
     private void Start()
     {
         if (instance == null)
@@ -47,13 +48,13 @@ public class TurnManager_YG : NetworkBehaviour
         }
         if (isServer)
         {
-            CmdChange_turn();
+            Ser_change_turn();
         }
         Debug.Log("Star4");
     }
 
     [Server]
-    public void CmdChange_turn()
+    public void Ser_change_turn()
     {
         Debug.Log("CmdChange_turn");
         player_turn = (player_turn == 2) ? 1 : 2;
