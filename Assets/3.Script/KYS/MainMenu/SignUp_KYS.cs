@@ -77,8 +77,8 @@ class SignUp_KYS : NetworkBehaviour
     // 회원가입 창의 제출 버튼
     public void Btn_Submit()
     {
-        _isIdVerified = false;
-        _isNicknameVerified = false;
+        IsIdVerified = false;
+        IsNicknameVerified = false;
 
         CmdCheckIfIdValid(_idInputField.text);
         CmdCheckIfNicknameValid(_nicknameInputField.text);
@@ -104,7 +104,7 @@ class SignUp_KYS : NetworkBehaviour
         Debug.LogWarning("Id " + isValid);
 
         _idInvalidationText.SetActive(!isValid);
-        _isIdVerified = true;
+        IsIdVerified = true;
     }
 
     // 닉네임 중복 검사
@@ -125,6 +125,6 @@ class SignUp_KYS : NetworkBehaviour
         Debug.LogWarning("Nick " + isValid);
 
         _nickNameInvalidationText.SetActive(!isValid);
-        _isNicknameVerified = true;
+        IsNicknameVerified = true;
     }
 }
