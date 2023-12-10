@@ -124,6 +124,7 @@ public class RockManager_YG : NetworkBehaviour
 
             GameObject rock = Instantiate(rock_prefab, pos, Quaternion.identity);
             rock_list.Add(rock);
+            Add_rocklist(rock);
             NetworkServer.Spawn(rock, connectionToClient);
             Change_Rocksetting(rock);
             Cmd_camset();
@@ -131,9 +132,14 @@ public class RockManager_YG : NetworkBehaviour
     }
 
     [ClientRpc]
+    private void Add_rocklist(GameObject obj)
+    {
+        rock_list.Add(obj);
+    }
+
+    [ClientRpc]
     private void Change_Rocksetting(GameObject rock)
     {
-
         //돌 위치 지정하기
         //Debug.Log("network_player.netId" + network_player.netId);
         if (network_player == null)
