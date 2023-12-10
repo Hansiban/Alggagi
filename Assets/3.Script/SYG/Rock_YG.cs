@@ -134,7 +134,7 @@ public class Rock_YG : NetworkBehaviour
 
     private void OnGUI() //드래그 감지
     {
-        if (!is_selected || !hasAuthority) //hasAuthority가 왜 사용되지 않지?
+        if (!is_selected) 
         {
             return;
         }
@@ -157,7 +157,9 @@ public class Rock_YG : NetworkBehaviour
         {
             if (isClient)
             {
+                TurnManager_YG.instance.Cmdchange_turn();
                 check_distance();
+                //TurnManager_YG.instance.Check_count();
             }
         }
     }

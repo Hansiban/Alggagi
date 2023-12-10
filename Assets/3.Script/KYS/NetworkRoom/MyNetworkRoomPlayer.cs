@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// 대기실에서 생성
 public class MyNetworkRoomPlayer : NetworkRoomPlayer
 {
     [SerializeField] private GameObject _profilePrefab;
+    public RockManager_YG rockmanager;
 
     public override void IndexChanged(int oldIndex, int newIndex)
     {
@@ -66,7 +66,6 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
         profile.transform.localPosition = position;
         profile.GetComponent<PlayerProfile>().Init(nick, lvl);
     }
-
     [TargetRpc]
     private void TargetSpawnHostProfile(Vector3 position, string nick, int lvl)
     {
