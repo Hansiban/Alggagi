@@ -18,19 +18,10 @@ public class MyNetworkRoomManager : NetworkRoomManager
         singleton = this;
     }
 
-    public override void OnClientSceneChanged()
+    public override void OnServerConnect(NetworkConnectionToClient conn)
     {
-        base.OnClientSceneChanged();
-
-        Debug.Log(SceneManager.GetActiveScene().name + "로 " + gameObject.name + "의 씬이 바뀌었습니다.");
-
-        if (SceneManager.GetActiveScene().name == "WaitingRoom_KYS") // to be modified
-        {
-            Debug.Log(gameObject.name);
-
-            gameObject.GetComponent<MyNetworkRoomPlayer>().FillInMyInfo();
-            //CmdFillInPlayerProfiles(this.gameObject);
-        }
+        base.OnServerConnect(conn);
+        // target rpc
     }
 
     /// <summary>
@@ -90,53 +81,53 @@ public class MyNetworkRoomManager : NetworkRoomManager
         base.OnServerAddPlayer(conn);
     }
 
-    private PlayerProfile _hostProfile = new PlayerProfile();
+    //private PlayerProfile _hostProfile = new PlayerProfile();
 
-    private UserDataModel_KYS _hostData;
-    public UserDataModel_KYS HostData
-    {
-        get => _hostData;
+    //private UserDataModel_KYS _hostData;
+    //public UserDataModel_KYS HostData
+    //{
+    //    get => _hostData;
 
-        private set
-        {
-            _hostData = value;
+    //    private set
+    //    {
+    //        _hostData = value;
 
-            if (_hostData == null)
-            {
-                _hostProfile = new PlayerProfile();
-            }
-            else
-            {
-                _hostProfile.Init(_hostData);
+    //        if (_hostData == null)
+    //        {
+    //            _hostProfile = new PlayerProfile();
+    //        }
+    //        else
+    //        {
+    //            _hostProfile.Init(_hostData);
 
-                Debug.Log($"HOST ENTERED : {_hostData.Id}");
-            }
-        } 
-    }
+    //            Debug.Log($"HOST ENTERED : {_hostData.Id}");
+    //        }
+    //    } 
+    //}
 
-    private PlayerProfile _guestProfile = new PlayerProfile();
+    //private PlayerProfile _guestProfile = new PlayerProfile();
 
-    private UserDataModel_KYS _guestData;
-    public UserDataModel_KYS GuestData
-    {
-        get => _guestData;
+    //private UserDataModel_KYS _guestData;
+    //public UserDataModel_KYS GuestData
+    //{
+    //    get => _guestData;
 
-        private set
-        {
-            _guestData = value;
+    //    private set
+    //    {
+    //        _guestData = value;
 
-            if (_guestData == null)
-            {
-                _guestProfile = new PlayerProfile();
-            }
-            else
-            {
-                _guestProfile.Init(_guestData);
+    //        if (_guestData == null)
+    //        {
+    //            _guestProfile = new PlayerProfile();
+    //        }
+    //        else
+    //        {
+    //            _guestProfile.Init(_guestData);
 
-                Debug.Log($"GUEST ENTERED : {_guestData.Id}");
-            }
-        }
-    }
+    //            Debug.Log($"GUEST ENTERED : {_guestData.Id}");
+    //        }
+    //    }
+    //}
 
 
     // Network Behaviour 가진 애가 불러줘야 함
@@ -152,17 +143,17 @@ public class MyNetworkRoomManager : NetworkRoomManager
     public void CmdInsertClientInfo()
     {
 
-        RpcInsertClientInfo();
+        //RpcInsertClientInfo();
     }
 
     //[ClientRpc]
-    public void RpcInsertClientInfo()
-    {
-        if(HostData == null)
-            HostData = GameManager.Instance.LocalUserData;
-        else
-            GuestData = GameManager.Instance.LocalUserData;
-    }
+    //public void RpcInsertClientInfo()
+    //{
+    //    if(HostData == null)
+    //        HostData = GameManager.Instance.LocalUserData;
+    //    else
+    //        GuestData = GameManager.Instance.LocalUserData;
+    //}
 
     bool showStartButton;
 

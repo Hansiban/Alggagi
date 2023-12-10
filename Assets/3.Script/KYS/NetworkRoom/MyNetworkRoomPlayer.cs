@@ -5,51 +5,73 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// 대기실
 public class MyNetworkRoomPlayer : NetworkRoomPlayer
 {
-    // 필요할지도 안 필요할지도
     [SerializeField] private GameObject _profilePrefab;
     public RockManager_YG rockmanager;
-
-    public UserDataModel_KYS LocalUserData { get; private set; }
-
-    private void Awake()
-    {
-        LocalUserData = GameManager.Instance.LocalUserData;
-    }
 
     public override void IndexChanged(int oldIndex, int newIndex)
     {
         base.IndexChanged(oldIndex, newIndex);
     }
 
-    internal void FillInMyInfo()
+    public override void OnStartClient()
     {
-        CmdFillInPlayerProfiles(gameObject);
+        base.OnStartClient();
+
+        if(isLocalPlayer)
+            CmdSpawnProfile(GameManager.Instance.LocalUserData.Nick, GameManager.Instance.LocalUserData.Lvl);
     }
+
+    private static string s_hostNick;
+    private static int s_hostLvl;
+    private static Vector3 s_hostPos;
 
     [Command]
-    private void CmdFillInPlayerProfiles(GameObject roomPlayer)
+    private void CmdSpawnProfile(string nick, int lvl)
     {
-        Debug.Log(SceneManager.GetActiveScene().name + " 씬이 현재 활성화 상태입니다.");
+        bool anotherPlayerExists = FindObjectsOfType<PlayerProfile>().Length > 0;
 
-        Debug.Log(roomPlayer.GetComponent<MyNetworkRoomPlayer>().LocalUserData.ToString());
+        Vector3 spawnPosition = anotherPlayerExists ? new Vector3(150, -350, 0) : new Vector3(-950, -350, 0);
 
-        var playerProfiles = GameObject.FindObjectsOfType<PlayerProfile>();
+        GameObject profile = Instantiate(_profilePrefab);
+        profile.transform.SetParent(GameObject.FindGameObjectWithTag("Test").transform); // Main Canvas
+        profile.transform.localPosition = spawnPosition;
+        profile.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 
-        Debug.Log(playerProfiles.Length + " 개의 PlayerProfiles들이 감지되었습니다.");
+        profile.GetComponent<PlayerProfile>().Init(nick, lvl);
 
-        // rpc로 빼야 할 수도 있음
-        // 이 변화가 Client 들 쪽에서도 반영될지는 모르겠음
-        if (!playerProfiles[0].IsInitialized)
-            playerProfiles[0].Init(roomPlayer.GetComponent<MyNetworkRoomPlayer>().LocalUserData);
+        Debug.Log(profile.GetComponent<PlayerProfile>().IsInitialized);
+
+        NetworkServer.Spawn(profile);
+
+        RpcSpawnProfile(profile, spawnPosition, nick, lvl);
+
+        if (anotherPlayerExists)
+        {
+            TargetSpawnHostProfile(s_hostPos, s_hostNick, s_hostLvl);
+        }
         else
-            playerProfiles[1].Init(roomPlayer.GetComponent<MyNetworkRoomPlayer>().LocalUserData);
-
+        {
+            s_hostNick = nick;
+            s_hostLvl = lvl;
+            s_hostPos = profile.transform.localPosition;
+        }
     }
-    public void Get_rockmanager(RockManager_YG manager)
+
+    [ClientRpc]
+    private void RpcSpawnProfile(GameObject profile, Vector3 position, string nick, int lvl)
     {
-        rockmanager = manager;
+        profile.transform.SetParent(GameObject.FindGameObjectWithTag("Test").transform);
+        profile.transform.localPosition = position;
+        profile.GetComponent<PlayerProfile>().Init(nick, lvl);
+    }
+    [TargetRpc]
+    private void TargetSpawnHostProfile(Vector3 position, string nick, int lvl)
+    {
+        GameObject profile = Instantiate(_profilePrefab);
+        profile.transform.SetParent(GameObject.FindGameObjectWithTag("Test").transform);
+        profile.transform.localPosition = position;
+        profile.GetComponent<PlayerProfile>().Init(nick, lvl);
     }
 }

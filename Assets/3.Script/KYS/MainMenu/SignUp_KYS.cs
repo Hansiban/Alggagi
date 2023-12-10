@@ -89,7 +89,7 @@ class SignUp_KYS : MonoBehaviour
     private void SignUp()
     {
         string cmdTxt = $"INSERT INTO user VALUES (\"{_idInputField.text}\", \"{_pwdInputField.text}\", \"{_nicknameInputField.text}\"," +
-                                                    $"0, 0, 0, 0, 0);";
+                                                    $"1, 1, 1, 1, 1);";
 
         var res = DbAccessManager_KYS.Instance.Insert(cmdTxt);
 

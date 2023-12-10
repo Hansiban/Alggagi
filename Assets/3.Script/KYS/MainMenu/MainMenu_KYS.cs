@@ -104,7 +104,7 @@ class MainMenu_KYS : NetworkBehaviour // temp
         _logInSignUpPanel.SetActive(false);
         _logoutButton.SetActive(true);
 
-        _userProfilePanel.GetComponent<PlayerProfile>().Init(GameManager.Instance.LocalUserData);
+        _userProfilePanel.GetComponent<PlayerProfile>().Init(GameManager.Instance.LocalUserData.Nick, GameManager.Instance.LocalUserData.Lvl);
 
         _userProfilePanel.SetActive(true);
     }
