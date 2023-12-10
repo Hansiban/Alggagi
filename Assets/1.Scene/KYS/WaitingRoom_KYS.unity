@@ -771,6 +771,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 431492854}
     m_Modifications:
+    - target: {fileID: -1736452814856411766, guid: 9df320d817a124d49b3a5026a9a8d309, type: 3}
+      propertyPath: sceneId
+      value: 4073599725
+      objectReference: {fileID: 0}
     - target: {fileID: 287755783698665142, guid: 9df320d817a124d49b3a5026a9a8d309, type: 3}
       propertyPath: m_Name
       value: Player Profile
@@ -1359,6 +1363,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 431492854}
     m_Modifications:
+    - target: {fileID: -1736452814856411766, guid: 9df320d817a124d49b3a5026a9a8d309, type: 3}
+      propertyPath: sceneId
+      value: 1407350794
+      objectReference: {fileID: 0}
     - target: {fileID: 287755783698665142, guid: 9df320d817a124d49b3a5026a9a8d309, type: 3}
       propertyPath: m_Name
       value: Player Profile (1)
