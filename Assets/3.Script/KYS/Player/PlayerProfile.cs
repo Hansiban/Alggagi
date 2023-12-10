@@ -13,10 +13,18 @@ class PlayerProfile : MonoBehaviour
 
     public bool IsInitialized { get; private set; } = false;
 
+    private void Awake()
+    {
+        _nickTxt.text = "nick";
+        _levelTxt.text = "level";
+    }
+
     public void Init(string nick, int lvl)
     {
         _nickTxt.text = nick;
         _levelTxt.text = lvl.ToString();
+
+        Debug.Log("IS INITIALIZED");
 
         IsInitialized = true;
     }

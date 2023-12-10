@@ -34,7 +34,7 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
         base.OnStartLocalPlayer();
 
         Debug.Log("is LOCAL PLAYER " + isLocalPlayer);
-        CmdSpawnProfile("asdf", 2);
+        CmdSpawnProfile(LocalUserData.Nick, LocalUserData.Lvl);
         //if (isLocalPlayer)
             //CmdSpawnProfile(connectionToClient, LocalUserData.Nick, LocalUserData.Lvl);
             //CmdFillInPlayerProfile(LocalUserData.Nick, LocalUserData.Lvl);
@@ -45,9 +45,8 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
     private void CmdSpawnProfile(string nick, int lvl)
     //private void CmdSpawnProfile(NetworkConnectionToClient conn, string nick, int lvl)
     {
-        //RpcSpawnProfile(nick, lvl);
         //return;
-        Debug.Log("CmdSpawnProfile");
+        Debug.Log("CmdSpawnProfile " + nick + " "+ lvl);
 
         bool anotherPlayerExists = FindObjectsOfType<PlayerProfile>().Length <= 0;
 
@@ -57,17 +56,37 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
 
         profile.GetComponent<PlayerProfile>().Init(nick, lvl);
 
+        Debug.Log(profile.GetComponent<PlayerProfile>().IsInitialized);
+
         NetworkServer.Spawn(profile);
+        // 스폰 하라니까 못 하고 지랄
+
+        RpcSpawnProfile(nick, lvl, anotherPlayerExists);
 
         if (anotherPlayerExists)
+            FindObjectsOfType<PlayerProfile>()[1].Init(nick, lvl);
+        else
             FindObjectsOfType<PlayerProfile>()[0].Init(nick, lvl);
-
         //NetworkServer.Spawn(profile, conn);
     }
 
     [ClientRpc]
-    private void RpcSpawnProfile(string nick, int lvl)
+    private void RpcSpawnProfile(string nick, int lvl, bool anotherPlayerExists)
     {
+        if (isServer)
+        {
+
+            Debug.Log("WTF");
+            return;
+        }
+
+        Debug.Log("RpcSpawnProfile  " + nick );
+
+        if (anotherPlayerExists)
+            FindObjectsOfType<PlayerProfile>()[1].Init(nick, lvl);
+        else
+            FindObjectsOfType<PlayerProfile>()[0].Init(nick, lvl);
+
         // without active server error 생김
         //bool anotherPlayerExists = FindObjectsOfType<PlayerProfile>().Length <= 0;
 
