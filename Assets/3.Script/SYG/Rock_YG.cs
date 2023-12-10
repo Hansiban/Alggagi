@@ -48,7 +48,7 @@ public class Rock_YG : NetworkBehaviour
     {
         // 서버에서 실행되는 코드
         RpcSetComponent();
-      //  Debug.Log("CmdGetComponent");
+        //  Debug.Log("CmdGetComponent");
     }
 
     [ClientRpc]
@@ -56,7 +56,7 @@ public class Rock_YG : NetworkBehaviour
     {
         // 클라이언트에서 실행되는 코드
         Get_component();
-       // Debug.Log("RpcSetComponent");
+        // Debug.Log("RpcSetComponent");
     }
 
     public void Get_component()
@@ -89,7 +89,7 @@ public class Rock_YG : NetworkBehaviour
         {
             // 클라이언트에서 실행되는 코드
             Line_setting();
-           // Debug.Log("RpcLine_setting");
+            // Debug.Log("RpcLine_setting");
         }
     }
 
@@ -165,7 +165,7 @@ public class Rock_YG : NetworkBehaviour
     [Client]
     private void check_distance()
     {
-       // Debug.Log("check_distance");
+        // Debug.Log("check_distance");
         lineRenderer.enabled = false;
         distance = Vector2.Distance(rock_pos, mouse_pos);
         CmdGo_rock(rock_pos, mouse_pos, distance);
@@ -198,7 +198,7 @@ public class Rock_YG : NetworkBehaviour
 
     private void OnTriggerExit2D(Collider2D col) //돌 죽으면 들어옴
     {
-        if (col.Equals(BG_col))
+        if (col.Equals(BG_col) && isClient)
         {
             CmdDead_rock();
         }
