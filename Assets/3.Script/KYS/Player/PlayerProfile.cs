@@ -8,12 +8,38 @@ using UnityEngine;
 
 class PlayerProfile : MonoBehaviour
 {
-    [SerializeField] TMP_Text _nickTxt;
-    [SerializeField] TMP_Text _levelTxt;
+    [SerializeField] private TMP_Text _nickTxt;
+    [SerializeField] private TMP_Text _lvlTxt;
 
-    public void Init(UserDataModel_KYS userData)
+    private string _nick;
+    public string Nick 
     {
-        _nickTxt.text = userData.Nick;
-        _levelTxt.text = userData.Lvl.ToString();
+        get => _nick;
+        private set
+        {
+            _nick = value;
+            _nickTxt.text = _nick;
+        }
+    }
+
+    private int _lvl;
+    public int Lvl
+    {
+        get => _lvl;
+        private set
+        {
+            _lvl = value;
+            _lvlTxt.text = _lvl.ToString();
+        }
+    }
+
+    public bool IsInitialized { get; private set; } = false;
+
+    public void Init(string nick, int lvl)
+    {
+        Nick = nick;
+        Lvl = lvl;
+
+        IsInitialized = true;
     }
 }

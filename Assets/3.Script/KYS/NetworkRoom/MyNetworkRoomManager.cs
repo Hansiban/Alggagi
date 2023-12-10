@@ -2,6 +2,7 @@ using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MyNetworkRoomManager : NetworkRoomManager
 {
@@ -17,10 +18,11 @@ public class MyNetworkRoomManager : NetworkRoomManager
         singleton = this;
     }
 
-    /// <summary>
-    /// Called on the server when a scene is completed loaded, when the scene load was initiated by the server with ServerChangeScene().
-    /// </summary>
-    /// <param name="sceneName">The name of the new scene.</param>
+    public override void OnServerConnect(NetworkConnectionToClient conn)
+    {
+        base.OnServerConnect(conn);
+        // target rpc
+    }
 
     /// <summary>
     /// This is called on the server when a networked scene finishes loading.
@@ -28,6 +30,8 @@ public class MyNetworkRoomManager : NetworkRoomManager
     /// <param name="sceneName">Name of the new scene.</param>
     public override void OnRoomServerSceneChanged(string sceneName)
     {
+        Debug.Log(sceneName + "Loaded when OnRoomServerSceneChanged");
+
         // spawn the initial batch of Rewards
         if (sceneName == GameplayScene)
         {
@@ -45,8 +49,10 @@ public class MyNetworkRoomManager : NetworkRoomManager
     /// <returns>true unless some code in here decides it needs to abort the replacement</returns>
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
     {
-        Debug.Log("OnRoomServerSceneLoadedForPlayer" + roomPlayer.GetComponent<MyNetworkRoomPlayer>().UserData.Id);
-        // gameobject.findobjectoftype<plyaerprofile>().init(aa,aa);
+        base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
+
+        Debug.LogError("게임 씬입니다 OnRoomServerSceneLoadedForPlayer");
+        //CmdFillInPlayerProfiles(roomPlayer);
 
         return true;
     }
@@ -75,53 +81,53 @@ public class MyNetworkRoomManager : NetworkRoomManager
         base.OnServerAddPlayer(conn);
     }
 
-    private PlayerProfile _hostProfile = new PlayerProfile();
+    //private PlayerProfile _hostProfile = new PlayerProfile();
 
-    private UserDataModel_KYS _hostData;
-    public UserDataModel_KYS HostData
-    {
-        get => _hostData;
+    //private UserDataModel_KYS _hostData;
+    //public UserDataModel_KYS HostData
+    //{
+    //    get => _hostData;
 
-        private set
-        {
-            _hostData = value;
+    //    private set
+    //    {
+    //        _hostData = value;
 
-            if (_hostData == null)
-            {
-                _hostProfile = new PlayerProfile();
-            }
-            else
-            {
-                _hostProfile.Init(_hostData);
+    //        if (_hostData == null)
+    //        {
+    //            _hostProfile = new PlayerProfile();
+    //        }
+    //        else
+    //        {
+    //            _hostProfile.Init(_hostData);
 
-                Debug.Log($"HOST ENTERED : {_hostData.Id}");
-            }
-        } 
-    }
+    //            Debug.Log($"HOST ENTERED : {_hostData.Id}");
+    //        }
+    //    } 
+    //}
 
-    private PlayerProfile _guestProfile = new PlayerProfile();
+    //private PlayerProfile _guestProfile = new PlayerProfile();
 
-    private UserDataModel_KYS _guestData;
-    public UserDataModel_KYS GuestData
-    {
-        get => _guestData;
+    //private UserDataModel_KYS _guestData;
+    //public UserDataModel_KYS GuestData
+    //{
+    //    get => _guestData;
 
-        private set
-        {
-            _guestData = value;
+    //    private set
+    //    {
+    //        _guestData = value;
 
-            if (_guestData == null)
-            {
-                _guestProfile = new PlayerProfile();
-            }
-            else
-            {
-                _guestProfile.Init(_guestData);
+    //        if (_guestData == null)
+    //        {
+    //            _guestProfile = new PlayerProfile();
+    //        }
+    //        else
+    //        {
+    //            _guestProfile.Init(_guestData);
 
-                Debug.Log($"GUEST ENTERED : {_guestData.Id}");
-            }
-        }
-    }
+    //            Debug.Log($"GUEST ENTERED : {_guestData.Id}");
+    //        }
+    //    }
+    //}
 
 
     // Network Behaviour 가진 애가 불러줘야 함
@@ -137,17 +143,17 @@ public class MyNetworkRoomManager : NetworkRoomManager
     public void CmdInsertClientInfo()
     {
 
-        RpcInsertClientInfo();
+        //RpcInsertClientInfo();
     }
 
     //[ClientRpc]
-    public void RpcInsertClientInfo()
-    {
-        if(HostData == null)
-            HostData = DbAccessManager_KYS.Instance.UserData;
-        else
-            GuestData = DbAccessManager_KYS.Instance.UserData;
-    }
+    //public void RpcInsertClientInfo()
+    //{
+    //    if(HostData == null)
+    //        HostData = GameManager.Instance.LocalUserData;
+    //    else
+    //        GuestData = GameManager.Instance.LocalUserData;
+    //}
 
     bool showStartButton;
 

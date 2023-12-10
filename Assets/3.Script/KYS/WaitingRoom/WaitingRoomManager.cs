@@ -1,15 +1,10 @@
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class WaitingRoomManager : MonoBehaviour
 {
-    private MyNetworkRoomManager _myNetworkRoomManager;
-
-    private void Awake()
-    {
-        _myNetworkRoomManager = GetComponent<MyNetworkRoomManager>();
-    }
-
-
+    public void Btn_TempGoToMainMenu(string sceneName) => SceneManager.LoadScene(sceneName);
 }

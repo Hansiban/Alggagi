@@ -16,6 +16,7 @@ public class TurnManager_YG : NetworkBehaviour
             instance = this;
             DontDestroyOnLoad(this);
         }
+
         else
         {
             Destroy(this);
@@ -33,7 +34,7 @@ public class TurnManager_YG : NetworkBehaviour
     public void Change_turn()
     {
         turn_count = turn_count == 1 ? 2 : 1;
-        Debug.Log($"ÅÏ ¹Ù²Ù±â {turn_count}Â÷·Ê");
+        Debug.Log($"ï¿½ï¿½ ï¿½Ù²Ù±ï¿½ {turn_count}ï¿½ï¿½ï¿½ï¿½");
     }
 
     private void Turn_setting(int _old, int _new)
@@ -45,13 +46,13 @@ public class TurnManager_YG : NetworkBehaviour
     //private void Add_rockmanager(RockManager_YG manager)
     //{
     //    all_rockmanager.Add(manager);
-    //    Debug.Log("manager Ãß°¡ ¼º°ø");
+    //    Debug.Log("manager ï¿½ß°ï¿½ ï¿½ï¿½ï¿½ï¿½");
     //    Debug.Log("all_rockmanager : " + all_rockmanager.Count);
     //}
 
-    public void Check_count() //turncount == roomplayer.index¶ó¸é º»ÀÎ Â÷·Ê
+    public void Check_count() //turncount == roomplayer.indexï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
-        //Debug.Log("Ã¼Å©Ä«¿îÆ®");
+        //Debug.Log("Ã¼Å©Ä«ï¿½ï¿½Æ®");
         //if (all_rockmanager == null || all_rockmanager.Length == 1)
         //{
         //    all_rockmanager = FindObjectsOfType<RockManager_YG>();
@@ -67,7 +68,7 @@ public class TurnManager_YG : NetworkBehaviour
 
         foreach (NetworkRoomPlayer player in MyNetworkRoomManager.singleton.roomSlots)
         {
-            Debug.Log("Ã¼Å©Ä«¿îÆ®foreach");
+            Debug.Log("Ã¼Å©Ä«ï¿½ï¿½Æ®foreach");
             MyNetworkRoomPlayer myplayer;
             myplayer = player as MyNetworkRoomPlayer;
             Debug.Log(turn_count + "||" + player.index);
@@ -91,6 +92,18 @@ public class TurnManager_YG : NetworkBehaviour
             //    //    myplayer.rockmanager.is_myturn = false;
             //    //    Debug.Log("is_myturn = " + myplayer.rockmanager.is_myturn);
             //    //}
+
         }
+    }
+
+    [Command]
+    public void Gameover()
+    {
+        Debug.Log("Gameover");
+    }
+
+    public void Add_list()
+    {
+        all_rockmanager = FindObjectsOfType<RockManager_YG>();
     }
 }
