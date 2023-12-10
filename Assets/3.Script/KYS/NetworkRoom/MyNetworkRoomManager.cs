@@ -132,7 +132,6 @@ public class MyNetworkRoomManager : NetworkRoomManager
     //[Command]
     public void CmdInsertClientInfo()
     {
-
         RpcInsertClientInfo();
     }
 

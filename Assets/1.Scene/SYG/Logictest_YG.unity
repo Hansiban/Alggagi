@@ -546,10 +546,6 @@ PrefabInstance:
       propertyPath: sceneId
       value: 1191651444
       objectReference: {fileID: 0}
-    - target: {fileID: 4232024471149228218, guid: f5783c69e844be341b36221ffdbb52e1, type: 3}
-      propertyPath: all_rockmanager.Array.size
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 6686851520937101317, guid: f5783c69e844be341b36221ffdbb52e1, type: 3}
       propertyPath: m_RootOrder
       value: 3

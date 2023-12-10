@@ -37,6 +37,7 @@ public class RockManager_YG : NetworkBehaviour
             }
         }
     }
+    public MyNetworkRoomPlayer[] players;
 
     [Header("Init_rock")]
     private int init_count = 8;
@@ -44,7 +45,7 @@ public class RockManager_YG : NetworkBehaviour
     [SerializeField] private Rock_YG selected_rock;
     [SerializeField] private GameObject rock_prefab;
     [SerializeField] private GameObject panel_prefab;
-    private NetworkRoomPlayer network_player;
+    private MyNetworkRoomPlayer network_player;
     Vector2 first_initpos = new Vector2(-6.64f, -3f);
     Vector2 second_initpos = new Vector2(-6.64f, -1.5f);
     float x_distance = 2f;
@@ -54,9 +55,21 @@ public class RockManager_YG : NetworkBehaviour
     [Header("Game_End")]
     private UserDataModel_KYS user_data;
 
+    private void Awake()
+    {
+        Input_list();
+    }
+
+    public void Start()
+    {
+        if (isServer)
+        {
+            TurnManager_YG.instance.Ser_change_turn();
+        }
+    }
     public override void OnStartAuthority()
     {
-        Find_player();
+        //Find_player();
         Init_pannel();
         Init_rock();
         Cmd_camset();
@@ -64,10 +77,24 @@ public class RockManager_YG : NetworkBehaviour
         base.OnStartAuthority();
     }
 
-    private void Find_player()
+    private void Input_list()
     {
-        NetworkRoomPlayer[] players = FindObjectsOfType<NetworkRoomPlayer>();
-        foreach (NetworkRoomPlayer player in players)
+        if (TurnManager_YG.instance == null)
+        {
+            Debug.Log("TurnManager_YG.instance == null");
+        }
+        TurnManager_YG.instance.all_rockmanager.Add(this);
+        Debug.Log("Input_list+1");
+
+        if (TurnManager_YG.instance.all_rockmanager.Count >= 2)
+        {
+            Find_player();
+        }
+    }
+
+    private void Find_player()
+    { 
+        foreach (MyNetworkRoomPlayer player in players)
         {
             if (player.isOwned)
             {
@@ -172,6 +199,7 @@ public class RockManager_YG : NetworkBehaviour
     private void Selecting_rock()
     {
         //돌 클릭받기
+        Debug.Log("Selecting_rock");
         StartCoroutine(click_co());
     }
 
@@ -217,10 +245,23 @@ public class RockManager_YG : NetworkBehaviour
             {
                 TurnManager_YG.instance.Gameover();
             }
-            TurnManager_YG.instance.Change_turn();
+            //TurnManager_YG.instance.Change_turn();
         }
     }
 
+    public void Set_myturn()
+    {
+        if (network_player == null)
+        {
+            Debug.Log("network_player == null");
+        }
+        else
+        {
+            is_myturn = network_player.Check_myturn();
+            Debug.Log("Set_myturn");
+        }
+
+    }
     #region game_end
     private void Game_end(bool is_win)
     {

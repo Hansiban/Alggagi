@@ -18,6 +18,17 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
 
     public override void IndexChanged(int oldIndex, int newIndex)
     {
+        Debug.Log($"{oldIndex}->{newIndex}¿Œµ¶Ω∫ πŸ≤ﬁ!");
         base.IndexChanged(oldIndex, newIndex);
+    }
+
+    public bool Check_myturn()
+    {
+        Debug.Log("Check_myturn");
+        if (TurnManager_YG.instance.player_turn == index)
+        {
+            return true;
+        }
+        return false;
     }
 }
