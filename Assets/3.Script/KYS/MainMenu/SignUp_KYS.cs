@@ -60,13 +60,14 @@ class SignUp_KYS : NetworkBehaviour
             {
                 Debug.Log("SignUpVerified");
 
-                SignUp(_idInputField.text, _pwdInputField.text, _nicknameInputField.text);
+                CmdSignUp(_idInputField.text, _pwdInputField.text, _nicknameInputField.text);
                 CloseSignUpModal();
             }
         }
     }
 
-    private void SignUp(string id, string pwd, string nickName)
+    [Command]
+    private void CmdSignUp(string id, string pwd, string nickName)
     {
         string cmdTxt = $"INSERT INTO user VALUES (\"{id}\", \"{pwd}\", \"{nickName}\"," +
                                                     $"1, 1, 1, 1, 1);";
@@ -83,8 +84,6 @@ class SignUp_KYS : NetworkBehaviour
         CmdCheckIfIdValid(_idInputField.text);
         CmdCheckIfNicknameValid(_nicknameInputField.text);
     }
-
-
 
     // 아이디 중복 검사
     [Command]
