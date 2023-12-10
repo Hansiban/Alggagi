@@ -2,6 +2,7 @@ using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MyNetworkRoomManager : NetworkRoomManager
 {
@@ -17,18 +18,18 @@ public class MyNetworkRoomManager : NetworkRoomManager
         singleton = this;
     }
 
-    /// <summary>
-    /// Called on the server when a scene is completed loaded, when the scene load was initiated by the server with ServerChangeScene().
-    /// </summary>
-    /// <param name="sceneName">The name of the new scene.</param>
-    public override void OnServerSceneChanged(string sceneName)
+    public override void OnClientSceneChanged()
     {
-        base.OnServerSceneChanged(sceneName);
+        base.OnClientSceneChanged();
 
-        if (sceneName == GameplayScene)
+        Debug.Log(SceneManager.GetActiveScene().name + "로 " + gameObject.name + "의 씬이 바뀌었습니다.");
+
+        if (SceneManager.GetActiveScene().name == "WaitingRoom_KYS") // to be modified
         {
-            Debug.Log("OnServerSceneChanged");
-            GameObject.FindObjectOfType<RockManager_YG>(true).gameObject.SetActive(true);
+            Debug.Log(gameObject.name);
+
+            gameObject.GetComponent<MyNetworkRoomPlayer>().FillInMyInfo();
+            //CmdFillInPlayerProfiles(this.gameObject);
         }
     }
 
@@ -38,6 +39,8 @@ public class MyNetworkRoomManager : NetworkRoomManager
     /// <param name="sceneName">Name of the new scene.</param>
     public override void OnRoomServerSceneChanged(string sceneName)
     {
+        Debug.Log(sceneName + "Loaded when OnRoomServerSceneChanged");
+
         // spawn the initial batch of Rewards
         if (sceneName == GameplayScene)
         {
@@ -55,8 +58,10 @@ public class MyNetworkRoomManager : NetworkRoomManager
     /// <returns>true unless some code in here decides it needs to abort the replacement</returns>
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
     {
-        Debug.Log("OnRoomServerSceneLoadedForPlayer" + roomPlayer.GetComponent<MyNetworkRoomPlayer>().UserData.Id);
-        // gameobject.findobjectoftype<plyaerprofile>().init(aa,aa);
+        base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
+
+        Debug.LogError("게임 씬입니다 OnRoomServerSceneLoadedForPlayer");
+        //CmdFillInPlayerProfiles(roomPlayer);
 
         return true;
     }
@@ -154,9 +159,9 @@ public class MyNetworkRoomManager : NetworkRoomManager
     public void RpcInsertClientInfo()
     {
         if(HostData == null)
-            HostData = DbAccessManager_KYS.Instance.UserData;
+            HostData = GameManager.Instance.LocalUserData;
         else
-            GuestData = DbAccessManager_KYS.Instance.UserData;
+            GuestData = GameManager.Instance.LocalUserData;
     }
 
     bool showStartButton;
