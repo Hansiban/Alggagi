@@ -4,8 +4,37 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+//게임씬 들어오면 프로필 로딩하기
 public class MyNetworkRoomManager : NetworkRoomManager
 {
+    //private Dictionary<int, UserDataModel_KYS> _userDatum = new Dictionary<int, UserDataModel_KYS>();
+    private Dictionary<string, UserDataModel_KYS> _userDatum = new Dictionary<string, UserDataModel_KYS>();
+    public Dictionary<string, UserDataModel_KYS> UserDatum
+    {
+        get => _userDatum;
+        private set => _userDatum = value;
+    }
+
+    public void AddData(string userId, string id, string pwd, string nick, int lvl, int exp, int win, int lose, int draw)
+    {
+        Debug.Log("userData.Count111  " + UserDatum.Count + "\nid : " + userId);
+
+        UserDataModel_KYS copy = UserDataModel_KYS.GetCopy(id, pwd, nick, lvl, exp, win, lose, draw);
+        Debug.LogWarning(copy.ToString());
+
+        UserDatum.Add(userId, copy);
+    }
+
+    public void AddData(string userId, UserDataModel_KYS data)
+    {
+        Debug.Log("userData.Count222  " + UserDatum.Count + "\nid : " + userId);
+
+        UserDataModel_KYS copy = UserDataModel_KYS.GetCopy(data.Id, data.Pwd, data.Nick, data.Lvl, data.Exp, data.Win, data.Lose, data.Draw);
+        Debug.LogWarning(copy.ToString());
+
+        UserDatum.Add(userId, copy);
+    }
+
     public static new MyNetworkRoomManager singleton { get; private set; }
 
     /// <summary>

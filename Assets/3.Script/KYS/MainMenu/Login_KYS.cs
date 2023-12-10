@@ -30,13 +30,14 @@ class Login_KYS : NetworkBehaviour
     private void CmdValidateLogin(string id, string pwd)
     {
         string cmdTxt = $"SELECT * FROM user WHERE id = \"{id}\" && pwd = \"{pwd}\"";
-
         UserDataModel_KYS userData = DbAccessManager_KYS.Instance.Select<UserDataModel_KYS>(cmdTxt);
 
         if (userData != default(UserDataModel_KYS))
         {
-            Debug.Log("SERVER : Logged In User Data :\n" + userData.ToString());
-            TargetSaveLocalUserData(userData.Nick, userData.Lvl);
+            UserDataModel_KYS copy = UserDataModel_KYS.GetCopy(userData);
+
+            Debug.Log("SERVER : Logged In User Data :\n" + copy.ToString());
+            TargetSaveLocalUserData(userData.Id, userData.Pwd, userData.Nick, userData.Lvl, userData.Exp, userData.Win, userData.Lose, userData.Draw);
         }
         else
             TargetNotifyLoginFailed();
@@ -52,16 +53,17 @@ class Login_KYS : NetworkBehaviour
 
     //private void TargetSaveLocalUserData(UserDataModel_KYS userData)
     [TargetRpc]
-    private void TargetSaveLocalUserData(string nick, int level)
+    private void TargetSaveLocalUserData(string id, string pwd, string nick, int lvl, int exp, int win, int lose, int draw)
     {
+        UserDataModel_KYS copy = UserDataModel_KYS.GetCopy(id, pwd, nick, lvl, exp, win, lose, draw);
+
         Debug.Log($"TargetSaveLocalUserData");
 
         // 로그인 한 유저가 본인 데이터 저장
         // 일단은 id와 레벨만
-        GameManager.Instance.InsertLocalUserData(nick, level);
+        GameManager.Instance.InsertLocalUserData(copy);
 
-        Debug.Log($"<color = red>CLIENT : Logged In User Data :\nnick : {nick}\tlevel:{level} </color>");
-        Debug.Log($"InsertLocalUserData :\nid : {GameManager.Instance.LocalUserData.Nick}\tlevel:{GameManager.Instance.LocalUserData.Lvl}");
+        Debug.Log($"<color = red>CLIENT : Logged In User Data : {copy.ToString()}");
 
         // 프로필 불러오기
         MainMenu_KYS mainMenu = gameObject.GetComponent<MainMenu_KYS>();

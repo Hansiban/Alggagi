@@ -816,6 +816,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1051979038}
     m_Modifications:
+    - target: {fileID: -1736452814856411766, guid: 9df320d817a124d49b3a5026a9a8d309, type: 3}
+      propertyPath: sceneId
+      value: 2504352172
+      objectReference: {fileID: 0}
     - target: {fileID: 287755783698665142, guid: 9df320d817a124d49b3a5026a9a8d309, type: 3}
       propertyPath: m_Name
       value: Local Player Profile
@@ -1337,6 +1341,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1051979038}
     m_Modifications:
+    - target: {fileID: -1736452814856411766, guid: 9df320d817a124d49b3a5026a9a8d309, type: 3}
+      propertyPath: sceneId
+      value: 940689585
+      objectReference: {fileID: 0}
     - target: {fileID: 287755783698665142, guid: 9df320d817a124d49b3a5026a9a8d309, type: 3}
       propertyPath: m_Name
       value: Opponent Player Profile

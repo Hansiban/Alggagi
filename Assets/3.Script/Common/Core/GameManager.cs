@@ -35,16 +35,6 @@ class GameManager
         Win = 0
     };
 
-    // 일단은 두 개의 정보만 보내게끔 함. UserData를 그냥 통째로 서버에서 Rpc로 파라미터로 보내는 게 안 됨
-    public void InsertLocalUserData(string nick, int level)
-    {
-        LocalUserData = new UserDataModel_KYS
-        {
-            Nick = nick,
-            Lvl = level
-        };
-    }
-
     public bool InsertLocalUserData(UserDataModel_KYS incomingData)
     {
         if (LocalUserData != null

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5825640384217700194}
   - component: {fileID: 1358095860445174797}
   - component: {fileID: 8553449189646266720}
+  - component: {fileID: 3868350061372742081}
   m_Layer: 0
   m_Name: Test Player Prefab
   m_TagString: Untagged
@@ -68,3 +69,18 @@ MonoBehaviour:
   selected_rock: {fileID: 0}
   rock_prefab: {fileID: 4186446091217560110, guid: f38a8b9f633035446826303892b6fa5c, type: 3}
   panel_prefab: {fileID: 8577599198532167169, guid: 75e2e5acdfb596640ab53534701a8c80, type: 3}
+--- !u!114 &3868350061372742081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 27718489743383958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c9f98ad8546d64daf050864e3d436d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
