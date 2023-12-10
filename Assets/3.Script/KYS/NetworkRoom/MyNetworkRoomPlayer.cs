@@ -13,15 +13,11 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
 
     private void Awake()
     {
-        Debug.Log("MyNetworkRoomPlayer AWAKE");
-
-        UserData = GameManager.Instance.LocalUserData;
+        UserData = DbAccessManager_KYS.Instance.UserData;
     }
 
     public override void IndexChanged(int oldIndex, int newIndex)
     {
         base.IndexChanged(oldIndex, newIndex);
-
-        Debug.Log($"INDEX CHANGED from {oldIndex} to {newIndex}");
     }
 }

@@ -18,22 +18,6 @@ public class MyNetworkRoomManager : NetworkRoomManager
     }
 
     /// <summary>
-    /// Called on the server when a scene is completed loaded, when the scene load was initiated by the server with ServerChangeScene().
-    /// </summary>
-    /// <param name="sceneName">The name of the new scene.</param>
-    public override void OnServerSceneChanged(string sceneName)
-    {
-        base.OnServerSceneChanged(sceneName);
-        Debug.Log("OnServerSceneChanged to   :    " + sceneName);
-        //여기에서 스타트 클라이언트 안 되나? 
-
-        if (sceneName == GameplayScene)
-        {
-            GameObject.FindObjectOfType<RockManager_YG>(true).gameObject.SetActive(true);
-        }
-    }
-
-    /// <summary>
     /// This is called on the server when a networked scene finishes loading.
     /// </summary>
     /// <param name="sceneName">Name of the new scene.</param>
@@ -58,7 +42,6 @@ public class MyNetworkRoomManager : NetworkRoomManager
     /// <returns>true unless some code in here decides it needs to abort the replacement</returns>
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
     {
-        Debug.Log("OnRoomServerSceneLoadedForPlayer" + roomPlayer.GetComponent<MyNetworkRoomPlayer>().UserData.Id);
         // gameobject.findobjectoftype<plyaerprofile>().init(aa,aa);
 
         return true;
