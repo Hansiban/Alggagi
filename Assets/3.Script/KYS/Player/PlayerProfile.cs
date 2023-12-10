@@ -29,7 +29,7 @@ class PlayerProfile : MonoBehaviour
         private set
         {
             _lvl = value;
-            //_lvlTxt.text = _lvl.ToString();
+            _lvlTxt.text = _lvl.ToString();
         }
     }
 

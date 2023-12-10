@@ -23,6 +23,10 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
             CmdSpawnProfile(GameManager.Instance.LocalUserData.Nick, GameManager.Instance.LocalUserData.Lvl);
     }
 
+    private static string s_hostNick;
+    private static int s_hostLvl;
+    private static Vector3 s_hostPos;
+
     [Command]
     private void CmdSpawnProfile(string nick, int lvl)
     {
@@ -45,9 +49,13 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
 
         if (anotherPlayerExists)
         {
-            GameObject hostProfileGO = profile;
-            
-            TargetSpawnHostProfile(hostProfileGO, new Vector3(-950, -350, 0), FindObjectsOfType<PlayerProfile>()[0].Nick, FindObjectsOfType<PlayerProfile>()[0].Lvl);
+            TargetSpawnHostProfile(s_hostPos, s_hostNick, s_hostLvl);
+        }
+        else
+        {
+            s_hostNick = nick;
+            s_hostLvl = lvl;
+            s_hostPos = profile.transform.localPosition;
         }
     }
 
@@ -60,11 +68,11 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
     }
 
     [TargetRpc]
-    private void TargetSpawnHostProfile(GameObject profile, Vector3 position, string nick, int lvl)
+    private void TargetSpawnHostProfile(Vector3 position, string nick, int lvl)
     {
-        Debug.Log("TARGET!!" + nick + lvl);
+        GameObject profile = Instantiate(_profilePrefab);
         profile.transform.SetParent(GameObject.FindGameObjectWithTag("Test").transform);
         profile.transform.localPosition = position;
-        //profile.GetComponent<PlayerProfile>().Init(nick, lvl);
+        profile.GetComponent<PlayerProfile>().Init(nick, lvl);
     }
 }

@@ -1998,7 +1998,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _nickTxt: {fileID: 5833693864666348617}
-  _levelTxt: {fileID: 2745300515058353728}
+  _lvlTxt: {fileID: 2745300515058353728}
 --- !u!1 &4911338721085483164
 GameObject:
   m_ObjectHideFlags: 0

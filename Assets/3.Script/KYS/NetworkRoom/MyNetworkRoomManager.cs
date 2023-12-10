@@ -16,9 +16,7 @@ public class MyNetworkRoomManager : NetworkRoomManager
     {
         base.Awake();
         singleton = this;
-    
     }
-
 
     public override void OnServerConnect(NetworkConnectionToClient conn)
     {
