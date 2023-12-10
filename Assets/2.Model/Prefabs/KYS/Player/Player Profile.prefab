@@ -56,7 +56,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _nickTxt: {fileID: 1667375842351880072}
-  _levelTxt: {fileID: 7047993306485337473}
+  _lvlTxt: {fileID: 7047993306485337473}
 --- !u!114 &-1736452814856411766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -560,7 +560,7 @@ MonoBehaviour:
   m_text: "\uB2C9\uB124\uC784\uC785\uB2C8\uB2E4"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 054842d9830fc2644897efc4b81df3c7, type: 2}
-  m_sharedMaterial: {fileID: 3314874276170481435, guid: 054842d9830fc2644897efc4b81df3c7, type: 2}
+  m_sharedMaterial: {fileID: 4643907535049317596, guid: 054842d9830fc2644897efc4b81df3c7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

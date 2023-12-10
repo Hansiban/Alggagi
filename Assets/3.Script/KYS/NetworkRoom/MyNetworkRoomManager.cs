@@ -20,32 +20,6 @@ public class MyNetworkRoomManager : NetworkRoomManager
     }
 
 
-    public override void OnClientSceneChanged()
-    {
-        base.OnClientSceneChanged();
-        Debug.Log(SceneManager.GetActiveScene().name + "로 " + gameObject.name + "의 씬이 바뀌었습니다.");
-        if (SceneManager.GetActiveScene().name == "WaitingRoom_KYS") // to be modified
-        {
-            gameObject.GetComponent<MyNetworkRoomPlayer>().FillInMyInfo();
-            //CmdFillInPlayerProfiles(this.gameObject);
-        }
-    }
-
-    // 서버에서만 만들어짐
-    public override void OnServerSceneChanged(string sceneName)
-    {
-        base.OnServerSceneChanged(sceneName);
-
-        //Debug.Log("OnServerConnect");
-        //Debug.Log(spawnPrefabs[2].name + "가 스폰 되려고 합니다. 이건 플레이어 프로필이어야 합니다.");
-
-        //GameObject hostProfile = Instantiate(spawnPrefabs[2], new Vector3(134, -329, 0), Quaternion.identity);
-        //NetworkServer.Spawn(hostProfile);
-
-        //GameObject questProfile = Instantiate(spawnPrefabs[2], new Vector3(-961, -329, 0), Quaternion.identity);
-        //NetworkServer.Spawn(questProfile);
-    }
-
     public override void OnServerConnect(NetworkConnectionToClient conn)
     {
         base.OnServerConnect(conn);
