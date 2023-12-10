@@ -5,21 +5,21 @@ using UnityEngine;
 
 public class RockManager_YG : NetworkBehaviour
 {
-    #region ½ºÄÉÄ¡
+    #region ìŠ¤ì¼€ì¹˜
 
     /*
-    ¸Ş¼Òµå
-    1.rock »ı¼º ÈÄ ¹èÄ¡
-    2. µ¹ ¼±ÅÃÇÏ±â
-    3. ³²Àº µ¹ÀÌ ¾ø´Â ÇÃ·¹ÀÌ¾î°¡ ÀÖ´Ù¸é, ½ÂÆĞÃ³¸®ÇÏ±â
-    4. ½ÂÆĞÃ³¸® : ÀÌ±ä»ç¶÷ - ½Â¼ö ¿Ã¸®±â, Áø »ç¶÷ - ÆĞ¼ö ¿Ã¸®±â, °æÇèÄ¡ ºÎ¿©ÇÏ±â
+    ë©”ì†Œë“œ
+    1.rock ìƒì„± í›„ ë°°ì¹˜
+    2. ëŒ ì„ íƒí•˜ê¸°
+    3. ë‚¨ì€ ëŒì´ ì—†ëŠ” í”Œë ˆì´ì–´ê°€ ìˆë‹¤ë©´, ìŠ¹íŒ¨ì²˜ë¦¬í•˜ê¸°
+    4. ìŠ¹íŒ¨ì²˜ë¦¬ : ì´ê¸´ì‚¬ëŒ - ìŠ¹ìˆ˜ ì˜¬ë¦¬ê¸°, ì§„ ì‚¬ëŒ - íŒ¨ìˆ˜ ì˜¬ë¦¬ê¸°, ê²½í—˜ì¹˜ ë¶€ì—¬í•˜ê¸°
      */
 
     #endregion
 
 
     [Header("Gameplay")]
-    private TurnManager_YG trun_manager;
+    //private TurnManager_YG trun_manager;
     private bool _isMyTurn;
     public bool is_myturn
     {
@@ -41,6 +41,7 @@ public class RockManager_YG : NetworkBehaviour
     [Header("Init_rock")]
     private int init_count = 8;
     [SerializeField] private List<GameObject> rock_list = new List<GameObject>();
+    [SerializeField] private Rock_YG selected_rock;
     [SerializeField] private GameObject rock_prefab;
     [SerializeField] private GameObject panel_prefab;
     private NetworkRoomPlayer network_player;
@@ -106,7 +107,7 @@ public class RockManager_YG : NetworkBehaviour
     }
 
     [Command]
-    //µ¹ »ı¼ºÇÏ±â
+    //ëŒ ìƒì„±í•˜ê¸°
     private void Init_rock()
     {
         for (int i = 0; i < init_count; i++)
@@ -140,7 +141,7 @@ public class RockManager_YG : NetworkBehaviour
     [ClientRpc]
     private void Change_Rocksetting(GameObject rock)
     {
-        //µ¹ À§Ä¡ ÁöÁ¤ÇÏ±â
+        //ëŒ ìœ„ì¹˜ ì§€ì •í•˜ê¸°
         //Debug.Log("network_player.netId" + network_player.netId);
         if (network_player == null)
         {
@@ -151,11 +152,12 @@ public class RockManager_YG : NetworkBehaviour
             rock.transform.position += new Vector3(0, 4.5f, 0);
         }
 
-        //»ö ¹Ù²Ù±â
+        //ìƒ‰ ë°”ê¾¸ê¸°
         GameObject[] all_rocks = GameObject.FindGameObjectsWithTag("Rock");
         foreach (GameObject tmp_rock in all_rocks)
         {
             Rock_YG tmprock_component = tmp_rock.GetComponent<Rock_YG>();
+
             if (tmp_rock.gameObject.GetComponent<NetworkIdentity>().isOwned == true)
             {
                 tmprock_component.change_sprite(0);
@@ -166,7 +168,7 @@ public class RockManager_YG : NetworkBehaviour
             }
         }
 
-        //Ä«¸Ş¶ó µÚÁıÈù ÇÃ·¹ÀÌ¾î´Â ½ºÇÁ¶óÀÌÆ®µµ µÚÁı¾îÁÜ
+        //ì¹´ë©”ë¼ ë’¤ì§‘íŒ í”Œë ˆì´ì–´ëŠ” ìŠ¤í”„ë¼ì´íŠ¸ë„ ë’¤ì§‘ì–´ì¤Œ
         if (network_player != null && network_player.netId == 1)
         {
             foreach (GameObject tmp_rock in all_rocks)
@@ -203,7 +205,7 @@ public class RockManager_YG : NetworkBehaviour
 
     private void Selecting_rock()
     {
-        //µ¹ Å¬¸¯¹Ş±â
+        //ëŒ í´ë¦­ë°›ê¸°
         StartCoroutine(click_co());
     }
 
@@ -215,7 +217,6 @@ public class RockManager_YG : NetworkBehaviour
             {
                 find_rock();
             }
-            yield return null;
         }
     }
 
@@ -228,11 +229,12 @@ public class RockManager_YG : NetworkBehaviour
             if (r.transform.CompareTag("Rock"))
             {
                 GameObject click_obj = r.transform.gameObject;
-                Rock_YG select_rock;
-                //click_obj°¡ rock_ygÄÄÆ÷³ÍÆ®¸¦ °¡Áö°í ÀÖ´Ù¸é
-                //rock_yg.is_selected¸¦ true·Î º¯°æ
-                if (click_obj.TryGetComponent<Rock_YG>(out select_rock))
+                // Rock_YG select_rock;
+                //click_objê°€ rock_ygì»´í¬ë„ŒíŠ¸ë¥¼ ê°€ì§€ê³  ìˆë‹¤ë©´
+                //rock_yg.is_selectedë¥¼ trueë¡œ ë³€ê²½
+                if (click_obj.TryGetComponent<Rock_YG>(out selected_rock))
                 {
+
                     if (select_rock.isOwned)
                     {
                         select_rock.is_selected = true;
@@ -245,9 +247,9 @@ public class RockManager_YG : NetworkBehaviour
     }
 
     #region game_end
-    private void Game_end(bool win)
+    private void Game_end(bool is_win)
     {
-        if (win)
+        if (is_win)
         {
             Win();
         }
@@ -270,9 +272,9 @@ public class RockManager_YG : NetworkBehaviour
 
     private void Get_exp()
     {
-        //³²Àº ¸» ¼ö Ã¼Å©ÇÏ±â
+        //ë‚¨ì€ ë§ ìˆ˜ ì²´í¬í•˜ê¸°
         int num = rock_list.Count;
-        //°æÇèÄ¡ ¾ò±â
+        //ê²½í—˜ì¹˜ ì–»ê¸°
         user_data.Exp += num;
     }
     #endregion
