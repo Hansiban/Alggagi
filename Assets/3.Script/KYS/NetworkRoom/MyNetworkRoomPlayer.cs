@@ -1,6 +1,4 @@
 using Mirror;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // 대기실
@@ -8,6 +6,7 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
 {
     // 필요할지도 안 필요할지도
     [SerializeField] private GameObject _profilePrefab;
+    public RockManager_YG rockmanager;
 
     public UserDataModel_KYS UserData { get; private set; }
 
@@ -23,5 +22,10 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
         base.IndexChanged(oldIndex, newIndex);
 
         Debug.Log($"INDEX CHANGED from {oldIndex} to {newIndex}");
+    }
+
+    public void Get_rockmanager(RockManager_YG manager)
+    {
+        rockmanager = manager;
     }
 }

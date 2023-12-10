@@ -62,17 +62,8 @@ public class Rock_YG : NetworkBehaviour
     {
         //할당
         lineRenderer = GetComponent<LineRenderer>();
-        if (lineRenderer != null)
-        {
-            Debug.Log(lineRenderer.gameObject.name);
-        }
-        else
-        {
-           // Debug.Log($"lineRenderer == null");
-        }
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        Debug.Log("sprite_rock.Length:" + sprite_rock.Length);
         if (spriteRenderer == null)
         {
             Debug.Log("spriteRenderer_null");
@@ -143,7 +134,7 @@ public class Rock_YG : NetworkBehaviour
 
     private void OnGUI() //드래그 감지
     {
-        if (!is_selected || !hasAuthority) //hasAuthority가 왜 사용되지 않지?
+        if (!is_selected) 
         {
             return;
         }
@@ -166,7 +157,9 @@ public class Rock_YG : NetworkBehaviour
         {
             if (isClient)
             {
+                TurnManager_YG.instance.Cmdchange_turn();
                 check_distance();
+                //TurnManager_YG.instance.Check_count();
             }
         }
     }

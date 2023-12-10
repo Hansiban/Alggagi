@@ -2,7 +2,6 @@ using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class RockManager_YG : NetworkBehaviour
 {
@@ -31,6 +30,7 @@ public class RockManager_YG : NetworkBehaviour
         set
         {
             _isMyTurn = value;
+            Debug.Log(_isMyTurn);
             if (_isMyTurn)
             {
                 Selecting_rock();
@@ -53,21 +53,24 @@ public class RockManager_YG : NetworkBehaviour
     [Header("Game_End")]
     private UserDataModel_KYS user_data;
 
-
-    private void Awake()
+    private void Start()
     {
-        //Init_rock();
-        //select_text = FindObjectOfType<Text>();
-        //select_text.enabled = false;
+        Find_player();
+        if (isServer && netId == 5)
+        {
+            TurnManager_YG.instance.Change_turn();
+        }
+
+        //if (isClient)
+        //{
+        //    TurnManager_YG.instance.Check_count();
+        //}
     }
     public override void OnStartAuthority()
     {
-        Find_turnmanager();
-        Find_player();
         Init_pannel();
         Init_rock();
-        Cmd_camset();
-       
+
         base.OnStartAuthority();
     }
 
@@ -77,29 +80,22 @@ public class RockManager_YG : NetworkBehaviour
     //    base.OnStopAuthority();
     //}
 
-    private void OnApplicationQuit()
+    public void Find_player()
     {
-        Reset_rock();
-    }
-
-    private void Find_player()
-    {
-        NetworkRoomPlayer[] players = FindObjectsOfType<NetworkRoomPlayer>();
-        foreach (NetworkRoomPlayer player in players)
+        // Debug.Log("Find_player" + isOwned);
+        MyNetworkRoomPlayer[] players = FindObjectsOfType<MyNetworkRoomPlayer>();
+        // Debug.Log("players.Length : " + players.Length);
+        foreach (MyNetworkRoomPlayer player in players)
         {
-            if (player.isOwned)
+            if (player.isOwned == isOwned)
             {
+                // Debug.Log("Find_player2");
                 network_player = player;
+                player.Get_rockmanager(this);
                 Debug.Log(network_player.netId);
                 return;
             }
         }
-    }
-
-    private void Find_turnmanager()
-    {
-        trun_manager = FindObjectOfType<TurnManager_YG>();
-        trun_manager.all_rockmanager.Add(this);
     }
 
     [Command]
@@ -130,6 +126,7 @@ public class RockManager_YG : NetworkBehaviour
             rock_list.Add(rock);
             NetworkServer.Spawn(rock, connectionToClient);
             Change_Rocksetting(rock);
+            Cmd_camset();
         }
     }
 
@@ -138,6 +135,11 @@ public class RockManager_YG : NetworkBehaviour
     {
 
         //돌 위치 지정하기
+        //Debug.Log("network_player.netId" + network_player.netId);
+        if (network_player == null)
+        {
+            Debug.Log("network_player == null");
+        }
         if (network_player != null && network_player.netId == 1)
         {
             rock.transform.position += new Vector3(0, 4.5f, 0);
@@ -166,11 +168,12 @@ public class RockManager_YG : NetworkBehaviour
                 tmp_rock.gameObject.GetComponent<SpriteRenderer>().flipY = true;
             }
         }
-            
+
     }
 
     private void Cmd_camset()
     {
+        Debug.Log($"{network_player != null} || {network_player.netId == 1}");
         if (network_player != null && network_player.netId == 1)
         {
             Camera.main.transform.position = new Vector3(-7.5f, 0, -10);
@@ -200,12 +203,11 @@ public class RockManager_YG : NetworkBehaviour
 
     private IEnumerator click_co()
     {
-        while (true)
+        while (is_myturn)
         {
             if (Input.GetMouseButtonDown(0))
             {
                 find_rock();
-
             }
             yield return null;
         }
@@ -225,13 +227,15 @@ public class RockManager_YG : NetworkBehaviour
                 //rock_yg.is_selected를 true로 변경
                 if (click_obj.TryGetComponent<Rock_YG>(out select_rock))
                 {
-                    select_rock.is_selected = true;
-                    StopCoroutine(click_co());
+                    if (select_rock.isOwned)
+                    {
+                        select_rock.is_selected = true;
+                        is_myturn = false;
+                    }
                     return;
                 }
             }
         }
-        is_myturn = false;
     }
 
     #region game_end
