@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 4186446091217560104}
   - component: {fileID: 4053870976048084725}
   - component: {fileID: -1778169132237053040}
+  - component: {fileID: -7665228326734454639}
   m_Layer: 0
   m_Name: Rock
   m_TagString: Rock
@@ -109,6 +110,7 @@ MonoBehaviour:
   mouse_pos: {x: 0, y: 0}
   rock_pos: {x: 0, y: 0}
   is_selected: 0
+  manager: {fileID: 0}
   BG_col: {fileID: 0}
 --- !u!120 &4186446091217560106
 LineRenderer:
@@ -296,3 +298,26 @@ MonoBehaviour:
   positionSensitivity: 0.01
   rotationSensitivity: 0.01
   scaleSensitivity: 0.01
+--- !u!114 &-7665228326734454639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4186446091217560110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab2cbc52526ea384ba280d13cd1a57b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 4186446091217560109}
+  clientAuthority: 1
+  syncVelocity: 1
+  clearVelocity: 0
+  velocitySensitivity: 1
+  syncAngularVelocity: 1
+  clearAngularVelocity: 0
+  angularVelocitySensitivity: 1

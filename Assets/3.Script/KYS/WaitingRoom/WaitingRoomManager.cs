@@ -24,7 +24,7 @@ public class WaitingRoomManager : MonoBehaviour
 
         manager = FindObjectOfType<MyNetworkRoomManager>();
 
-        Debug.Log(SceneManager.GetActiveScene().name + "�� "+ type .ToString()+ " �ʿ��� �ε�ƽ��ϴ�");
+        Debug.Log(SceneManager.GetActiveScene().name + "ÀÌ "+ type .ToString()+ " ÂÊ¿¡¼­ ·ÎµåµÆ½À´Ï´Ù");
 
         Debug.Log("ipAddress " + ipAddress);
         manager.networkAddress = ipAddress;

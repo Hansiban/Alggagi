@@ -169,7 +169,6 @@ public class Rock_YG : NetworkBehaviour
             {
                 TurnManager_YG.instance.Cmdchange_turn();
                 check_distance();
-                //TurnManager_YG.instance.Check_count();
             }
         }
     }
@@ -177,7 +176,6 @@ public class Rock_YG : NetworkBehaviour
     [Client]
     private void check_distance()
     {
-        // Debug.Log("check_distance");
         lineRenderer.enabled = false;
         distance = Vector2.Distance(rock_pos, mouse_pos);
         CmdGo_rock(rock_pos, mouse_pos, distance);
@@ -186,62 +184,47 @@ public class Rock_YG : NetworkBehaviour
     [Command]
     public void CmdGo_rock(Vector2 start, Vector2 end, float distance)
     {
-        // 서버에서 실행되는 코드
         RpcGo_rock(rock_pos, mouse_pos, distance);
-        //Debug.Log("CmdGo_rock");
     }
 
     [ClientRpc]
     public void RpcGo_rock(Vector2 start, Vector2 end, float distance)
     {
-        // 서버에서 실행되는 코드
         Go_rock(rock_pos, mouse_pos, distance);
-        //Debug.Log("RpcGo_rock");
     }
 
     private void Go_rock(Vector2 start, Vector2 end, float distance) //addforce로 돌 움직이게 하기
     {
-        //Debug.Log("Go_rock");
         is_selected = false;
         rigid.AddForce(new Vector2(start.x - end.x, start.y - end.y) * distance, ForceMode2D.Impulse);
-        //StartCoroutine(Check_velocity());
-        //Debug.Log($"{rock_pos.x - mouse_pos.x} || {rock_pos.y - mouse_pos.y}");
     }
 
     private void OnTriggerExit2D(Collider2D col) //돌 죽으면 들어옴
     {
         if (col.Equals(BG_col) && isClient)
         {
-            CmdDead_rock();
+            Dead_rock();
         }
     }
+
 
     [Command]
-    private void CmdDead_rock()
+    private void Network_destroy()
     {
-        GameObject obj = GetComponent<NetworkIdentity>().gameObject;
-        Debug.Log("CmdDead_rock");
-        RpcDead_rock(obj);
+        Debug.Log("Network_destroy");
+        NetworkServer.Destroy(gameObject);
     }
 
-    [ClientRpc]
-    private void RpcDead_rock(GameObject obj)
+    [Client]
+    private void Dead_rock()//(GameObject obj)
     {
-        Debug.Log("RpcDead_rock");
-        Dead_rock(obj);
-    }
-
-    private void Dead_rock(GameObject obj) //돌 죽게하는 메서드
-    {
-        Debug.Log("Dead_rock");
-        manager.rock_list.Remove(gameObject);
-        if (isServer)
+        if (isOwned && !manager.is_gameover)
         {
-            manager.Set_rocklistcount();
-            Debug.Log(manager.rocklist_count);
+            manager.rocklist_count--;
         }
-        NetworkServer.Destroy(obj);
-
+        Debug.Log($"manager.rocklist_count-- : {manager.rocklist_count}");
+        Network_destroy();
+        manager.Check_rockcount();
     }
 
     private IEnumerator Check_velocity()
