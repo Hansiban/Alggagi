@@ -25,13 +25,43 @@ public class DbAccessManager_KYS
     #endregion
 
     #region DB Connection Info
-    private const string IP_ADDRESS = "172.30.1.32";
+    //private const string IP_ADDRESS = "172.30.1.32";
+    private const string IP_ADDRESS = "172.30.1.19";
     private const string DB_ID = "root";
     private const string DB_PWD = "1234";
     private const string DB_NAME = "Alggagi";
 
     private readonly string connStr = $"server={IP_ADDRESS};uid={DB_ID};pwd={DB_PWD};database={DB_NAME};charset=utf8 ;";
     #endregion
+
+
+    public bool Update(string id, string column, string value)
+    {
+        bool successfullyExecuted = false;
+
+        string cmdTxt = $"UPDATE {DB_NAME} SET {column} = {value} WHERE id = {id}";
+
+        using (MySqlConnection connection = new MySqlConnection(connStr))
+        {
+            try
+            {
+                connection.Open();
+
+                using (MySqlCommand command = new MySqlCommand(cmdTxt, connection))
+                {
+                    int rowAffected = command.ExecuteNonQuery();
+                    successfullyExecuted = rowAffected > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("DB Error: " + ex.Message);
+            }
+        }
+
+        return successfullyExecuted;
+    }
+
 
     /// <summary>
     /// 파라미터 cmdTxt를 실행했을 때 데이터를 찾았을 경우 지정한 타입 T의 형태로 반환, 그렇지 않을 경우 타입 T의 default 값(null 등)을 반환
