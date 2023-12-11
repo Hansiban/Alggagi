@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-//°ÔÀÓ¾À µé¾î¿À¸é ÇÁ·ÎÇÊ ·ÎµùÇÏ±â
+//ê²Œì„ì”¬ ë“¤ì–´ì˜¤ë©´ í”„ë¡œí•„ ë¡œë”©í•˜ê¸°
 public class MyNetworkRoomManager : NetworkRoomManager
 {
     //private Dictionary<int, UserDataModel_KYS> _userDatum = new Dictionary<int, UserDataModel_KYS>();
@@ -47,174 +47,91 @@ public class MyNetworkRoomManager : NetworkRoomManager
         singleton = this;
     }
 
-    public override void OnServerConnect(NetworkConnectionToClient conn)
-    {
-        base.OnServerConnect(conn);
-        // target rpc
-    }
-
-    /// <summary>
-    /// This is called on the server when a networked scene finishes loading.
-    /// </summary>
-    /// <param name="sceneName">Name of the new scene.</param>
-    public override void OnRoomServerSceneChanged(string sceneName)
-    {
-        Debug.Log(sceneName + "Loaded when OnRoomServerSceneChanged");
-
-        // spawn the initial batch of Rewards
-        if (sceneName == GameplayScene)
-        {
-            // profile ·Îµù
-        }
-    }
-
-    /// <summary>
-    /// Called just after GamePlayer object is instantiated and just before it replaces RoomPlayer object.
-    /// This is the ideal point to pass any data like player name, credentials, tokens, colors, etc.
-    /// into the GamePlayer object as it is about to enter the Online scene.
-    /// </summary>
-    /// <param name="roomPlayer"></param>
-    /// <param name="gamePlayer"></param>
-    /// <returns>true unless some code in here decides it needs to abort the replacement</returns>
-    public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
-    {
-        base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
-
-        Debug.Log("°ÔÀÓ ¾ÀÀÔ´Ï´Ù OnRoomServerSceneLoadedForPlayer");
-        //CmdFillInPlayerProfiles(roomPlayer);
-
-        return true;
-    }
-
-    public override void OnRoomStopClient()
-    {
-        base.OnRoomStopClient();
-    }
-
-    public override void OnRoomStopServer()
-    {
-        base.OnRoomStopServer();
-    }
-
-    /*
-        This code below is to demonstrate how to do a Start button that only appears for the Host player
-        showStartButton is a local bool that's needed because OnRoomServerPlayersReady is only fired when
-        all players are ready, but if a player cancels their ready state there's no callback to set it back to false
-        Therefore, allPlayersReady is used in combination with showStartButton to show/hide the Start button correctly.
-        Setting showStartButton false when the button is pressed hides it in the game scene since NetworkRoomManager
-        is set as DontDestroyOnLoad = true.
-    */
-
-    public override void OnServerAddPlayer(NetworkConnectionToClient conn)
-    {
-        base.OnServerAddPlayer(conn);
-    }
-
-    //private PlayerProfile _hostProfile = new PlayerProfile();
-
-    //private UserDataModel_KYS _hostData;
-    //public UserDataModel_KYS HostData
-    //{
-    //    get => _hostData;
-
-    //    private set
-    //    {
-    //        _hostData = value;
-
-    //        if (_hostData == null)
-    //        {
-    //            _hostProfile = new PlayerProfile();
-    //        }
-    //        else
-    //        {
-    //            _hostProfile.Init(_hostData);
-
-    //            Debug.Log($"HOST ENTERED : {_hostData.Id}");
-    //        }
-    //    } 
-    //}
-
-    //private PlayerProfile _guestProfile = new PlayerProfile();
-
-    //private UserDataModel_KYS _guestData;
-    //public UserDataModel_KYS GuestData
-    //{
-    //    get => _guestData;
-
-    //    private set
-    //    {
-    //        _guestData = value;
-
-    //        if (_guestData == null)
-    //        {
-    //            _guestProfile = new PlayerProfile();
-    //        }
-    //        else
-    //        {
-    //            _guestProfile.Init(_guestData);
-
-    //            Debug.Log($"GUEST ENTERED : {_guestData.Id}");
-    //        }
-    //    }
-    //}
-
-
-    // Network Behaviour °¡Áø ¾Ö°¡ ºÒ·¯Áà¾ß ÇÔ
-    /// <summary>
-    /// This is called on the client when the client is finished loading a new networked scene.
-    /// </summary>
-    public override void OnRoomClientSceneChanged()
-    {
-        //CmdInsertClientInfo();
-    }
-
-    //[Command]
-    public void CmdInsertClientInfo()
-    {
-
-        //RpcInsertClientInfo();
-    }
-
-    //[ClientRpc]
-    //public void RpcInsertClientInfo()
-    //{
-    //    if(HostData == null)
-    //        HostData = GameManager.Instance.LocalUserData;
-    //    else
-    //        GuestData = GameManager.Instance.LocalUserData;
-    //}
-
-    bool showStartButton;
-
-    public override void OnRoomServerPlayersReady()
-    {
-        // calling the base method calls ServerChangeScene as soon as all players are in Ready state.
-#if UNITY_SERVER
-            base.OnRoomServerPlayersReady();
-#else
-        showStartButton = true;
-#endif
-    }
-
-    public override void OnGUI()
-    {
-        base.OnGUI();
-
-        if (allPlayersReady && showStartButton && GUI.Button(new Rect(150, 300, 120, 20), "START GAME"))
-        {
-            // set to false to hide it in the game scene
-            showStartButton = false;
-
-            ServerChangeScene(GameplayScene);
-        }
-    }
 
     public int GetPlayerIndex(NetworkConnection conn)
     {
-        // ÇÃ·¹ÀÌ¾î ÄÁÆ®·Ñ·¯ °¡Á®¿À±â
+        // í”Œë ˆì´ì–´ ì»¨íŠ¸ë¡¤ëŸ¬ ê°€ì ¸ì˜¤ê¸°
         NetworkRoomPlayer roomPlayer = conn.identity.GetComponent<NetworkRoomPlayer>();
-        
-        // ÇÃ·¹ÀÌ¾î ÄÁÆ®·Ñ·¯ÀÇ ÀÎµ¦½º ¹İÈ¯
+
+        // í”Œë ˆì´ì–´ ì»¨íŠ¸ë¡¤ëŸ¬ì˜ ì¸ë±ìŠ¤ ë°˜í™˜
         return roomPlayer.index;
     }
+
+    bool showStartButton = true;
+
+
+    //public override void OnGUI()
+    //{
+    //    base.OnGUI();
+
+    //    if (allPlayersReady && showStartButton && GUI.Button(new Rect(150, 300, 120, 20), "START GAME"))
+    //    {
+    //        // set to false to hide it in the game scene
+    //        showStartButton = false;
+
+    //        ServerChangeScene(GameplayScene);
+    //    }
+    //}
+
+    public override void OnRoomServerPlayersReady()
+    {
+        ServerChangeScene(GameplayScene);
+    }
+
+    //public override void ServerChangeScene(string newSceneName)
+    //{
+    //    // NetworkRoomManager ìª½ ì½”ë“œ
+
+    //    if (newSceneName == RoomScene)
+    //    {
+    //        foreach (NetworkRoomPlayer roomPlayer in roomSlots)
+    //        {
+    //            if (roomPlayer == null)
+    //                continue;
+
+    //            // find the game-player object for this connection, and destroy it
+    //            NetworkIdentity identity = roomPlayer.GetComponent<NetworkIdentity>();
+
+    //            if (NetworkServer.active)
+    //            {
+    //                // re-add the room object
+    //                roomPlayer.GetComponent<NetworkRoomPlayer>().readyToBegin = false;
+    //                NetworkServer.ReplacePlayerForConnection(identity.connectionToClient, roomPlayer.gameObject);
+    //            }
+    //        }
+
+    //        allPlayersReady = false;
+    //    }
+
+        
+    //    // ì´í•˜ NetworkManager ìª½ ì½”ë“œ
+
+
+    //    NetworkServer.SetAllClientsNotReady();
+    //    networkSceneName = newSceneName;
+
+    //    // ì–´ì°¨í”¼ ì´ê±¸ ì˜¤ë²„ë¼ì´ë”© í•˜ëŠ” ê³³ì´ ì—†ì–´ ë¶€ë¥´ëŠ” ê²ƒì´ ì˜ë¯¸ ì—†ìœ¼ë‚˜ ì¼ë‹¨ ë„£ìŒ
+    //    OnServerChangeScene(newSceneName);
+
+    //    NetworkServer.isLoadingScene = true;
+
+    //    if (newSceneName != GameplayScene)
+    //        loadingSceneAsync = SceneManager.LoadSceneAsync(newSceneName);
+    //    else
+    //    {
+    //        loadingSceneAsync = SceneManager.LoadSceneAsync(newSceneName, LoadSceneMode.Additive);
+    //    }
+
+    //    if (NetworkServer.active)
+    //    {
+    //        // notify all clients about the new scene
+    //        NetworkServer.SendToAll(new SceneMessage
+    //        {
+    //            sceneName = newSceneName
+    //        });
+    //    }
+
+    //    startPositionIndex = 0;
+    //    startPositions.Clear();
+    //}
 }
