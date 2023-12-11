@@ -2,6 +2,7 @@ using Mirror;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -14,6 +15,26 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
     [SerializeField] private GameObject _readyButtonPrefab;
 
     public RockManager_YG rockmanager;
+
+    public void DiscardInfo()
+    {
+        CmdDestroyProfile(GameManager.Instance.LocalUserData.Nick);
+
+        CmdRemoveUserData(GameManager.Instance.LocalUserData.Id);
+    }
+
+    [Command]
+    private void CmdDestroyProfile(string nick)
+    {
+        var pf = FindObjectsOfType<PlayerProfile>().Where(x => x.Nick == nick).FirstOrDefault();
+        NetworkServer.Destroy(pf.gameObject);
+    }
+
+    [Command]
+    private void CmdRemoveUserData(string id)
+    {
+        MyNetworkRoomManager.singleton.RemoveUserData(id);
+    }
 
 
     // Waiting Room에서의 프로필 데이터 연동도 해당 방법을 사용하면 좋았겠으나
