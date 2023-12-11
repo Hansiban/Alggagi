@@ -1,8 +1,10 @@
+using LitJson;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Reflection;
 using UnityEngine;
 
@@ -25,14 +27,40 @@ public class DbAccessManager_KYS
     #endregion
 
     #region DB Connection Info
-    //private const string IP_ADDRESS = "172.30.1.32";
-    private const string IP_ADDRESS = "172.30.1.19";
+    //private const string IP_ADDRESS = "172.30.1.19";
+    private string ipAddress = "172.30.1.32";
     private const string DB_ID = "root";
     private const string DB_PWD = "1234";
     private const string DB_NAME = "Alggagi";
 
-    private readonly string connStr = $"server={IP_ADDRESS};uid={DB_ID};pwd={DB_PWD};database={DB_NAME};charset=utf8 ;";
+    //private readonly string connStr = $"server={IP_ADDRESS};uid={DB_ID};pwd={DB_PWD};database={DB_NAME};charset=utf8 ;";
+    private string getConStr => $"server={ipAddress};uid={DB_ID};pwd={DB_PWD};database={DB_NAME};charset=utf8 ;";
     #endregion
+
+
+    public DbAccessManager_KYS()
+    {
+
+        string path = Application.dataPath + "/License";
+
+        if (!File.Exists(path)) //폴더 검사
+        {
+            Directory.CreateDirectory(path);
+        }
+        if (!File.Exists(path + "/License.json")) //파일 검사
+        {
+            List<Item> item = new List<Item>();
+            item.Add(new Item("1", "172.30.1.32", "8596"));
+
+            JsonData data = JsonMapper.ToJson(item);
+            File.WriteAllText(path + "/License.json", data.ToString());
+        }
+
+        string Json_string = File.ReadAllText(Application.dataPath + "/License" + "/License.json");
+        JsonData itemdata = JsonMapper.ToObject(Json_string);
+
+        ipAddress = itemdata[0]["Server_IP"].ToString();
+    }
 
 
     // int value only
@@ -42,7 +70,7 @@ public class DbAccessManager_KYS
 
         string cmdTxt = $"UPDATE user SET {column} = {value} WHERE id = \"{id}\"";
 
-        using (MySqlConnection connection = new MySqlConnection(connStr))
+        using (MySqlConnection connection = new MySqlConnection(getConStr))
         {
             try
             {
@@ -71,7 +99,7 @@ public class DbAccessManager_KYS
     {
         T rowModel = default(T);
 
-        using (MySqlConnection connection = new MySqlConnection(connStr))
+        using (MySqlConnection connection = new MySqlConnection(getConStr))
         {
             try
             {
@@ -139,7 +167,7 @@ public class DbAccessManager_KYS
     {
         bool exist = false;
         
-        using (MySqlConnection connection = new MySqlConnection(connStr))
+        using (MySqlConnection connection = new MySqlConnection(getConStr))
         {
             try
             {
@@ -164,7 +192,7 @@ public class DbAccessManager_KYS
     {
         bool success = false;
 
-        using (MySqlConnection connection = new MySqlConnection(connStr))
+        using (MySqlConnection connection = new MySqlConnection(getConStr))
         {
             try
             {
