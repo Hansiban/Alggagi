@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-//°ÔÀÓ¾À µé¾î¿À¸é ÇÁ·ÎÇÊ ·ÎµùÇÏ±â
+//ê²Œì„ì”¬ ë“¤ì–´ì˜¤ë©´ í”„ë¡œí•„ ë¡œë”©í•˜ê¸°
 public class MyNetworkRoomManager : NetworkRoomManager
 {
     //private Dictionary<int, UserDataModel_KYS> _userDatum = new Dictionary<int, UserDataModel_KYS>();
@@ -47,12 +47,13 @@ public class MyNetworkRoomManager : NetworkRoomManager
         singleton = this;
     }
 
+
     public int GetPlayerIndex(NetworkConnection conn)
     {
-        // ÇÃ·¹ÀÌ¾î ÄÁÆ®·Ñ·¯ °¡Á®¿À±â
+        // í”Œë ˆì´ì–´ ì»¨íŠ¸ë¡¤ëŸ¬ ê°€ì ¸ì˜¤ê¸°
         NetworkRoomPlayer roomPlayer = conn.identity.GetComponent<NetworkRoomPlayer>();
 
-        // ÇÃ·¹ÀÌ¾î ÄÁÆ®·Ñ·¯ÀÇ ÀÎµ¦½º ¹İÈ¯
+        // í”Œë ˆì´ì–´ ì»¨íŠ¸ë¡¤ëŸ¬ì˜ ì¸ë±ìŠ¤ ë°˜í™˜
         return roomPlayer.index;
     }
 
@@ -79,7 +80,7 @@ public class MyNetworkRoomManager : NetworkRoomManager
 
     //public override void ServerChangeScene(string newSceneName)
     //{
-    //    // NetworkRoomManager ÂÊ ÄÚµå
+    //    // NetworkRoomManager ìª½ ì½”ë“œ
 
     //    if (newSceneName == RoomScene)
     //    {
@@ -103,13 +104,13 @@ public class MyNetworkRoomManager : NetworkRoomManager
     //    }
 
         
-    //    // ÀÌÇÏ NetworkManager ÂÊ ÄÚµå
+    //    // ì´í•˜ NetworkManager ìª½ ì½”ë“œ
 
 
     //    NetworkServer.SetAllClientsNotReady();
     //    networkSceneName = newSceneName;
 
-    //    // ¾îÂ÷ÇÇ ÀÌ°É ¿À¹ö¶óÀÌµù ÇÏ´Â °÷ÀÌ ¾ø¾î ºÎ¸£´Â °ÍÀÌ ÀÇ¹Ì ¾øÀ¸³ª ÀÏ´Ü ³ÖÀ½
+    //    // ì–´ì°¨í”¼ ì´ê±¸ ì˜¤ë²„ë¼ì´ë”© í•˜ëŠ” ê³³ì´ ì—†ì–´ ë¶€ë¥´ëŠ” ê²ƒì´ ì˜ë¯¸ ì—†ìœ¼ë‚˜ ì¼ë‹¨ ë„£ìŒ
     //    OnServerChangeScene(newSceneName);
 
     //    NetworkServer.isLoadingScene = true;

@@ -1,11 +1,13 @@
 using Mirror;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class TurnManager_YG : NetworkBehaviour
 {
     public static TurnManager_YG instance = null;
     public RockManager_YG[] all_rockmanager = null;
+
     [SyncVar(hook = nameof(Turn_setting))]
     public int turn_count;
     //public List<RockManager_YG> all_rockmanager = new List<RockManager_YG>();
@@ -34,9 +36,9 @@ public class TurnManager_YG : NetworkBehaviour
     public void Change_turn()
     {
         turn_count = turn_count == 1 ? 2 : 1;
-        Debug.Log($"�� �ٲٱ� {turn_count}����");
+        Debug.Log($" {turn_count}바뀜");
     }
-
+    
     private void Turn_setting(int _old, int _new)
     {
         turn_count = _new;
@@ -52,23 +54,11 @@ public class TurnManager_YG : NetworkBehaviour
 
     public void Check_count() //turncount == roomplayer.index��� ���� ����
     {
-        //Debug.Log("üũī��Ʈ");
-        //if (all_rockmanager == null || all_rockmanager.Length == 1)
-        //{
-        //    all_rockmanager = FindObjectsOfType<RockManager_YG>();
-        //}
-
-        //for (int i = 0; i < all_rockmanager.Length; i++)
-        //{
-        //    if (turn_count == MyNetworkRoomManager.singleton.roomSlots[i].index+1)
-        //    {
-        //        all_rockmanager[i].is_myturn = true;
-        //    }
-        //}
-
-        foreach (NetworkRoomPlayer player in MyNetworkRoomManager.singleton.roomSlots)
+        Debug.Log("체크카운트 들어오냐?");
+        StartCoroutine(check_count_co());
+        /*foreach (NetworkRoomPlayer player in MyNetworkRoomManager.singleton.roomSlots)
         {
-            Debug.Log("üũī��Ʈforeach");
+            Debug.Log("foreach");
             MyNetworkRoomPlayer myplayer;
             myplayer = player as MyNetworkRoomPlayer;
             Debug.Log(turn_count + "||" + player.index);
@@ -85,25 +75,43 @@ public class TurnManager_YG : NetworkBehaviour
                 Debug.Log("is_myturn = " + myplayer.rockmanager.is_myturn);
                 break;
             }
+        }*/
+    }
 
-            //    //else
-            //    //{
-            //    //    Debug.Log("turn_count != player.index");
-            //    //    myplayer.rockmanager.is_myturn = false;
-            //    //    Debug.Log("is_myturn = " + myplayer.rockmanager.is_myturn);
-            //    //}
-
+    public IEnumerator check_count_co() {
+        foreach (NetworkRoomPlayer player in MyNetworkRoomManager.singleton.roomSlots)
+        {
+            Debug.Log("foreach");
+            MyNetworkRoomPlayer myplayer;
+            myplayer = player as MyNetworkRoomPlayer;
+            Debug.Log(turn_count + "||" + player.index);
+            if (turn_count == player.index + 1 && player.isOwned)
+            {
+                Debug.Log("turn_count == player.index");
+                while (myplayer.rockmanager == null)
+                {
+                    yield return null;
+                }
+                myplayer.rockmanager.is_myturn = true;
+                Debug.Log("is_myturn = " + myplayer.rockmanager.is_myturn);
+                break;
+            }
         }
     }
 
-    [Command]
-    public void Gameover()
+    public void Gameover(RockManager_YG manager)
     {
         Debug.Log("Gameover");
-    }
-
-    public void Add_list()
-    {
-        all_rockmanager = FindObjectsOfType<RockManager_YG>();
+        foreach (var tmp_manager in all_rockmanager)
+        {
+            if (tmp_manager == manager)
+            {
+                tmp_manager.Lose();
+            }
+            else
+            {
+                tmp_manager.Win();
+            }
+        }
     }
 }
