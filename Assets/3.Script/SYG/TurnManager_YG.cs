@@ -7,6 +7,7 @@ public class TurnManager_YG : NetworkBehaviour
 {
     public static TurnManager_YG instance = null;
     public RockManager_YG[] all_rockmanager = null;
+    public Texture2D[] cursorimgs; //0:기본,1:특수
 
     [SyncVar(hook = nameof(Turn_setting))]
     public int turn_count;

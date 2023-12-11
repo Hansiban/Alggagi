@@ -547,6 +547,18 @@ PrefabInstance:
       value: 1191651444
       objectReference: {fileID: 0}
     - target: {fileID: 4232024471149228218, guid: f5783c69e844be341b36221ffdbb52e1, type: 3}
+      propertyPath: cursorimgs.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4232024471149228218, guid: f5783c69e844be341b36221ffdbb52e1, type: 3}
+      propertyPath: cursorimgs.Array.data[0]
+      value: 
+      objectReference: {fileID: 2800000, guid: cf59ad7e25dd57649803a8dda4817146, type: 3}
+    - target: {fileID: 4232024471149228218, guid: f5783c69e844be341b36221ffdbb52e1, type: 3}
+      propertyPath: cursorimgs.Array.data[1]
+      value: 
+      objectReference: {fileID: 2800000, guid: d449b517db45ea447be17a6d7c17c0fe, type: 3}
+    - target: {fileID: 4232024471149228218, guid: f5783c69e844be341b36221ffdbb52e1, type: 3}
       propertyPath: all_rockmanager.Array.size
       value: 2
       objectReference: {fileID: 0}
