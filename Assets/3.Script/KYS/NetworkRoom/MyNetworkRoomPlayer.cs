@@ -118,7 +118,7 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
 
         Vector3 spawnPosition = anotherPlayerExists ? new Vector3(150, -350, 0) : new Vector3(-950, -350, 0);
 
-        GameObject profile = Instantiate(_profilePrefab);
+        GameObject profile = Instantiate(_profilePrefab, Vector3.zero, Quaternion.identity);
         profile.transform.SetParent(GameObject.FindGameObjectWithTag("Test").transform); // Main Canvas
         profile.transform.localPosition = spawnPosition;
         profile.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
@@ -148,13 +148,14 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
     {
         profile.transform.SetParent(GameObject.FindGameObjectWithTag("Test").transform);
         profile.transform.localPosition = position;
+        profile.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
         profile.GetComponent<PlayerProfile>().Init(nick, lvl);
     }
 
     [TargetRpc]
     private void TargetSpawnHostProfile(Vector3 position, string nick, int lvl)
     {
-        GameObject profile = Instantiate(_profilePrefab);
+        GameObject profile = Instantiate(_profilePrefab, Vector3.zero, Quaternion.identity);
         profile.transform.SetParent(GameObject.FindGameObjectWithTag("Test").transform);
         profile.transform.localPosition = position;
         profile.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
