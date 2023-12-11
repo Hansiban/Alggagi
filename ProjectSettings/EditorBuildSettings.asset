@@ -8,10 +8,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/1.Scene/GameScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
+  - enabled: 0
     path: Assets/1.Scene/KYS/WaitingRoom_KYS.unity
     guid: d42364c561e44b94496b25214ea69cd3
-  - enabled: 1
+  - enabled: 0
     path: Assets/1.Scene/KYS/MainMenu_KYS.unity
     guid: 88a6e1fb047cca44e8296352b8ed8d30
   - enabled: 0
@@ -24,11 +24,11 @@ EditorBuildSettings:
     path: Assets/1.Scene/KYS/Lobby_KYS_not-using.unity
     guid: cd15d5ddac17b1b49ab4f233d9406f0a
   - enabled: 0
-    path: Assets/1.Scene/KYS/_Single_NetworkRoomManager_TestScene.unity
-    guid: 4fa3a60788892524da1764b96fac1298
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 0
-    path: Assets/1.Scene/KYS/Temp_GameScene_KYS.unity
-    guid: 85c40aa6e6f250542adf9342aab5b529
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 0
     path: Assets/Mirror/Examples/Room/Scenes/OfflineScene.unity
     guid: 9e6f14982412b2545a0911ebaaa46a23
