@@ -17,7 +17,6 @@ public class RockManager_YG : NetworkBehaviour
 
     #endregion
 
-
     [Header("Gameplay")]
     //private TurnManager_YG trun_manager;
     private bool _isMyTurn;
@@ -40,7 +39,9 @@ public class RockManager_YG : NetworkBehaviour
 
     [Header("Init_rock")]
     private int init_count = 8;
-    [SerializeField] private List<GameObject> rock_list = new List<GameObject>();
+    private bool isstart_changeturn;
+    public List<GameObject> rock_list = new List<GameObject>();
+    public int rocklist_count;
     [SerializeField] private Rock_YG selected_rock;
     [SerializeField] private GameObject rock_prefab;
     [SerializeField] private GameObject panel_prefab;
@@ -57,9 +58,10 @@ public class RockManager_YG : NetworkBehaviour
     private void Start()
     {
         Find_player();
-        if (isServer && netId == 5)
+        if (isServer && netId == 8)
         {
             TurnManager_YG.instance.Change_turn();
+            //StartCoroutine(Time());
         }
 
         //if (isClient)
@@ -67,6 +69,17 @@ public class RockManager_YG : NetworkBehaviour
         //    TurnManager_YG.instance.Check_count();
         //}
     }
+    //private IEnumerator Time()
+    //{
+    //    while (isstart_changeturn)
+    //    {
+    //        Debug.Log("Time 코루틴 돌아가는 중");
+    //        Debug.Log("체크카운트 준비중");
+    //        yield return null;
+    //    }
+    //    TurnManager_YG.instance.Check_count();
+    //}
+
     public override void OnStartAuthority()
     {
         Init_pannel();
@@ -83,17 +96,17 @@ public class RockManager_YG : NetworkBehaviour
 
     public void Find_player()
     {
-        // Debug.Log("Find_player" + isOwned);
+        Debug.Log("Find_player" + isOwned);
         MyNetworkRoomPlayer[] players = FindObjectsOfType<MyNetworkRoomPlayer>();
-        // Debug.Log("players.Length : " + players.Length);
+        Debug.Log("players.Length : " + players.Length);
         foreach (MyNetworkRoomPlayer player in players)
         {
             if (player.isOwned == isOwned)
             {
-                // Debug.Log("Find_player2");
+                Debug.Log("Find_player2");
                 network_player = player;
                 player.Get_rockmanager(this);
-                Debug.Log(network_player.netId);
+                isstart_changeturn = true;
                 return;
             }
         }
@@ -125,29 +138,47 @@ public class RockManager_YG : NetworkBehaviour
 
             GameObject rock = Instantiate(rock_prefab, pos, Quaternion.identity);
             rock_list.Add(rock);
-            Add_rocklist(rock);
+            rocklist_count = rock_list.Count;
             NetworkServer.Spawn(rock, connectionToClient);
             Change_Rocksetting(rock);
             Cmd_camset();
         }
+        if (isServer)
+        {
+            Set_rocklistcount();
+        }
+    }
+
+    [ServerCallback]
+    public void Set_rocklistcount()
+    {
+        rocklist_count = rock_list.Count;
+        Add_rocklistcount(rocklist_count);
+    }
+
+    [Command]
+    public void cmd_Set_rocklistcount()
+    {
+        rocklist_count = rock_list.Count;
+        Add_rocklistcount(rocklist_count);
     }
 
     [ClientRpc]
-    private void Add_rocklist(GameObject obj)
+    private void Add_rocklistcount(int count)
     {
-        rock_list.Add(obj);
+        rocklist_count = count;
     }
 
     [ClientRpc]
     private void Change_Rocksetting(GameObject rock)
     {
         //돌 위치 지정하기
-        //Debug.Log("network_player.netId" + network_player.netId);
+        Debug.Log("돌위치지정 : network_player.netId" + network_player.netId);
         if (network_player == null)
         {
             Debug.Log("network_player == null");
         }
-        if (network_player != null && network_player.netId == 1)
+        if (network_player != null && network_player.netId == 2)
         {
             rock.transform.position += new Vector3(0, 4.5f, 0);
         }
@@ -169,7 +200,7 @@ public class RockManager_YG : NetworkBehaviour
         }
 
         //카메라 뒤집힌 플레이어는 스프라이트도 뒤집어줌
-        if (network_player != null && network_player.netId == 1)
+        if (network_player != null && network_player.netId == 2)
         {
             foreach (GameObject tmp_rock in all_rocks)
             {
@@ -181,8 +212,8 @@ public class RockManager_YG : NetworkBehaviour
 
     private void Cmd_camset()
     {
-        Debug.Log($"{network_player != null} || {network_player.netId == 1}");
-        if (network_player != null && network_player.netId == 1)
+        Debug.Log($"{network_player != null} || {network_player.netId == 2}");
+        if (network_player != null && network_player.netId == 2)
         {
             Camera.main.transform.position = new Vector3(-7.5f, 0, -10);
             Camera.main.transform.rotation = Quaternion.Euler(0, 0, 180);
@@ -216,7 +247,7 @@ public class RockManager_YG : NetworkBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 find_rock();
-                
+
             }
             yield return null;
         }
@@ -234,15 +265,14 @@ public class RockManager_YG : NetworkBehaviour
                 // Rock_YG select_rock;
                 //click_obj가 rock_yg컴포넌트를 가지고 있다면
                 //rock_yg.is_selected를 true로 변경
-                if (click_obj.TryGetComponent<Rock_YG>(out selected_rock))
+                Rock_YG select_rock;
+                if (click_obj.TryGetComponent<Rock_YG>(out select_rock))
                 {
-                    foreach (var tmp_rock in rock_list)
+                    select_rock.is_selected = true;
+                    if (select_rock.isOwned)
                     {
-                        tmp_rock.GetComponent<Rock_YG>().is_selected = false;
-                    }
-                    if (selected_rock.isOwned)
-                    {
-                        selected_rock.is_selected = true;
+                        StopCoroutine(click_co());
+                        select_rock.is_selected = true;
                         is_myturn = false;
                     }
                     return;
@@ -251,26 +281,23 @@ public class RockManager_YG : NetworkBehaviour
         }
     }
 
-    #region game_end
-    private void Game_end(bool is_win)
+    public void Check_rockcount()
     {
-        if (is_win)
+        if (rock_list.Count == 0)
         {
-            Win();
-        }
-        else
-        {
-            Lose();
+            TurnManager_YG.instance.Gameover(this);
         }
     }
+    #region game_end
 
-    private void Win()
+
+    public void Win()
     {
         Get_exp();
         user_data.Win += 1;
     }
 
-    private void Lose()
+    public void Lose()
     {
         user_data.Lose += 1;
     }

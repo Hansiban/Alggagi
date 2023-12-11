@@ -32,6 +32,7 @@ public class Rock_YG : NetworkBehaviour
     private Rigidbody2D rigid;
 
     [Header("Dead_rock")]
+    [SerializeField] private RockManager_YG manager;
     [SerializeField] private BoxCollider2D BG_col;
 
     private void Start()
@@ -65,6 +66,15 @@ public class Rock_YG : NetworkBehaviour
         lineRenderer = GetComponent<LineRenderer>();
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        RockManager_YG[] rockmanager = FindObjectsOfType<RockManager_YG>();
+        foreach (var tmp_manager in rockmanager)
+        {
+            if (tmp_manager.isOwned == isOwned)
+            {
+                manager = tmp_manager;
+                break;
+            }
+        }
         if (spriteRenderer == null)
         {
             Debug.Log("spriteRenderer_null");
@@ -194,7 +204,7 @@ public class Rock_YG : NetworkBehaviour
         //Debug.Log("Go_rock");
         is_selected = false;
         rigid.AddForce(new Vector2(start.x - end.x, start.y - end.y) * distance, ForceMode2D.Impulse);
-        StartCoroutine(Check_velocity());
+        //StartCoroutine(Check_velocity());
         //Debug.Log($"{rock_pos.x - mouse_pos.x} || {rock_pos.y - mouse_pos.y}");
     }
 
@@ -224,7 +234,14 @@ public class Rock_YG : NetworkBehaviour
     private void Dead_rock(GameObject obj) //돌 죽게하는 메서드
     {
         Debug.Log("Dead_rock");
+        manager.rock_list.Remove(gameObject);
+        if (isServer)
+        {
+            manager.Set_rocklistcount();
+            Debug.Log(manager.rocklist_count);
+        }
         NetworkServer.Destroy(obj);
+
     }
 
     private IEnumerator Check_velocity()

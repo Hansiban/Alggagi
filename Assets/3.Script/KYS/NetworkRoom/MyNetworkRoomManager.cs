@@ -80,7 +80,7 @@ public class MyNetworkRoomManager : NetworkRoomManager
     {
         base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
 
-        Debug.LogError("게임 씬입니다 OnRoomServerSceneLoadedForPlayer");
+        Debug.Log("게임 씬입니다 OnRoomServerSceneLoadedForPlayer");
         //CmdFillInPlayerProfiles(roomPlayer);
 
         return true;

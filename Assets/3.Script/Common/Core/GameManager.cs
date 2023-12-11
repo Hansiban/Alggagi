@@ -26,7 +26,7 @@ class GameManager
     public UserDataModel_KYS LocalUserData { get; private set; } = new UserDataModel_KYS()
     {
         Draw = -1,
-        Id = "test_id",
+        Id = "test_id" + DateTime.Now.ToString(),
         Lvl = 0,
         Exp = 0,
         Lose = 0,
