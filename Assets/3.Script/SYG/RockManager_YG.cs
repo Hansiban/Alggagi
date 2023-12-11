@@ -32,7 +32,12 @@ public class RockManager_YG : NetworkBehaviour
             Debug.Log(_isMyTurn);
             if (_isMyTurn && !is_gameover)
             {
+                TurnManager_YG.instance.game_info[2].SetActive(true);
                 Selecting_rock();
+            }
+            else
+            {
+                TurnManager_YG.instance.game_info[2].SetActive(false);
             }
         }
     }
