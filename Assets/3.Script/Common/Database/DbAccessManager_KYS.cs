@@ -35,11 +35,12 @@ public class DbAccessManager_KYS
     #endregion
 
 
+    // int value only
     public bool Update(string id, string column, string value)
     {
         bool successfullyExecuted = false;
 
-        string cmdTxt = $"UPDATE {DB_NAME} SET {column} = {value} WHERE id = {id}";
+        string cmdTxt = $"UPDATE user SET {column} = {value} WHERE id = \"{id}\"";
 
         using (MySqlConnection connection = new MySqlConnection(connStr))
         {

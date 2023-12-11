@@ -319,15 +319,17 @@ public class RockManager_YG : NetworkBehaviour
     [Command]
     public void Lose_result(string id)
     {
+        Debug.Log("Lose_result" + id);
         DbAccessManager_KYS.Instance.Update(id, "lose", "lose + 1");
     }
 
     [Command]
     public void Win_result(string id, int rock_count)
     {
+        Debug.Log("Win_result" + id + rock_count);
         DbAccessManager_KYS.Instance.Update(id, "win", "win + 1");
 
-        var userData = DbAccessManager_KYS.Instance.Select<UserDataModel_KYS>($"Select * from user where id = {id}");
+        var userData = DbAccessManager_KYS.Instance.Select<UserDataModel_KYS>($"Select * from user where id = \"{id}\"");
 
         int levelUpNum = 0;
         int exp = userData.Exp + rock_count;
