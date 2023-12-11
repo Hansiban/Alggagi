@@ -84,3 +84,4 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  _emojiCanvasPrefab: {fileID: 4007123626842128583, guid: a0fd8d422c258384fa95257e5b2c4985, type: 3}
