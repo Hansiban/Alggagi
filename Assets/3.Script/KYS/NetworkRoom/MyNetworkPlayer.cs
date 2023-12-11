@@ -76,8 +76,8 @@ public class MyNetworkPlayer : NetworkBehaviour
 
         List<TMP_Text> myRecordTxts = GameObject.FindGameObjectsWithTag("RecordText").Where(x => x.transform.parent == recordContainers[1].transform).Select(x => x.GetComponent<TMP_Text>()).ToList();
         Debug.Log("myRecordTxts °³¼ö = " + myRecordTxts.Count);
-        myRecordTxts[0].text = win.ToString(); // my win
-        myRecordTxts[1].text = draw.ToString(); // my draw
-        myRecordTxts[2].text = lose.ToString(); // my lose
+        myRecordTxts[0].text = GameManager.Instance.LocalUserData.Win.ToString(); // my win
+        myRecordTxts[1].text = GameManager.Instance.LocalUserData.Draw.ToString(); // my draw
+        myRecordTxts[2].text = GameManager.Instance.LocalUserData.Lose.ToString(); // my lose
     }
 }
