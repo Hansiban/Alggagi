@@ -297,11 +297,9 @@ public class RockManager_YG : NetworkBehaviour
     [Command]
     public void Cmd_check_roundcount()
     {
-        Debug.Log("제발들어와 빨리 승패체크해줘");
         is_lose = true;
         if (isServer)
         {
-            Debug.Log("서버야 서버야 제발들어와 빨리 승패체크해줘");
             TurnManager_YG.instance.Gameover();
         }
     }
@@ -309,20 +307,26 @@ public class RockManager_YG : NetworkBehaviour
     public void Win()
     {
         Debug.Log("이김");
-        //Get_exp();
-        //user_data.Win += 1;
+        Win_result("win", rocklist_count);
     }
 
     public void Lose()
     {
         Debug.Log("짐");
-        //user_data.Lose += 1;
+        Lose_result("lose");
     }
 
-    private void Get_exp()
+    [Command]
+    public void Lose_result(string result)
     {
-        //경험치 얻기
-        user_data.Exp += rocklist_count;
+        GameManager.Instance.Result_check(result);
     }
+
+    [Command]
+    public void Win_result(string result,int rock_count)
+    {
+        GameManager.Instance.Result_check(result, rock_count);
+    }
+
     #endregion
 }
