@@ -51,6 +51,8 @@ MonoBehaviour:
   readyToBegin: 0
   index: 0
   _profilePrefab: {fileID: 287755783698665142, guid: 9df320d817a124d49b3a5026a9a8d309, type: 3}
+  _readyButtonPrefab: {fileID: 3865296980956343674, guid: 5671127882f8c5f41a847759810d0219, type: 3}
+  rockmanager: {fileID: 0}
 --- !u!114 &-7534086111301754275
 MonoBehaviour:
   m_ObjectHideFlags: 0

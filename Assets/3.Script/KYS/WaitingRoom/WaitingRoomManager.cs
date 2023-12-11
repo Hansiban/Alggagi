@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,7 +14,9 @@ public class WaitingRoomManager : MonoBehaviour
 
     private MyNetworkRoomManager manager;
 
+
     private Type type;
+    private string ipAddress;
 
     private void Start()
     {
@@ -21,14 +24,15 @@ public class WaitingRoomManager : MonoBehaviour
 
         manager = FindObjectOfType<MyNetworkRoomManager>();
 
-        Debug.Log(SceneManager.GetActiveScene().name + "�� "+ type .ToString()+ " �ʿ��� �ε�ƽ��ϴ�");
+        Debug.Log(SceneManager.GetActiveScene().name + "ÀÌ "+ type .ToString()+ " ÂÊ¿¡¼­ ·ÎµåµÆ½À´Ï´Ù");
 
-        Debug.Log("networkAddress before" + manager.networkAddress);
-        manager.networkAddress = "172.30.1.34";
-        Debug.Log("networkAddress after" + manager.networkAddress);
+        Debug.Log("ipAddress " + ipAddress);
+        manager.networkAddress = ipAddress;
 
         if (type.Equals(Type.Client))
             manager.StartClient();
+        else if (type.Equals(Type.Server))
+            manager.StartServer();
     }
 
 
@@ -40,6 +44,7 @@ public class WaitingRoomManager : MonoBehaviour
             JsonData itemdata = JsonMapper.ToObject(Json_string);
 
             string string_type = itemdata[0]["Lisence"].ToString();
+            ipAddress = itemdata[0]["Server_IP"].ToString();
             return (Type)Enum.Parse(typeof(Type), string_type);
 
         }
