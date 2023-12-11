@@ -73,6 +73,7 @@ public class ServerChecker_YG : MonoBehaviour
         try
         {
             string Json_string = File.ReadAllText(Path + "/License.json");
+
             JsonData itemdata = JsonMapper.ToObject(Json_string);
 
             string string_type = itemdata[0]["Lisence"].ToString();

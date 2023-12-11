@@ -21,7 +21,7 @@ public class WaitingRoomManager : MonoBehaviour
 
         manager = FindObjectOfType<MyNetworkRoomManager>();
 
-        Debug.Log(SceneManager.GetActiveScene().name + "이 클라 쪽에서 로드됐습니다");
+        Debug.Log(SceneManager.GetActiveScene().name + "이 "+ type .ToString()+ " 쪽에서 로드됐습니다");
 
         Debug.Log("networkAddress before" + manager.networkAddress);
         manager.networkAddress = "172.30.1.32";
@@ -36,14 +36,11 @@ public class WaitingRoomManager : MonoBehaviour
     {
         try
         {
-            string Json_string = File.ReadAllText(Application.dataPath + "/License.json");
+            string Json_string = File.ReadAllText(Application.dataPath + "/License" + "/License.json");
             JsonData itemdata = JsonMapper.ToObject(Json_string);
 
             string string_type = itemdata[0]["Lisence"].ToString();
-            manager.networkAddress = itemdata[0]["Server_IP"].ToString();
-            type = (Type)Enum.Parse(typeof(Type), string_type);
-
-            return type;
+            return (Type)Enum.Parse(typeof(Type), string_type);
 
         }
         catch (Exception e)
