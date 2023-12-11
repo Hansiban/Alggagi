@@ -32,7 +32,12 @@ public class RockManager_YG : NetworkBehaviour
             Debug.Log(_isMyTurn);
             if (_isMyTurn && !is_gameover)
             {
+                TurnManager_YG.instance.game_info[2].SetActive(true);
                 Selecting_rock();
+            }
+            else
+            {
+                TurnManager_YG.instance.game_info[2].SetActive(false);
             }
         }
     }
@@ -210,7 +215,6 @@ public class RockManager_YG : NetworkBehaviour
                 tmp_rock.gameObject.GetComponent<SpriteRenderer>().flipY = true;
             }
         }
-
     }
 
     private void Cmd_camset()
@@ -323,7 +327,7 @@ public class RockManager_YG : NetworkBehaviour
         DbAccessManager_KYS.Instance.Update(id, "lose", "lose + 1");
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     public void Win_result(string id, int rock_count)
     {
         Debug.Log("Win_result" + id + rock_count);

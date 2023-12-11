@@ -1,24 +1,33 @@
 using Mirror;
-using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
+using UnityEngine;
 
 public class TurnManager_YG : NetworkBehaviour
 {
     public static TurnManager_YG instance = null;
     public RockManager_YG[] all_rockmanager = null;
+    public Texture2D[] cursorimgs; //0:기본,1:특수
+    public GameObject[] game_info; //0:짐,1:이김,2:턴
 
     [SyncVar(hook = nameof(Turn_setting))]
     public int turn_count;
     //public List<RockManager_YG> all_rockmanager = new List<RockManager_YG>();
     private void Awake()
     {
+        //시작 시 UI끄기
+        foreach (var obj in game_info)
+        {
+            if (obj.activeSelf)
+            {
+                obj.SetActive(false);
+            }
+        }
+
         if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(this);
         }
-
         else
         {
             Destroy(this);
@@ -38,7 +47,7 @@ public class TurnManager_YG : NetworkBehaviour
         turn_count = turn_count == 1 ? 2 : 1;
         Debug.Log($" {turn_count}바뀜");
     }
-    
+
     private void Turn_setting(int _old, int _new)
     {
         turn_count = _new;
@@ -78,7 +87,8 @@ public class TurnManager_YG : NetworkBehaviour
         }*/
     }
 
-    public IEnumerator check_count_co() {
+    public IEnumerator check_count_co()
+    {
         foreach (NetworkRoomPlayer player in MyNetworkRoomManager.singleton.roomSlots)
         {
             Debug.Log("foreach");
@@ -102,21 +112,24 @@ public class TurnManager_YG : NetworkBehaviour
     [ClientRpc]
     public void Gameover()
     {
-        Debug.Log("Gameover");
         all_rockmanager = FindObjectsOfType<RockManager_YG>();
         foreach (var tmp_manager in all_rockmanager)
         {
-            Debug.Log("Gameover2");
+           // Debug.Log("Gameover2");
             tmp_manager.is_gameover = true;
-            Debug.Log($"이김 판단중 : {tmp_manager.is_lose}");
-            if (tmp_manager.is_lose) 
+           // Debug.Log($"이김 판단중 : {tmp_manager.is_lose}");
+            if (tmp_manager.is_lose)
             {
                 Debug.Log("지러 가는중");
                 tmp_manager.Lose();
+                game_info[0].SetActive(true);
+                game_info[1].SetActive(false);
                 return;
             }
         }
-            Debug.Log("이기러 가는중");
-            all_rockmanager[0].Win();
+        Debug.Log("이기러 가는중");
+        all_rockmanager[0].Win();
+        game_info[0].SetActive(false);
+        game_info[1].SetActive(true);
     }
 }
