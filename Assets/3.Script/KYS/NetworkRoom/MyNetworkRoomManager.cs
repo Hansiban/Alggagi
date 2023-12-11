@@ -74,7 +74,7 @@ public class MyNetworkRoomManager : NetworkRoomManager
 
     public override void OnRoomServerPlayersReady()
     {
-        this.ServerChangeScene(GameplayScene);
+        ServerChangeScene(GameplayScene);
     }
 
     //public override void ServerChangeScene(string newSceneName)

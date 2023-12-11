@@ -3061,6 +3061,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d71b02f7c5922e418ba98a45ceec120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   _signUpModal: {fileID: 5373237078406648253}
   _nickNameInvalidationText: {fileID: 2682173777615032478}
   _idInvalidationText: {fileID: 8455291288361987194}
