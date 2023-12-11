@@ -153,7 +153,11 @@ public class Rock_YG : NetworkBehaviour
 
         if (m_event.type == EventType.MouseDrag) //드래그
         {
+            //커서 이미지 바꾸기
+            Cursor.SetCursor(TurnManager_YG.instance.cursorimgs[1], Vector2.zero, CursorMode.Auto);
             rock_pos = transform.position;
+            
+            //라인렌더러
             lineRenderer.SetPosition(0, rock_pos);
             lineRenderer.SetPosition(1, mouse_pos);
 
@@ -165,6 +169,7 @@ public class Rock_YG : NetworkBehaviour
 
         if (m_event.type == EventType.MouseUp) //드래그 끝
         {
+            Cursor.SetCursor(TurnManager_YG.instance.cursorimgs[0], Vector2.zero, CursorMode.Auto);
             if (isClient)
             {
                 TurnManager_YG.instance.Cmdchange_turn();
@@ -206,7 +211,6 @@ public class Rock_YG : NetworkBehaviour
             Dead_rock();
         }
     }
-
 
     [Command]
     private void Network_destroy()
