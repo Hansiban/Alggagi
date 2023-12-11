@@ -12,12 +12,6 @@ public class WaitingRoomManager : MonoBehaviour
 {
     public void Btn_TempGoToMainMenu(string sceneName) => SceneManager.LoadScene(sceneName);
 
-    public void Btn_Ready()
-    {
-        FindObjectsOfType<MyNetworkRoomPlayer>().Where(x => x.isOwned).FirstOrDefault()?.Ready();
-
-    }
-
     private MyNetworkRoomManager manager;
 
 
