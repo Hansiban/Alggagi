@@ -2,14 +2,39 @@ using Mirror;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using static UnityEngine.UI.Button;
 
- // 여기가 아니라 MyNetworkRoomManager가 처리.. 아니다. 얘는 networkbrhavioye없어서커맨드안됨 
+// 여기가 아니라 MyNetworkRoomManager가 처리.. 아니다. 얘는 networkbrhavioye없어서커맨드안됨 
 public class MyNetworkRoomPlayer : NetworkRoomPlayer
 {
     [SerializeField] private GameObject _profilePrefab;
+    [SerializeField] private GameObject _readyButtonPrefab;
+
     public RockManager_YG rockmanager;
+
+    public void DiscardInfo()
+    {
+        CmdDestroyProfile(GameManager.Instance.LocalUserData.Nick);
+
+        CmdRemoveUserData(GameManager.Instance.LocalUserData.Id);
+    }
+
+    [Command]
+    private void CmdDestroyProfile(string nick)
+    {
+        var pf = FindObjectsOfType<PlayerProfile>().Where(x => x.Nick == nick).FirstOrDefault();
+        NetworkServer.Destroy(pf.gameObject);
+    }
+
+    [Command]
+    private void CmdRemoveUserData(string id)
+    {
+        MyNetworkRoomManager.singleton.RemoveUserData(id);
+    }
 
 
     // Waiting Room에서의 프로필 데이터 연동도 해당 방법을 사용하면 좋았겠으나
@@ -25,10 +50,25 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
         //CmdAddDataMyNetworkRoomManagerOnServerside(connectionToClient.connectionId, GameManager.Instance.LocalUserData);
         CmdAddDataMyNetworkRoomManagerOnServerside(GameManager.Instance.LocalUserData.Id, GameManager.Instance.LocalUserData.Pwd, GameManager.Instance.LocalUserData.Nick,
             GameManager.Instance.LocalUserData.Lvl, GameManager.Instance.LocalUserData.Exp, GameManager.Instance.LocalUserData.Win, GameManager.Instance.LocalUserData.Lose, GameManager.Instance.LocalUserData.Draw);
-
     }
 
+    private bool isReady = false;
 
+    public void Ready()
+    {
+        if (!isLocalPlayer) return;
+
+        isReady = !isReady;
+
+        CmdChangeReadyState(isReady);
+    }
+
+    public override void ReadyStateChanged(bool oldReadyState, bool newReadyState)
+    {
+        base.ReadyStateChanged(oldReadyState, newReadyState);
+
+        Debug.Log("STATE CHANGED TO : ready ==" + newReadyState);
+    }
 
     public override void OnClientEnterRoom()
     {
@@ -57,8 +97,14 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
     {
         base.OnStartClient();
 
-        if(isLocalPlayer)
+        if (isLocalPlayer)
+        {
+            //GameObject readyButton = Instantiate(_readyButtonPrefab);
+            //readyButton.transform.SetParent(GameObject.FindGameObjectWithTag("Test").transform);
+            //readyButton.GetComponent<Button>().onClick.AddListener(delegate { Ready(); });
+
             CmdSpawnProfile(GameManager.Instance.LocalUserData.Nick, GameManager.Instance.LocalUserData.Lvl);
+        }
     }
 
     private static string s_hostNick;
@@ -104,12 +150,14 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
         profile.transform.localPosition = position;
         profile.GetComponent<PlayerProfile>().Init(nick, lvl);
     }
+
     [TargetRpc]
     private void TargetSpawnHostProfile(Vector3 position, string nick, int lvl)
     {
         GameObject profile = Instantiate(_profilePrefab);
         profile.transform.SetParent(GameObject.FindGameObjectWithTag("Test").transform);
         profile.transform.localPosition = position;
+        profile.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
         profile.GetComponent<PlayerProfile>().Init(nick, lvl);
     }
     public void  Get_rockmanager(RockManager_YG manager)

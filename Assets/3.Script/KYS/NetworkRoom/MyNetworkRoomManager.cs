@@ -1,18 +1,26 @@
 using Mirror;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 //게임씬 들어오면 프로필 로딩하기
 public class MyNetworkRoomManager : NetworkRoomManager
 {
-    //private Dictionary<int, UserDataModel_KYS> _userDatum = new Dictionary<int, UserDataModel_KYS>();
     private Dictionary<string, UserDataModel_KYS> _userDatum = new Dictionary<string, UserDataModel_KYS>();
     public Dictionary<string, UserDataModel_KYS> UserDatum
     {
         get => _userDatum;
         private set => _userDatum = value;
+    }
+
+    public static new MyNetworkRoomManager singleton { get; private set; }
+
+    public override void Awake()
+    {
+        base.Awake();
+        singleton = this;
     }
 
     public void AddData(string userId, string id, string pwd, string nick, int lvl, int exp, int win, int lose, int draw)
@@ -25,28 +33,10 @@ public class MyNetworkRoomManager : NetworkRoomManager
         UserDatum.Add(userId, copy);
     }
 
-    public void AddData(string userId, UserDataModel_KYS data)
+    public void RemoveUserData(string id)
     {
-        Debug.Log("userData.Count222  " + UserDatum.Count + "\nid : " + userId);
-
-        UserDataModel_KYS copy = UserDataModel_KYS.GetCopy(data.Id, data.Pwd, data.Nick, data.Lvl, data.Exp, data.Win, data.Lose, data.Draw);
-        Debug.LogWarning(copy.ToString());
-
-        UserDatum.Add(userId, copy);
+        UserDatum.Remove(id);
     }
-
-    public static new MyNetworkRoomManager singleton { get; private set; }
-
-    /// <summary>
-    /// Runs on both Server and Client
-    /// Networking is NOT initialized when this fires
-    /// </summary>
-    public override void Awake()
-    {
-        base.Awake();
-        singleton = this;
-    }
-
 
     public int GetPlayerIndex(NetworkConnection conn)
     {
@@ -57,81 +47,60 @@ public class MyNetworkRoomManager : NetworkRoomManager
         return roomPlayer.index;
     }
 
-    bool showStartButton = true;
-
-
-    //public override void OnGUI()
-    //{
-    //    base.OnGUI();
-
-    //    if (allPlayersReady && showStartButton && GUI.Button(new Rect(150, 300, 120, 20), "START GAME"))
-    //    {
-    //        // set to false to hide it in the game scene
-    //        showStartButton = false;
-
-    //        ServerChangeScene(GameplayScene);
-    //    }
-    //}
-
     public override void OnRoomServerPlayersReady()
     {
         ServerChangeScene(GameplayScene);
     }
 
-    //public override void ServerChangeScene(string newSceneName)
-    //{
-    //    // NetworkRoomManager 쪽 코드
+    public override void OnClientDisconnect()
+    {
+        base.OnClientDisconnect();
 
-    //    if (newSceneName == RoomScene)
-    //    {
-    //        foreach (NetworkRoomPlayer roomPlayer in roomSlots)
-    //        {
-    //            if (roomPlayer == null)
-    //                continue;
+        if(SceneManager.GetActiveScene().name == GameplayScene)
+        {
 
-    //            // find the game-player object for this connection, and destroy it
-    //            NetworkIdentity identity = roomPlayer.GetComponent<NetworkIdentity>();
+            // 모두 room으로 돌아가기
+        }
+    }
 
-    //            if (NetworkServer.active)
-    //            {
-    //                // re-add the room object
-    //                roomPlayer.GetComponent<NetworkRoomPlayer>().readyToBegin = false;
-    //                NetworkServer.ReplacePlayerForConnection(identity.connectionToClient, roomPlayer.gameObject);
-    //            }
-    //        }
+    public override void OnRoomServerDisconnect(NetworkConnectionToClient conn)
+    {
+        Debug.Log(UserDatum.Count + "개 남음");
 
-    //        allPlayersReady = false;
-    //    }
+        base.OnRoomServerDisconnect(conn);
 
-        
-    //    // 이하 NetworkManager 쪽 코드
+        conn.Disconnect();
+
+        StopClient();
 
 
-    //    NetworkServer.SetAllClientsNotReady();
-    //    networkSceneName = newSceneName;
+        var cli = FindObjectsOfType<MyNetworkRoomPlayer>().Where(x => x.connectionToClient == conn).FirstOrDefault();
+        if (cli == null)
+            Debug.Log("cli == null");
+        else
+            cli.DiscardInfo();
 
-    //    // 어차피 이걸 오버라이딩 하는 곳이 없어 부르는 것이 의미 없으나 일단 넣음
-    //    OnServerChangeScene(newSceneName);
+        Debug.Log(UserDatum.Count + "개 남음");
+        Debug.Log("1 CLIENT DISCONNECTED");
 
-    //    NetworkServer.isLoadingScene = true;
+    }
 
-    //    if (newSceneName != GameplayScene)
-    //        loadingSceneAsync = SceneManager.LoadSceneAsync(newSceneName);
-    //    else
-    //    {
-    //        loadingSceneAsync = SceneManager.LoadSceneAsync(newSceneName, LoadSceneMode.Additive);
-    //    }
+    public override void OnRoomStopClient()
+    {
+        base.OnRoomStopClient();
 
-    //    if (NetworkServer.active)
-    //    {
-    //        // notify all clients about the new scene
-    //        NetworkServer.SendToAll(new SceneMessage
-    //        {
-    //            sceneName = newSceneName
-    //        });
-    //    }
 
-    //    startPositionIndex = 0;
-    //    startPositions.Clear();
-    //}
+    }
+
+    public override void OnApplicationQuit()
+    {
+        base.OnApplicationQuit();
+
+        Debug.Log("OnApplicationQuit");
+
+        if (NetworkClient.isConnected)
+            StopClient();
+        if (NetworkClient.active)
+            StopServer();
+    }
 }

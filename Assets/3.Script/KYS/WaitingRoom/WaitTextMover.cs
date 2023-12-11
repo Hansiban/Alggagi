@@ -14,7 +14,7 @@ public class WaitTextMover : MonoBehaviour
 
     private void Awake()
     {
-        StartCoroutine(nameof(AddDotsRoutine));
+        //StartCoroutine(nameof(AddDotsRoutine));
     }
 
     private IEnumerator AddDotsRoutine()
