@@ -12,47 +12,39 @@ public class WaitingRoomManager : MonoBehaviour
 {
     public void Btn_TempGoToMainMenu(string sceneName) => SceneManager.LoadScene(sceneName);
 
-    private MyNetworkRoomManager manager;
-
-
-    private Type type;
-    private string ipAddress;
-
     private void Start()
     {
-        type = License_type();
 
-        manager = FindObjectOfType<MyNetworkRoomManager>();
+        string path = Application.dataPath + "/License";
 
-        Debug.Log(SceneManager.GetActiveScene().name + "ÀÌ "+ type .ToString()+ " ÂÊ¿¡¼­ ·ÎµåµÆ½À´Ï´Ù");
-
-        Debug.Log("ipAddress " + ipAddress);
-        manager.networkAddress = ipAddress;
-
-        if (type.Equals(Type.Client))
-            manager.StartClient();
-        else if (type.Equals(Type.Server))
-            manager.StartServer();
-    }
-
-
-    private Type License_type()
-    {
-        try
+        if (!File.Exists(path)) //폴더 검사
         {
-            string Json_string = File.ReadAllText(Application.dataPath + "/License" + "/License.json");
-            JsonData itemdata = JsonMapper.ToObject(Json_string);
-
-            string string_type = itemdata[0]["Lisence"].ToString();
-            ipAddress = itemdata[0]["Server_IP"].ToString();
-            return (Type)Enum.Parse(typeof(Type), string_type);
-
+            Directory.CreateDirectory(path);
         }
-        catch (Exception e)
+        if (!File.Exists(path + "/License.json")) //파일 검사
         {
-            Debug.Log(e.Message);
-            return Type.Empty;
-        }
-    }
+            List<Item> item = new List<Item>();
+            item.Add(new Item("1", "172.30.1.32", "8596"));
 
+            JsonData data = JsonMapper.ToJson(item);
+            File.WriteAllText(path + "/License.json", data.ToString());
+        }
+
+        string Json_string = File.ReadAllText(Application.dataPath + "/License" + "/License.json");
+        JsonData itemdata = JsonMapper.ToObject(Json_string);
+        
+        
+        string ipAddress = itemdata[0]["Server_IP"].ToString();
+        MyNetworkRoomManager.singleton.networkAddress = ipAddress;
+
+
+        string string_type = itemdata[0]["Lisence"].ToString();
+
+        Type myType = (Type)Enum.Parse(typeof(Type), string_type);
+
+        if (myType.Equals(Type.Client))
+            MyNetworkRoomManager.singleton.StartClient();
+        else if (myType.Equals(Type.Server))
+            MyNetworkRoomManager.singleton.StartServer();
+    }
 }
