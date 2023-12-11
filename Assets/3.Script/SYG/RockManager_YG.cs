@@ -215,7 +215,6 @@ public class RockManager_YG : NetworkBehaviour
                 tmp_rock.gameObject.GetComponent<SpriteRenderer>().flipY = true;
             }
         }
-
     }
 
     private void Cmd_camset()
@@ -327,7 +326,7 @@ public class RockManager_YG : NetworkBehaviour
         DbAccessManager_KYS.Instance.Update(id, "lose", "lose + 1");
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     public void Win_result(string id, int rock_count)
     {
         DbAccessManager_KYS.Instance.Update(id, "win", "win + 1");

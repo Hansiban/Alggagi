@@ -112,13 +112,12 @@ public class TurnManager_YG : NetworkBehaviour
     [ClientRpc]
     public void Gameover()
     {
-        Debug.Log("Gameover");
         all_rockmanager = FindObjectsOfType<RockManager_YG>();
         foreach (var tmp_manager in all_rockmanager)
         {
-            Debug.Log("Gameover2");
+           // Debug.Log("Gameover2");
             tmp_manager.is_gameover = true;
-            Debug.Log($"이김 판단중 : {tmp_manager.is_lose}");
+           // Debug.Log($"이김 판단중 : {tmp_manager.is_lose}");
             if (tmp_manager.is_lose)
             {
                 Debug.Log("지러 가는중");
