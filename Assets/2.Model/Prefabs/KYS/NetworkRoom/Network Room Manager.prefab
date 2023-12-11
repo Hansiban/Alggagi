@@ -49,11 +49,11 @@ MonoBehaviour:
   runInBackground: 1
   autoStartServerBuild: 1
   autoConnectClientBuild: 0
-  sendRate: 60
+  sendRate: 120
   offlineScene: Assets/1.Scene/KYS/MainMenu_KYS.unity
   onlineScene: Assets/1.Scene/KYS/WaitingRoom_KYS.unity
   transport: {fileID: 7833457791687408322}
-  networkAddress: 43.200.181.67
+  networkAddress: localhost
   maxConnections: 100
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
@@ -64,6 +64,7 @@ MonoBehaviour:
   spawnPrefabs:
   - {fileID: 8577599198532167169, guid: 75e2e5acdfb596640ab53534701a8c80, type: 3}
   - {fileID: 4186446091217560110, guid: f38a8b9f633035446826303892b6fa5c, type: 3}
+  - {fileID: 287755783698665142, guid: 9df320d817a124d49b3a5026a9a8d309, type: 3}
   snapshotSettings:
     bufferTimeMultiplier: 2
     bufferLimit: 32

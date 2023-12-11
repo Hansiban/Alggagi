@@ -970,26 +970,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4396296682743902187, guid: 13dcd7781aaa10349a2e56383585a9dc, type: 3}
-      propertyPath: GameplayScene
-      value: Assets/1.Scene/SYG/Logictest_YG.unity
-      objectReference: {fileID: 0}
-    - target: {fileID: 4396296682743902187, guid: 13dcd7781aaa10349a2e56383585a9dc, type: 3}
-      propertyPath: networkAddress
-      value: localhost
-      objectReference: {fileID: 0}
-    - target: {fileID: 4396296682743902187, guid: 13dcd7781aaa10349a2e56383585a9dc, type: 3}
-      propertyPath: roomPlayerPrefab
-      value: 
-      objectReference: {fileID: 1283694800733325514, guid: 5b9cf0c94199edb4f81576d0e82ddc96, type: 3}
-    - target: {fileID: 4396296682743902187, guid: 13dcd7781aaa10349a2e56383585a9dc, type: 3}
-      propertyPath: spawnPrefabs.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4396296682743902187, guid: 13dcd7781aaa10349a2e56383585a9dc, type: 3}
-      propertyPath: spawnPrefabs.Array.data[2]
-      value: 
-      objectReference: {fileID: 287755783698665142, guid: 9df320d817a124d49b3a5026a9a8d309, type: 3}
     - target: {fileID: 8872500390697652717, guid: 13dcd7781aaa10349a2e56383585a9dc, type: 3}
       propertyPath: m_RootOrder
       value: 4

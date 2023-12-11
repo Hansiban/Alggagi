@@ -30,7 +30,7 @@ public class RockManager_YG : NetworkBehaviour
         {
             _isMyTurn = value;
             Debug.Log(_isMyTurn);
-            if (_isMyTurn)
+            if (_isMyTurn && !is_gameover)
             {
                 Selecting_rock();
             }
@@ -39,7 +39,7 @@ public class RockManager_YG : NetworkBehaviour
 
     [Header("Init_rock")]
     private int init_count = 8;
-    private bool isstart_changeturn;
+    private bool check_changeturn = false;
     public List<GameObject> rock_list = new List<GameObject>();
     public int rocklist_count;
     [SerializeField] private Rock_YG selected_rock;
@@ -54,13 +54,16 @@ public class RockManager_YG : NetworkBehaviour
 
     [Header("Game_End")]
     private UserDataModel_KYS user_data;
-
+    public bool is_gameover = false;
+    public bool is_lose = false;
     private void Start()
     {
+        rocklist_count = init_count;
         Find_player();
-        if (isServer && netId == 8)
+        if (isServer && !check_changeturn)
         {
             TurnManager_YG.instance.Change_turn();
+            check_changeturn = true;
             //StartCoroutine(Time());
         }
 
@@ -106,7 +109,6 @@ public class RockManager_YG : NetworkBehaviour
                 Debug.Log("Find_player2");
                 network_player = player;
                 player.Get_rockmanager(this);
-                isstart_changeturn = true;
                 return;
             }
         }
@@ -143,31 +145,32 @@ public class RockManager_YG : NetworkBehaviour
             Change_Rocksetting(rock);
             Cmd_camset();
         }
-        if (isServer)
-        {
-            Set_rocklistcount();
-        }
+        //if (isServer)
+        //{
+        //    Set_rocklistcount();
+        //}
     }
 
-    [ServerCallback]
-    public void Set_rocklistcount()
-    {
-        rocklist_count = rock_list.Count;
-        Add_rocklistcount(rocklist_count);
-    }
+    //[ServerCallback]
+    //public void Set_rocklistcount()
+    //{
+    //    rocklist_count = rock_list.Count;
+    //    Set_rocklistcount(rocklist_count);
+    //}
 
-    [Command]
-    public void cmd_Set_rocklistcount()
-    {
-        rocklist_count = rock_list.Count;
-        Add_rocklistcount(rocklist_count);
-    }
+    //[Command]
+    //public void cmd_Set_rocklistcount()
+    //{
+    //    rocklist_count = rock_list.Count;
+    //    Set_rocklistcount(rocklist_count);
+    //}
 
-    [ClientRpc]
-    private void Add_rocklistcount(int count)
-    {
-        rocklist_count = count;
-    }
+    //[ClientRpc]
+    //private void Set_rocklistcount(int count)
+    //{
+    //    rocklist_count = count;
+    //    Debug.Log("카운트 연동완료" + rocklist_count);
+    //}
 
     [ClientRpc]
     private void Change_Rocksetting(GameObject rock)
@@ -178,7 +181,7 @@ public class RockManager_YG : NetworkBehaviour
         {
             Debug.Log("network_player == null");
         }
-        if (network_player != null && network_player.netId == 2)
+        if (network_player != null && network_player.netId == 3)
         {
             rock.transform.position += new Vector3(0, 4.5f, 0);
         }
@@ -220,19 +223,19 @@ public class RockManager_YG : NetworkBehaviour
         }
     }
 
-    private void Reset_rock()
-    {
-        if (isServer)
-        {
-            for (int i = 0; i < rock_list.Count; i++)
-            {
-                GameObject rock = rock_list[i];
-                rock_list.Remove(rock);
-                Destroy(rock);
-            }
-            Debug.Log("Reset_rock");
-        }
-    }
+    //private void Reset_rock()
+    //{
+    //    if (isServer)
+    //    {
+    //        for (int i = 0; i < rock_list.Count; i++)
+    //        {
+    //            GameObject rock = rock_list[i];
+    //            rock_list.Remove(rock);
+    //            Destroy(rock);
+    //        }
+    //        Debug.Log("Reset_rock");
+    //    }
+    //}
 
     private void Selecting_rock()
     {
@@ -247,7 +250,6 @@ public class RockManager_YG : NetworkBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 find_rock();
-
             }
             yield return null;
         }
@@ -268,7 +270,6 @@ public class RockManager_YG : NetworkBehaviour
                 Rock_YG select_rock;
                 if (click_obj.TryGetComponent<Rock_YG>(out select_rock))
                 {
-                    select_rock.is_selected = true;
                     if (select_rock.isOwned)
                     {
                         StopCoroutine(click_co());
@@ -281,33 +282,47 @@ public class RockManager_YG : NetworkBehaviour
         }
     }
 
+    [Client]
     public void Check_rockcount()
     {
-        if (rock_list.Count == 0)
+        Debug.Log("rockcount 체크");
+        if (rocklist_count == 0)
         {
-            TurnManager_YG.instance.Gameover(this);
+            is_lose = true;
+            Cmd_check_roundcount();
         }
     }
     #region game_end
 
+    [Command]
+    public void Cmd_check_roundcount()
+    {
+        Debug.Log("제발들어와 빨리 승패체크해줘");
+        is_lose = true;
+        if (isServer)
+        {
+            Debug.Log("서버야 서버야 제발들어와 빨리 승패체크해줘");
+            TurnManager_YG.instance.Gameover();
+        }
+    }
 
     public void Win()
     {
-        Get_exp();
-        user_data.Win += 1;
+        Debug.Log("이김");
+        //Get_exp();
+        //user_data.Win += 1;
     }
 
     public void Lose()
     {
-        user_data.Lose += 1;
+        Debug.Log("짐");
+        //user_data.Lose += 1;
     }
 
     private void Get_exp()
     {
-        //남은 말 수 체크하기
-        int num = rock_list.Count;
         //경험치 얻기
-        user_data.Exp += num;
+        user_data.Exp += rocklist_count;
     }
     #endregion
 }
