@@ -8,6 +8,7 @@ TagManager:
   - Rock
   - Container
   - Test
+  - RecordText
   layers:
   - Default
   - TransparentFX

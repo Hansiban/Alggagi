@@ -60,7 +60,7 @@ public class ServerChecker_YG : MonoBehaviour
     private void Default_Data(string path)
     {
         List<Item> item = new List<Item>();
-        item.Add(new Item("1", "43.200.181.67", "7777"));
+        item.Add(new Item("1", "172.30.1.32", "8596"));
 
         JsonData data = JsonMapper.ToJson(item);
         File.WriteAllText(path + "/License.json", data.ToString());
@@ -73,6 +73,7 @@ public class ServerChecker_YG : MonoBehaviour
         try
         {
             string Json_string = File.ReadAllText(Path + "/License.json");
+
             JsonData itemdata = JsonMapper.ToObject(Json_string);
 
             string string_type = itemdata[0]["Lisence"].ToString();
