@@ -333,7 +333,7 @@ public class RockManager_YG : NetworkBehaviour
 
         int levelUpNum = 0;
         int exp = userData.Exp + rock_count;
-        while(exp < 5)
+        while(exp >= 5)
         {
             levelUpNum++;
             exp -= 5;
