@@ -24,7 +24,7 @@ public class WaitingRoomManager : MonoBehaviour
         Debug.Log(SceneManager.GetActiveScene().name + "이 "+ type .ToString()+ " 쪽에서 로드됐습니다");
 
         Debug.Log("networkAddress before" + manager.networkAddress);
-        manager.networkAddress = "172.30.1.32";
+        manager.networkAddress = "172.30.1.34";
         Debug.Log("networkAddress after" + manager.networkAddress);
 
         if (type.Equals(Type.Client))

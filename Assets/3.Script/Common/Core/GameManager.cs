@@ -50,4 +50,14 @@ class GameManager
     {
         LocalUserData = null;
     }
+
+    public void Result_check(string result)
+    {
+
+    }
+
+    public void Result_check(string result, int rock_count)
+    {
+
+    }
 }

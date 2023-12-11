@@ -99,19 +99,24 @@ public class TurnManager_YG : NetworkBehaviour
         }
     }
 
-    public void Gameover(RockManager_YG manager)
+    [ClientRpc]
+    public void Gameover()
     {
         Debug.Log("Gameover");
+        all_rockmanager = FindObjectsOfType<RockManager_YG>();
         foreach (var tmp_manager in all_rockmanager)
         {
-            if (tmp_manager == manager)
+            Debug.Log("Gameover2");
+            tmp_manager.is_gameover = true;
+            Debug.Log($"이김 판단중 : {tmp_manager.is_lose}");
+            if (tmp_manager.is_lose) 
             {
+                Debug.Log("지러 가는중");
                 tmp_manager.Lose();
-            }
-            else
-            {
-                tmp_manager.Win();
+                return;
             }
         }
+            Debug.Log("이기러 가는중");
+            all_rockmanager[0].Win();
     }
 }
