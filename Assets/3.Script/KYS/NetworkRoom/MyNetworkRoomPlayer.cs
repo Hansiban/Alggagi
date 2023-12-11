@@ -25,10 +25,22 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
         //CmdAddDataMyNetworkRoomManagerOnServerside(connectionToClient.connectionId, GameManager.Instance.LocalUserData);
         CmdAddDataMyNetworkRoomManagerOnServerside(GameManager.Instance.LocalUserData.Id, GameManager.Instance.LocalUserData.Pwd, GameManager.Instance.LocalUserData.Nick,
             GameManager.Instance.LocalUserData.Lvl, GameManager.Instance.LocalUserData.Exp, GameManager.Instance.LocalUserData.Win, GameManager.Instance.LocalUserData.Lose, GameManager.Instance.LocalUserData.Draw);
-
     }
 
 
+    public void Ready()
+    {
+        if (!isLocalPlayer) return;
+
+        CmdChangeReadyState(true);
+    }
+
+    public override void ReadyStateChanged(bool oldReadyState, bool newReadyState)
+    {
+        base.ReadyStateChanged(oldReadyState, newReadyState);
+
+        Debug.Log("STATE CHANGED TO : ready ==" + newReadyState);
+    }
 
     public override void OnClientEnterRoom()
     {

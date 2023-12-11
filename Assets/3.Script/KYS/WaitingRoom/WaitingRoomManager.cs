@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,13 +14,8 @@ public class WaitingRoomManager : MonoBehaviour
 
     public void Btn_Ready()
     {
-        Debug.Log("ready");
+        FindObjectsOfType<MyNetworkRoomPlayer>().Where(x => x.isOwned).FirstOrDefault()?.Ready();
 
-        NetworkClient.Ready();
-        if (NetworkClient.localPlayer == null)
-        {
-            NetworkClient.AddPlayer();
-        }
     }
 
     private MyNetworkRoomManager manager;
