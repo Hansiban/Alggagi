@@ -307,26 +307,40 @@ public class RockManager_YG : NetworkBehaviour
     public void Win()
     {
         Debug.Log("이김");
-        Win_result("win", rocklist_count);
+        Win_result(GameManager.Instance.LocalUserData.Id, rocklist_count);
     }
 
     public void Lose()
     {
         Debug.Log("짐");
-        Lose_result("lose");
+        Lose_result(GameManager.Instance.LocalUserData.Id);
     }
 
     [Command]
-    public void Lose_result(string result)
+    public void Lose_result(string id)
     {
-        GameManager.Instance.Result_check(result);
+        DbAccessManager_KYS.Instance.Update(id, "lose", "lose + 1");
     }
 
     [Command]
-    public void Win_result(string result,int rock_count)
+    public void Win_result(string id, int rock_count)
     {
-        GameManager.Instance.Result_check(result, rock_count);
-    }
+        DbAccessManager_KYS.Instance.Update(id, "win", "win + 1");
 
+        var userData = DbAccessManager_KYS.Instance.Select<UserDataModel_KYS>($"Select * from user where id = {id}");
+
+        int levelUpNum = 0;
+        int exp = userData.Exp + rock_count;
+        while(exp < 5)
+        {
+            levelUpNum++;
+            exp -= 5;
+        }
+
+        if(levelUpNum > 0)
+            DbAccessManager_KYS.Instance.Update(id, "lvl", $"lvl + {levelUpNum}");
+
+        DbAccessManager_KYS.Instance.Update(id, "exp", exp.ToString());
+    }
     #endregion
 }
