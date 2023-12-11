@@ -122,6 +122,7 @@ public class MyNetworkRoomPlayer : NetworkRoomPlayer
         GameObject profile = Instantiate(_profilePrefab);
         profile.transform.SetParent(GameObject.FindGameObjectWithTag("Test").transform);
         profile.transform.localPosition = position;
+        profile.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
         profile.GetComponent<PlayerProfile>().Init(nick, lvl);
     }
     public void  Get_rockmanager(RockManager_YG manager)
