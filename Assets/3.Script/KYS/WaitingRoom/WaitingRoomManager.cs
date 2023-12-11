@@ -11,9 +11,22 @@ public class WaitingRoomManager : MonoBehaviour
 {
     public void Btn_TempGoToMainMenu(string sceneName) => SceneManager.LoadScene(sceneName);
 
+    public void Btn_Ready()
+    {
+        Debug.Log("ready");
+
+        NetworkClient.Ready();
+        if (NetworkClient.localPlayer == null)
+        {
+            NetworkClient.AddPlayer();
+        }
+    }
+
     private MyNetworkRoomManager manager;
 
+
     private Type type;
+    private string ipAddress;
 
     private void Start()
     {
@@ -23,12 +36,13 @@ public class WaitingRoomManager : MonoBehaviour
 
         Debug.Log(SceneManager.GetActiveScene().name + "이 "+ type .ToString()+ " 쪽에서 로드됐습니다");
 
-        Debug.Log("networkAddress before" + manager.networkAddress);
-        manager.networkAddress = "172.30.1.32";
-        Debug.Log("networkAddress after" + manager.networkAddress);
+        Debug.Log("ipAddress " + ipAddress);
+        manager.networkAddress = ipAddress;
 
         if (type.Equals(Type.Client))
             manager.StartClient();
+        else if (type.Equals(Type.Server))
+            manager.StartServer();
     }
 
 
@@ -40,6 +54,7 @@ public class WaitingRoomManager : MonoBehaviour
             JsonData itemdata = JsonMapper.ToObject(Json_string);
 
             string string_type = itemdata[0]["Lisence"].ToString();
+            ipAddress = itemdata[0]["Server_IP"].ToString();
             return (Type)Enum.Parse(typeof(Type), string_type);
 
         }
