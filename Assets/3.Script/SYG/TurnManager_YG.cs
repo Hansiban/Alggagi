@@ -7,13 +7,22 @@ public class TurnManager_YG : NetworkBehaviour
     public static TurnManager_YG instance = null;
     public RockManager_YG[] all_rockmanager = null;
     public Texture2D[] cursorimgs; //0:기본,1:특수
-    public GameObject[] game_info;
+    public GameObject[] game_info; //0:짐,1:이김,2:턴
 
     [SyncVar(hook = nameof(Turn_setting))]
     public int turn_count;
     //public List<RockManager_YG> all_rockmanager = new List<RockManager_YG>();
     private void Awake()
     {
+        //시작 시 UI끄기
+        foreach (var obj in game_info)
+        {
+            if (obj.activeSelf)
+            {
+                obj.SetActive(false);
+            }
+        }
+
         if (instance == null)
         {
             instance = this;
@@ -22,15 +31,6 @@ public class TurnManager_YG : NetworkBehaviour
         else
         {
             Destroy(this);
-        }
-
-        //시작 시 UI끄기
-        foreach (var obj in game_info)
-        {
-            if (obj.activeSelf)
-            {
-                obj.SetActive(false);
-            }
         }
     }
 
