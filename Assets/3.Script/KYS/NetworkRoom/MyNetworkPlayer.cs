@@ -53,6 +53,7 @@ public class MyNetworkPlayer : NetworkBehaviour
 
         // 정보 채우기
         Canvas canvas = Instantiate(_emojiCanvasPrefab);
+        canvas.transform.SetParent(GameObject.FindGameObjectWithTag("Test").transform); // 이미 씬에 있는 Canvas에 자식으로 들어감
 
         PlayerProfile[] playerProfiles = canvas.GetComponentsInChildren<PlayerProfile>();
         playerProfiles[0].Init(nick, lvl); // opp
