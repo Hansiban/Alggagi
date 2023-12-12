@@ -48,8 +48,8 @@ public class MyNetworkPlayer : NetworkBehaviour
         Debug.Log("oppoData : " + oppData.ToString());
         Debug.Log("myData : " + GameManager.Instance.LocalUserData.ToString());
 
-        Debug.Log("해당 씬에서의 캔버스 개수 = "+FindObjectsOfType<Canvas>().Length);
-        Debug.Log("첫 번째 캔버스 이름 = "+FindObjectOfType<Canvas>().name);
+        Debug.Log("해당 씬에서의 캔버스 개수 = " + FindObjectsOfType<Canvas>().Length);
+        Debug.Log("첫 번째 캔버스 이름 = " + FindObjectOfType<Canvas>().name);
 
         // 정보 채우기
         Canvas canvas = Instantiate(_emojiCanvasPrefab);
@@ -71,14 +71,23 @@ public class MyNetworkPlayer : NetworkBehaviour
 
         List<TMP_Text> oppoRecordTxts = GameObject.FindGameObjectsWithTag("RecordText").Where(x => x.transform.parent == recordContainers[0].transform).Select(x => x.GetComponent<TMP_Text>()).ToList();
         Debug.Log("oppoRecordTxts 개수 = " + oppoRecordTxts.Count);
-        oppoRecordTxts[0].text = win.ToString(); // oppo win
-        oppoRecordTxts[1].text = draw.ToString(); // oppo draw
-        oppoRecordTxts[2].text = lose.ToString(); // oppo lose
+
+        // 왠
+
+        //oppoRecordTxts[0].text = win.ToString(); // oppo win
+        //oppoRecordTxts[1].text = draw.ToString(); // oppo draw
+        //oppoRecordTxts[2].text = lose.ToString(); // oppo lose
+        oppoRecordTxts[0].text = GameManager.Instance.LocalUserData.Win.ToString(); // my win지
+        oppoRecordTxts[1].text = GameManager.Instance.LocalUserData.Draw.ToString(); // my draw
+        oppoRecordTxts[2].text = GameManager.Instance.LocalUserData.Lose.ToString(); // my lose
 
         List<TMP_Text> myRecordTxts = GameObject.FindGameObjectsWithTag("RecordText").Where(x => x.transform.parent == recordContainers[1].transform).Select(x => x.GetComponent<TMP_Text>()).ToList();
         Debug.Log("myRecordTxts 개수 = " + myRecordTxts.Count);
-        myRecordTxts[0].text = GameManager.Instance.LocalUserData.Win.ToString(); // my win
-        myRecordTxts[1].text = GameManager.Instance.LocalUserData.Draw.ToString(); // my draw
-        myRecordTxts[2].text = GameManager.Instance.LocalUserData.Lose.ToString(); // my lose
+        //myRecordTxts[0].text = GameManager.Instance.LocalUserData.Win.ToString(); // my win
+        //myRecordTxts[1].text = GameManager.Instance.LocalUserData.Draw.ToString(); // my draw
+        //myRecordTxts[2].text = GameManager.Instance.LocalUserData.Lose.ToString(); // my lose
+        myRecordTxts[0].text = win.ToString(); // oppo win
+        myRecordTxts[1].text = draw.ToString(); // oppo draw
+        myRecordTxts[2].text = lose.ToString(); // oppo lose
     }
 }
