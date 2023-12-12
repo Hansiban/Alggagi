@@ -4829,7 +4829,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -277, y: 50}
+  m_AnchoredPosition: {x: -299, y: 61}
   m_SizeDelta: {x: 500, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4911338722605391364
@@ -4860,7 +4860,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Credit : \uAE40\uC608\uC2AC, \uC131\uC720\uACBD, \uC7A5\uADDC\uB3D9, \uAE40\uD0DC\uACB8"
+  m_text: "Credit : \uC131\uC720\uACBD, \uAE40\uC608\uC2AC"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1c564fcd22ecfb141a9d2ca30607bab1, type: 2}
   m_sharedMaterial: {fileID: -7954353348655032666, guid: 1c564fcd22ecfb141a9d2ca30607bab1, type: 2}

@@ -975,6 +975,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4396296682743902187, guid: 13dcd7781aaa10349a2e56383585a9dc, type: 3}
+      propertyPath: showRoomGUI
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4396296682743902187, guid: 13dcd7781aaa10349a2e56383585a9dc, type: 3}
       propertyPath: GameplayScene
       value: Assets/1.Scene/SYG/Logictest_YG.unity
       objectReference: {fileID: 0}
